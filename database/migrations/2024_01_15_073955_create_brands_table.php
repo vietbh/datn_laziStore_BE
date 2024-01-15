@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('brands', function (Blueprint $table) {
             // $table->id();
             $table->increments('id');
-            $table->string('order_code')->unique();
-            $table->unsignedBigInteger('user_id');
-            $table->dateTime('order_date');
-            $table->decimal('total_amount');
+            $table->string('slug');
+            $table->string('name');
+            $table->string('country');
+            $table->char('show_hide')->default('show');
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('brands');
     }
 };
