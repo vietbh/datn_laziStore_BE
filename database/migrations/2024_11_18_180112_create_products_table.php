@@ -25,8 +25,8 @@ return new class extends Migration
             $table->text('description');
             $table->string('image_url',255);
             $table->unsignedInteger('categories_product_id');
-            $table->unsignedInteger('brands_id');            
-            $table->foreign('categories_products_id')->references('id')->on('categories_products');
+            $table->unsignedInteger('brand_id');            
+            $table->foreign('categories_product_id')->references('id')->on('categories_products');
             $table->foreign('brand_id')->references('id')->on('brands');
             $table->integer('quantity_available')->default(0);
             $table->integer('quantity_sold')->default(0);
