@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Product;
 
-use App\Models\Product;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class BrandController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,9 +13,6 @@ class ProductController extends Controller
     public function index()
     {
         //
-        // $products = Product::limit(1)->get();
-        // dd($products);
-        return view('layouts.admin.Product.index');
     }
 
     /**

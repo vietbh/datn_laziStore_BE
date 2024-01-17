@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Product;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class CategoriesProductController extends Controller
+class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -12,7 +13,9 @@ class CategoriesProductController extends Controller
     public function index()
     {
         //
-        return view('layouts.admin.Product.Categories.index');
+        // $products = Product::limit(1)->get();
+        // dd($products);
+        return view('layouts.admin.Product.index');
     }
 
     /**

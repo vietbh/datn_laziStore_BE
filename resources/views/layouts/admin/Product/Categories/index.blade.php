@@ -44,42 +44,21 @@
    </div>
    <!-- Sale & Revenue End -->
 
-
-   <!-- Sales Chart Start -->
-   <div class="container-fluid pt-4 px-4">
-       <div class="row g-4">
-           <div class="col-sm-12 col-xl-6">
-               <div class="bg-light text-center rounded p-4">
-                   <div class="d-flex align-items-center justify-content-between mb-4">
-                       <h6 class="mb-0">Worldwide Sales</h6>
-                       <a href="">Show All</a>
-                   </div>
-                   <canvas id="worldwide-sales"></canvas>
-               </div>
-           </div>
-           <div class="col-sm-12 col-xl-6">
-               <div class="bg-light text-center rounded p-4">
-                   <div class="d-flex align-items-center justify-content-between mb-4">
-                       <h6 class="mb-0">Salse & Revenue</h6>
-                       <a href="">Show All</a>
-                   </div>
-                   <canvas id="salse-revenue"></canvas>
-               </div>
-           </div>
-       </div>
-   </div>
-   <!-- Sales Chart End -->
-
-
    <!-- Recent Sales Start -->
    <div class="container-fluid pt-4 px-4">
        <div class="bg-light text-center rounded p-4">
            <div class="d-flex align-items-center justify-content-between mb-4">
-               <h6 class="mb-0">Recent Salse</h6>
-               <a href="">Show All</a>
+               <h6 class="mb-0">Tất cả danh mục sản phẩm</h6>
+               <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoriesModal">
+                    Thêm danh mục
+                </button>
+            <!-- Modal -->
+            @include('layouts.admin.Product.Categories.components.addCatModal')
+            <!--End Modal -->
            </div>
-           <div class="table-responsive">
-               <table class="table text-start align-middle table-bordered table-hover mb-0">
+           <div class="table-responsive" style="height: 30rem">
+               <table class="table text-start align-middle table-bordered table-hover mb-0" >
                    <thead>
                        <tr class="text-dark">
                            <th scope="col"><input class="form-check-input" type="checkbox"></th>
@@ -101,41 +80,19 @@
                            <td>Paid</td>
                            <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
                        </tr>
+                      
                        <tr>
-                           <td><input class="form-check-input" type="checkbox"></td>
-                           <td>01 Jan 2045</td>
-                           <td>INV-0123</td>
-                           <td>Jhon Doe</td>
-                           <td>$123</td>
-                           <td>Paid</td>
-                           <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                       </tr>
-                       <tr>
-                           <td><input class="form-check-input" type="checkbox"></td>
-                           <td>01 Jan 2045</td>
-                           <td>INV-0123</td>
-                           <td>Jhon Doe</td>
-                           <td>$123</td>
-                           <td>Paid</td>
-                           <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                       </tr>
-                       <tr>
-                           <td><input class="form-check-input" type="checkbox"></td>
-                           <td>01 Jan 2045</td>
-                           <td>INV-0123</td>
-                           <td>Jhon Doe</td>
-                           <td>$123</td>
-                           <td>Paid</td>
-                           <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                       </tr>
-                       <tr>
-                           <td><input class="form-check-input" type="checkbox"></td>
-                           <td>01 Jan 2045</td>
-                           <td>INV-0123</td>
-                           <td>Jhon Doe</td>
-                           <td>$123</td>
-                           <td>Paid</td>
-                           <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
+                           <td colspan="12" >
+                            <div class="btn-toolbar float-end" role="toolbar">
+                                <div class="btn-group me-2" role="group" aria-label="Second group">
+                                    <button type="button" class="btn btn-secondary"><<</button>
+                                    <button type="button" class="btn btn-secondary">5</button>
+                                    <button type="button" class="btn btn-secondary">6</button>
+                                    <button type="button" class="btn btn-secondary">7</button>
+                                    <button type="button" class="btn btn-secondary">>></button>
+                                </div>
+                            </div>
+                           </td>
                        </tr>
                    </tbody>
                </table>
