@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('brands', function (Blueprint $table) {
             // $table->id();
             $table->increments('id');
-            $table->string('slug');
             $table->string('name');
+            $table->string('slug');
             $table->string('country');
             $table->char('show_hide')->default('show');
             $table->timestamps();

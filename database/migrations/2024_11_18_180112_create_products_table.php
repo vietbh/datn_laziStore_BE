@@ -22,10 +22,12 @@ return new class extends Migration
             $table->string('seo_keywords',255)->nullable();
             $table->string('slug',255)->unique();
             $table->string('product_type',255)->nullable();
-            $table->text('description');
+            $table->string('description')->nullable();
+            $table->text('detail_description')->nullable();
             $table->string('image_url',255);
-            $table->unsignedInteger('categories_product_id');
-            $table->unsignedInteger('brand_id');            
+            $table->string('image_path',255);
+            $table->unsignedInteger('categories_product_id')->nullable();
+            $table->unsignedInteger('brand_id')->nullable();            
             $table->foreign('categories_product_id')->references('id')->on('categories_products');
             $table->foreign('brand_id')->references('id')->on('brands');
             $table->integer('quantity_available')->default(0);

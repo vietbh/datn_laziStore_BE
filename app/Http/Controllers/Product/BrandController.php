@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Product;
 
-use App\Http\Controllers\Controller;
+use App\Models\Brands;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class BrandController extends Controller
 {
@@ -13,31 +15,38 @@ class BrandController extends Controller
     public function index()
     {
         //
+        $brands = Brands::all();
+        $data = compact('brands');
+        return view('layouts.admin.Brands.index',$data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request,Brands $brands)
     {
         //
+        // dd($request);
+        $validated = $request->validate([
+            'name' => 'required|unique:brands|max:255',
+            'country' => 'required',
+            
+        ],[
+            'name.required'=>'Không được để trống trường này!',
+            'name.unique'=>'Đã tồn tại danh mục này rồi!',
+            'country.required'=>'Không được để trống trường này!',
+        ]);
+        $slug = Str::slug($request->name); 
+        $brands->name = $request->name;
+        $brands->slug = $slug;
+        $brands->country = $request->country;
+        $brands->show_hide = $request->show_hide;
+        $brands->save();
+        return redirect()->route('brand.index')->with('success','Thêm mới thành công');
+
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -45,6 +54,10 @@ class BrandController extends Controller
     public function edit(string $id)
     {
         //
+        $brands = Brands::all();
+        $brand = Brands::findOrFail($id);
+        $data = compact('brands','brand');
+        return view('layouts.admin.Brands.index',$data);
     }
 
     /**
@@ -53,6 +66,23 @@ class BrandController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $brand = Brands::findOrFail($id);
+        $validated = $request->validate([
+            'name' => 'required|unique:brands|max:255',
+            'country' => 'required|min:1'
+        ],[
+            'name.required'=>'Không được để trống trường này!',
+            'name.unique'=>'Đã tồn tại thương hiệu này rồi!',
+            'country.required'=>'Không được để trống trường này!',
+        ]);
+        $slug = Str::slug($request->name); 
+        $brand->name = $request->name;
+        $brand->slug = $slug;
+        $brand->country = $request->country;
+        $brand->show_hide = $request->show_hide;
+        $brand->update();
+        return redirect()->route('brand.index')->with('success','Cập nhật thành công');
+
     }
 
     /**
@@ -61,5 +91,12 @@ class BrandController extends Controller
     public function destroy(string $id)
     {
         //
+        $brand = Brands::findOrFail($id);
+        // dd($brand);
+        
+        $brand->delete();
+        $alert='Thương hiệu '.$brand->name.' đã được xóa thành công.';
+        return redirect()->route('brand.index')->with('success',$alert);
+
     }
 }

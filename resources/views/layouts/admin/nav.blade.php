@@ -75,13 +75,19 @@
         </div>
         <div class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                <img class="rounded-circle me-lg-2" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                <img class="rounded-circle me-lg-2" src="{{ asset('img/user.jpg') }}" alt="" style="width: 40px; height: 40px;">
                 <span class="d-none d-lg-inline-flex">{{ Auth::user()->name }}</span>
             </a>
             <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                 <a href="{{ route('profile.edit') }}" class="dropdown-item">Thông tin cá nhân</a>
                 <a href="{{ route('dashboard') }}" class="dropdown-item">Cài đặt</a>
-                <a href="{{ route('logout') }}" class="dropdown-item">Đăng xuất</a>
+                <a href="{{ route('logout') }}" >
+                <form action="{{ route('logout') }}" method="post">
+                    @csrf
+                    @method('post')
+                    <button type="submit" class="dropdown-item">Đăng xuất</button>
+                </form>
+                </a>
             </div>
         </div>
     </div>

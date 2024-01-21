@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('specification_name');
             $table->string('specification_value');
             $table->char('show_hide')->default('show');
+            $table->unsignedInteger('product_id')->nullable();
+            $table->foreign('product_id')->references('id')->on('products');
             $table->timestamps();
         });
     }

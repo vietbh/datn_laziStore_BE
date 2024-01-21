@@ -18,6 +18,8 @@ return new class extends Migration
             $table->decimal('price',10,2);
             $table->decimal('price_sale',10,2);
             $table->integer('quantity');
+            $table->unsignedInteger('product_id')->nullable();
+            $table->foreign('product_id')->references('id')->on('products');
             $table->timestamps();
         });
     }

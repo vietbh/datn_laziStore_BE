@@ -16,6 +16,7 @@ return new class extends Migration
             $table->increments('id');
             $table->string('slug',255)->unique();
             $table->string('title',255);
+            $table->integer('index')->default(1)->nullable();
             $table->char('show_hide',10)->default('show');
             $table->timestamps();
         });

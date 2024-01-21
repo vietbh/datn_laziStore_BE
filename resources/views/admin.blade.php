@@ -49,7 +49,7 @@
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <div class="position-relative">
-                        <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                        <img class="rounded-circle" src="{{ asset('img/user.jpg') }}" alt="" style="width: 40px; height: 40px;">
                         <div class="bg-danger rounded-circle border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                     </div>
                     <div class="ms-3">
@@ -59,18 +59,18 @@
                 </div>
                 <div class="navbar-nav w-100">
              
-                    <a href="/" class="nav-item nav-link {{request()->routeIs('home') == 1 ? 'active':''}}"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <a href="{{ route('home') }}" class="nav-item nav-link {{request()->routeIs('home') == 1 ? 'active':''}}"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                     <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Thống kê</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle 
-                        {{request()->routeIs('categories-product') 
-                        || request()->routeIs('product')
-                        || request()->routeIs('brand')
+                        {{request()->routeIs('product.cat.index') 
+                        || request()->routeIs('product.index')
+                        || request()->routeIs('brand.index')
                         == 1 ? 'active':''}} " data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Sản phẩm</a>
                         <div class="dropdown-menu bg-transparent border-0">
-                            <a href="{{ route('brand') }}" class="dropdown-item {{request()->routeIs('brand') == 1 ? 'active':''}}">Thương hiệu</a>
-                            <a href="{{ route('categories-product') }}" class="dropdown-item {{request()->routeIs('categories-product') == 1 ? 'active':''}}">Danh mục</a>
-                            <a href="{{ route('product') }}" class="dropdown-item {{request()->routeIs('product') == 1 ? 'active':''}}">Sản phẩm</a>
+                            <a href="{{ route('brand.index') }}" class="dropdown-item {{request()->routeIs('brand.index') == 1 ? 'active':''}}">Thương hiệu</a>
+                            <a href="{{ route('product.cat.index') }}" class="dropdown-item {{request()->routeIs('product.cat.index') == 1 ? 'active':''}}">Danh mục</a>
+                            <a href="{{ route('product.index') }}" class="dropdown-item {{request()->routeIs('product.index') == 1 ? 'active':''}}">Sản phẩm</a>
                             {{-- <a href="element.html" class="dropdown-item">Other Elements</a> --}}
                         </div>
                     </div>
@@ -78,12 +78,9 @@
                     <a href="form.html" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Forms</a>
                     <a href="table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a> --}}
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle {{request()->routeIs('categories-new')==1 || request()->routeIs('new') == 1 ? 'active':''}} " data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Tin tức</a>
+                        <a href="#" class="nav-link dropdown-toggle {{request()->routeIs('cat.news')==1 || request()->routeIs('news') == 1 ? 'active':''}} " data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Tin tức</a>
                         <div class="dropdown-menu bg-transparent border-0">
-                            <a href="{{ route('categories-product') }}" class="dropdown-item {{request()->routeIs('') == 1 ? 'active':''}}">Thương hiệu</a>
-                            <a href="{{ route('categories-product') }}" class="dropdown-item {{request()->routeIs('categories-product') == 1 ? 'active':''}}">Danh mục</a>
-                            <a href="{{ route('product') }}" class="dropdown-item {{request()->routeIs('product') == 1 ? 'active':''}}">Sản phẩm</a>
-                            {{-- <a href="element.html" class="dropdown-item">Other Elements</a> --}}
+                             {{-- <a href="element.html" class="dropdown-item">Other Elements</a> --}}
                         </div>
                     </div>
                 </div>
@@ -106,7 +103,7 @@
                         </div>
                         <div class="col-12 col-sm-6 text-center text-sm-end">
                             <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-                            Development By <a href="https://htmlcodex.com">Lazi Team</a>
+                            Phát triển bởi <a href="vietbh.github.io/lazi-store">Lazi Team</a>
                         </br>
                         {{-- Distributed By <a class="border-bottom" href="https://themewagon.com" target="_blank">ThemeWagon</a> --}}
                         </div>

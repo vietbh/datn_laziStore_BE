@@ -1,21 +1,40 @@
 @extends('admin')
 @section('content')
+    
+        
     @if (session('success'))
         @include('layouts.admin.components.alert')
+        <script type="module">
+            setTimeout(() => {
+                var myAlert = document.getElementById('alertSuccess')
+                var bsAlert = new bootstrap.Alert(myAlert)
+                bsAlert.close()
+            }, 3000);
+        </script>
     @endif
-    @error('title')
+    
+    @error('name')
     <script type="module"> 
-            var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
-            keyboard: false
-            })
-            myModal.toggle();
-            myModal.show();
+        var myModal = new bootstrap.Modal(document.getElementById('addBrandsModal'), {
+        keyboard: false
+        })
+        myModal.toggle();
+        myModal.show();
+    </script> 
+    @enderror
+    @error('country')
+    <script type="module"> 
+        var myModal = new bootstrap.Modal(document.getElementById('addBrandsModal'), {
+        keyboard: false
+        })
+        myModal.toggle();
+        myModal.show();
     </script>
     @enderror
     
-    @if (isset($category))
+    @isset($brand)
     <script type="module"> 
-            var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
+            var myModal = new bootstrap.Modal(document.getElementById('addBrandsModal'), {
             keyboard: false
             })
             myModal.toggle();
@@ -65,17 +84,17 @@
    </div>
    <!-- Sale & Revenue End -->
 
-   <!-- Table Cate Start -->
+   <!-- Recent Sales Start -->
    <div class="container-fluid pt-4 px-4">
        <div class="bg-light text-center rounded p-4">
            <div class="d-flex align-items-center justify-content-between mb-4">
-               <h6 class="mb-0">Tất cả danh mục sản phẩm</h6>
+               <h6 class="mb-0">Tất cả thương hiệu</h6>
                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoriesModal">
-                    Thêm danh mục
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBrandsModal">
+                    Thêm 
                 </button>
             <!-- Modal -->
-            @include('layouts.admin.components.catModal')
+            @include('layouts.admin.components.brandModal')
             <!--End Modal -->
            </div>
            <div class="table-responsive" style="height: 30rem">
@@ -84,7 +103,7 @@
                        <tr class="text-dark">
                            <th scope="col"><input class="form-check-input" type="checkbox"></th>
                            <th scope="col">Ngày tạo</th>
-                           <th scope="col">Tên danh mục</th>
+                           <th scope="col">Tên thương hiệu</th>
                            <th scope="col">Slug</th>
                            <th scope="col">Thứ tự</th>
                            <th scope="col">Trạng thái</th>
@@ -92,18 +111,18 @@
                        </tr>
                    </thead>
                    <tbody>
-                    @foreach ($categories as $category)
+                    @foreach ($brands as $brand)
                         <tr>
                             <td><input class="form-check-input" type="checkbox"></td>
-                            <td>{{$category->created_at}}</td>
-                            <td>{{$category->title}}</td>
-                            <td>{{$category->slug}}</td>
-                            <td>{{$category->index}}</td>
-                            <td>{{$category->show_hide=='show'?'Hiện':'Ẩn'}}</td>
+                            <td>{{$brand->created_at}}</td>
+                            <td>{{$brand->name}}</td>
+                            <td>{{$brand->slug}}</td>
+                            <td>{{$brand->country}}</td>
+                            <td>{{$brand->show_hide=='show'?'Hiện':'Ẩn'}}</td>
                             <td>
                             <div class="d-flex justify-content-evenly">
-                                <a class="btn btn-sm btn-primary" href="{{ route('product.cat.edit', ['id' => $category->id]) }}">Edit</a>
-                                <form action="{{ route('product.cat.delete', ['id' => $category->id]) }}" method="POST">
+                                <a class="btn btn-sm btn-primary" href="{{ route('brand.edit', ['id' => $brand->id]) }}">Edit</a>
+                                <form action="{{ route('brand.delete', ['id' => $brand->id]) }}" method="POST">
                                     @csrf
                                     @method('delete')
                                     <button class="btn btn-sm btn-danger" type="submit">Xóa</button>
@@ -127,6 +146,6 @@
        </div>
        </div> --}}
    </div>
-   <!-- Table Cate End -->
+   <!-- Recent Sales End -->
 
 @endsection

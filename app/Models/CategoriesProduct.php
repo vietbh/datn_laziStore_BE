@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class CategoriesProduct extends Model
 {
     use HasFactory;
+    protected $primaryKey="id";
+    protected $fillable = ['title','slug','index','show_hide'];
 }
