@@ -92,14 +92,14 @@
                        </tr>
                    </thead>
                    <tbody>
-                    {{-- @foreach ($categories as $category)
+                    {{-- @foreach ($news as $new)
                         <tr>
                             <td><input class="form-check-input" type="checkbox"></td>
-                            <td>{{$category->created_at}}</td>
-                            <td>{{$category->title}}</td>
-                            <td>{{$category->slug}}</td>
-                            <td>{{$category->index}}</td>
-                            <td>{{$category->show_hide=='show'?'Hiện':'Ẩn'}}</td>
+                            <td>{{$new->created_at}}</td>
+                            <td>{{$new->title}}</td>
+                            <td>{{$new->slug}}</td>
+                            <td>{{$new->index}}</td>
+                            <td>{{$new->show_hide=='show'?'Hiện':'Ẩn'}}</td>
                             <td>
                             <div class="d-flex justify-content-evenly">
                                 <a class="btn btn-sm btn-primary" href="{{ route('product.cat.edit', ['id' => $category->id]) }}">Edit</a>
@@ -115,17 +115,7 @@
                    </tbody>
                </table>
            </div>
-           
        </div>
-       {{-- <div class="btn-toolbar float-end" role="toolbar">
-       <div class="btn-group me-2" role="group" aria-label="Second group">
-           <button type="button" class="btn btn-secondary"><<</button>
-           <button type="button" class="btn btn-secondary">5</button>
-           <button type="button" class="btn btn-secondary">6</button>
-           <button type="button" class="btn btn-secondary">7</button>
-           <button type="button" class="btn btn-secondary">>></button>
-       </div>
-       </div> --}}
    </div>
    <!-- Table Cate End -->
 
