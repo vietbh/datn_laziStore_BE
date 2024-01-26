@@ -75,7 +75,7 @@
                     Thêm danh mục
                 </button>
             <!-- Modal -->
-            @include('layouts.admin.components.catModal')
+            @include('layouts.admin.components.catProModal')
             <!--End Modal -->
            </div>
            <div class="table-responsive" style="height: 30rem">

@@ -28,6 +28,8 @@
 
     <!-- Template Stylesheet -->
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+
+
 </head>
 
 <body>
@@ -71,18 +73,29 @@
                             <a href="{{ route('brand.index') }}" class="dropdown-item {{request()->routeIs('brand.index') == 1 ? 'active':''}}">Thương hiệu</a>
                             <a href="{{ route('product.cat.index') }}" class="dropdown-item {{request()->routeIs('product.cat.index') == 1 ? 'active':''}}">Danh mục</a>
                             <a href="{{ route('product.index') }}" class="dropdown-item {{request()->routeIs('product.index') == 1 ? 'active':''}}">Sản phẩm</a>
-                            {{-- <a href="element.html" class="dropdown-item">Other Elements</a> --}}
                         </div>
                     </div>
-                    {{-- <a href="widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Widgets</a>
-                    <a href="form.html" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Forms</a>
-                    <a href="table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a> --}}
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle {{request()->routeIs('cat.news')==1 || request()->routeIs('news') == 1 ? 'active':''}} " data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Tin tức</a>
+                        <a href="#" class="nav-link dropdown-toggle 
+                        {{request()->routeIs('news.cat.index')==1 
+                        || request()->routeIs('news.tag.index') == 1
+                        || request()->routeIs('news.index') == 1 ? 'active':''}}
+                        " data-bs-toggle="dropdown"><i class="fa fa-newspaper me-2"></i>Tin tức</a>
                         <div class="dropdown-menu bg-transparent border-0">
-                             {{-- <a href="element.html" class="dropdown-item">Other Elements</a> --}}
+                            <a href="{{ route('news.cat.index') }}" class="dropdown-item {{request()->routeIs('news.cat.index') == 1 ? 'active':''}}">Danh mục</a>
+                            <a href="{{ route('news.tag.index') }}" class="dropdown-item {{request()->routeIs('news.tag.index') == 1 ? 'active':''}}">Tag</a>
+                            <a href="{{ route('news.index') }}" class="dropdown-item {{request()->routeIs('news.index') == 1 ? 'active':''}}">Tin tức</a>
                         </div>
                     </div>
+                    {{-- <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle 
+                        {{request()->routeIs('cat.news')==1 || request()->routeIs('news') == 1 ? 'active':''}}
+                        " data-bs-toggle="dropdown"><i class="fa-regular fa-newspaper"></i>Tin tức</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="{{ route('news.cat.index') }}" class="dropdown-item {{request()->routeIs('news.cat.index') == 1 ? 'active':''}}">Danh mục</a>
+                            <a href="{{ route('news.index') }}" class="dropdown-item {{request()->routeIs('news.index') == 1 ? 'active':''}}">Tin tức</a>
+                        </div>
+                    </div> --}}
                 </div>
             </nav>
         </div>
@@ -120,14 +133,15 @@
     <!-- JavaScript Libraries -->
     <script src="{{ url('https://code.jquery.com/jquery-3.4.1.min.js') }} "></script>
     <script src="{{ url('https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset("lib/chart/chart.min.js") }}"></script>
+    <script src="{{ asset('lib/chart/chart.min.js') }}"></script>
     <script src="{{ asset('lib/easing/easing.min.js') }}"></script>
     <script src="{{ asset('lib/waypoints/waypoints.min.js') }}"></script>
     <script src="{{ asset('lib/owlcarousel/owl.carousel.min.js') }}"></script>
     <script src="{{ asset('lib/tempusdominus/js/moment.min.js') }}"></script>
     <script src="{{ asset('lib/tempusdominus/js/moment-timezone.min.js') }}"></script>
     <script src="{{ asset('lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js') }}"></script>
-
+    {{-- Text editor --}}
+    <script src="{{ url('https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js') }}"></script>
     <!-- Template Javascript -->
     <script src="{{ asset('js/main.js') }}"></script>
 </body>

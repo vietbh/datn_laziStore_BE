@@ -1,4 +1,9 @@
-
+<style>
+    .ck-editor__editable_inline {
+        min-height: 25rem;
+        max-height: 45rem;
+    }
+    </style>
 <div class="modal fade" id="addProductModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen modal-dialog-centered">
     <div class="modal-content">
@@ -36,7 +41,7 @@
                                 @method('post')
                                 @endisset
                                 <div class="row mb-3">
-                                    <div class="col-sm-12 col-xl-4 mb-3">
+                                    <div class="col-sm-12 col-xl-6 mb-3">
                                         <label for="name" class="form-label ">Tên sản phẩm <span class="text-danger text-small">(*)</span></label>
                                         <input type="text" name="name" class="form-control @error('name') 
                                         is-invalid
@@ -50,7 +55,7 @@
                                         <div id="name" class="form-text text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                    <div class="col-sm-12 col-xl-4 mb-3">
+                                    <div class="col-sm-12 col-xl-6 mb-3">
                                         <label for="seo_keywords" class="form-label">Từ khóa SEO<span class="text-danger text-small">(*)</span></label>
                                         <input type="text" name="seo_keywords" class="form-control" 
                                         @isset($product)
@@ -61,13 +66,9 @@
                                         <div id="seo_keywords" class="form-text text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                    <div class="col-sm-12 col-xl-4 mb-3">
-                                        <label for="color" class="form-label ">Màu sắc</label>
-                                        <button type="button" class="btn btn-secondary w-100" id="color" data-bs-toggle="modal" data-bs-target="#addProductColorModal">Chọn màu sắc</button>
-                                    </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <div class="col-sm-12 col-xl-4 mb-3">
+                                    <div class="col-sm-12 col-xl-6 mb-3">
                                         <label for="categories_product_id" class="form-label ">Danh mục sản phẩm <span class="text-danger text-small">(*)</span></label>
                                         <select class="form-select  
                                         @error('categories_product_id') 
@@ -86,7 +87,7 @@
                                             <div id="categories_product_id" class="form-text text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                    <div class="col-sm-12 col-xl-4 mb-3">
+                                    <div class="col-sm-12 col-xl-6 mb-3">
                                         <label for="brand_id" class="form-label ">Thương hiệu <span class="text-danger text-small">(*)</span></label>
                                         <select class="form-select  
                                         @error('brand_id') 
@@ -105,13 +106,9 @@
                                             <div id="brand_id" class="form-text text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                    <div class="col-sm-12 col-xl-4 mb-3">
-                                        <label for="thong_so" class="form-label ">Thông số</label>
-                                        <button type="button" class="btn btn-secondary w-100" id="thong_so">Thêm thông số</button>
-                                    </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <div class="col-sm-12 col-xl-4 mb-3">
+                                    <div class="col-sm-12 col-xl-6 mb-3">
                                         <label for="image_url" class="form-label ">Chọn hình ảnh <span class="text-danger text-small">(*)</span></label>
                                         <div class="d-flex justify-content-around">
                                             <input type="file" name="image_url" class="form-control @error('image_url') 
@@ -127,7 +124,7 @@
                                             <button type="button" class="btn btn-secondary ms-1">Thêm</button>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-xl-4 mb-3">
+                                    <div class="col-sm-12 col-xl-6 mb-3">
                                         <label for="show_hide" class="form-label">Trạng thái (mặc định sẽ là Hiện)</label>
                                         <select class="form-select" name="show_hide" 
                                         @isset($product)
@@ -138,23 +135,30 @@
                                             <option value="hide">Ẩn</option>
                                         </select>    
                                     </div>
-                                    <div class="col-sm-12 col-xl-4 mb-3">
-                                        <label for="detail_description" class="form-label">Mô tả chi tiết</label>
-                                        <button type="button" id="detail_description" class="btn btn-secondary w-100" data-bs-toggle="modal" data-bs-target="#addProductDesModal">Mô tả chi tiết    </button>
-                                    </div>
                                 </div>    
-                                <div class="mb-3">
-                                    <label for="description" class="form-label">Mô tả ngắn</label>
-                                    <textarea name="description" class="form-control" id="description" rows="3">
-                                    @isset($product)
-                                        {{$product->description}}
-                                    @endisset
-                                    </textarea>
+                                <div class="row mb-3">
+                                    <div class="col-sm-12 col-xl-12">
+                                        <label for="description" class="form-label">Mô tả ngắn</label>
+                                        <div name="description" class="form-control ck-editor__editable_inline" id="description">
+                                        @isset($product)
+                                            {{$product->description}}
+                                        @endisset
+                                        </div>
+                                    </div>
+                                </div>     
+                                <div class="row mb-3">
+                                    <div class="col-sm-12 col-xl-12">
+                                        <label for="detail_description" class="form-label">Mô tả chi tiết</label>
+                                        <div name="detail_description" class="form-control " id="editor" >
+                                        @isset($product)
+                                            {{$product->detail_description}}
+                                        @endisset
+                                        </div>
+                                    </div>
                                 </div>     
                                 @include('layouts.admin.components.colorModal')
                                 {{-- @include('layouts.admin.components.speciModal')     --}}
-                           
-                                <div class="mb-3 float-end">
+                                <div class=" mb-3 float-end">
                                     <button type="submit" class="btn btn-primary">
                                         @isset($product)
                                         Sửa
@@ -179,3 +183,11 @@
     </div>
     </div>
 </div>
+    <script type="module">
+        ClassicEditor.create( document.querySelector('#editor') , {language: 'vi'} )
+        .then( editors => { editors.setData( '' ); } )
+        .catch( error => {console.error( error )} );
+        ClassicEditor.create( document.querySelector('#description') , {language: 'vi'} )
+        .then( editor => { editor.setData( '' ); } )
+        .catch( error => {console.error( error )} );
+    </script>
