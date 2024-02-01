@@ -42,4 +42,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    // Kiểm tra vai trò
+    public function hasRole($role) :bool
+    {
+        // Kiểm tra xem người dùng có vai trò truyền vào hay không
+        // return $this->roles->contains('name', $role);
+        // Kiểm tra xem người dùng có vai trò truyền vào hay không
+        return $this->role === $role;
+    }
+    // public function roles()
+    // {
+    //     // Mối quan hệ nhiều-nhiều với mô hình Role
+    //     return $this->belongsToMany(Role::class);
+    // }
 }

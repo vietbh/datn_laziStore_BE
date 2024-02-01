@@ -90,7 +90,7 @@ class CategoriesProductController extends Controller
         
         $category->delete();
         $alert='Danh mục '.$category->title.' đã được xóa thành công.';
-        return redirect()->route('cat.product')->with('success',$alert);
+        return redirect()->route('product.cat.index')->with('success',$alert);
 
     }
 }

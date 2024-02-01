@@ -1,25 +1,29 @@
 @extends('admin')
 @section('content')
+@php
+$modal = `  var myModal = new bootstrap.Modal(document.getElementById('addNewsModal'), {
+            keyboard: false
+            })
+            myModal.toggle();
+            myModal.show();`;
+@endphp
     @if (session('success'))
         @include('layouts.admin.components.alert')
     @endif
     @error('title')
     <script type="module"> 
-            var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
-            keyboard: false
-            })
-            myModal.toggle();
-            myModal.show();
+    {{$modal}}
     </script>
     @enderror
     
-    @if (isset($category))
-    <script type="module"> 
-            var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
-            keyboard: false
-            })
-            myModal.toggle();
-            myModal.show();
+    @if (isset($news))
+    <script type="module">
+    {{$modal}} 
+            // var myModal = new bootstrap.Modal(document.getElementById('addNewsModal'), {
+            // keyboard: false
+            // })
+            // myModal.toggle();
+            // myModal.show();
     </script>
     @endif
    <!-- Sale & Revenue Start -->
@@ -71,11 +75,11 @@
            <div class="d-flex align-items-center justify-content-between mb-4">
                <h6 class="mb-0">Tất cả tin tức</h6>
                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoriesModal">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addNewsModal">
                     <i class="fas fa-plus me-1"></i> Thêm
                 </button>
             <!-- Modal -->
-            {{-- @include('layouts.admin.components.') --}}
+            @include('layouts.admin.components.newsModal')
             <!--End Modal -->
            </div>
            <div class="table-responsive" style="height: 30rem">

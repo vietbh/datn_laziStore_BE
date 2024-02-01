@@ -1,44 +1,69 @@
 <?php
 
-use App\Http\Controllers\News\CategoriesNewsController;
+use App\Http\Controllers\ChartController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashBoardController;
-use App\Http\Controllers\News\CategoriesController;
-use App\Http\Controllers\News\NewsController;
-use App\Http\Controllers\News\TagNewsController;
+use App\Http\Controllers\DeliveryController;
+use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\Product\CategoriesProductController;
 use App\Http\Controllers\Product\BrandController;
 use App\Http\Controllers\Product\ProductController;
+use App\Http\Controllers\News\CategoriesNewsController;
+use App\Http\Controllers\News\TagNewsController;
+use App\Http\Controllers\News\NewsController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PolicyController;
+use App\Http\Controllers\ProductHotController;
+use App\Http\Controllers\RoleAdminController;
+use App\Http\Controllers\SlideAdsController;
+use App\Http\Controllers\UserGuestController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 Route::get('/', function () {
     return redirect()->route('home');
 });
 
-// Route::get('/product',[ProductController::class,'index']);
 
 Route::get('/dashboard', function () {
-    return redirect()->route('home');
     // return view('dashboard');
+    return redirect()->route('home');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
-    // 
+Route::get('/authorize', function () {
+    return view('layouts.abort.401');
+})->middleware(['auth', 'verified'])->name('401');
+
+Route::middleware(['auth','role:0'])->group(function () {
+    // Dashboard
     Route::get('/admin',[DashBoardController::class, 'index'])->name('home');
+    // Thống kê
+    Route::get('/admin/thong-ke',[ChartController::class, 'index'])->name('chart.index');
+    // Khách hàng
+    Route::get('/admin/khach-hang',[UserGuestController::class, 'index'])->name('guest.index');
+    // Đơn hàng
+    Route::get('/admin/don-hang',[PaymentController::class, 'index'])->name('payment.index');
+    // Mã giảm giá
+    Route::get('/admin/ma-giam-gia',[DiscountController::class, 'index'])->name('discount.index');
+    // Sản phẩm hot
+    Route::get('/admin/san-pham-hot',[ProductHotController::class, 'index'])->name('hot.index');
+    // Vận chuyển
+    Route::get('/admin/van-chuyen',[DeliveryController::class, 'index'])->name('delivery.index');
+    // Bình luận
+    Route::get('/admin/binh-luan',[CommentController::class, 'index'])->name('comment.index');
+    // Tư vấn
+    Route::get('/admin/tu-van',[ContactController::class, 'index'])->name('contact.index');
+    // Chính sách
+    Route::get('/admin/chinh-sach',[PolicyController::class, 'index'])->name('policy.index');
+    // Slide quảng cáo
+    Route::get('/admin/slide-quang-cao',[SlideAdsController::class, 'index'])->name('slide.index');
+    // Vai trò quản trị
+    Route::get('/admin/vai-tro-quan-tri',[RoleAdminController::class, 'index'])->name('role.index');
+    // Tới cửa hàng
+    Route::get('/https://vietbh.github.io/lazi-store',function(){
+        return redirect('https://vietbh.github.io/lazi-store');
+    })->name('lazi.index');
     //Sản phẩm
     Route::get('/admin/san-pham',[ProductController::class, 'index'])->name('product.index');
     Route::post('/admin/san-pham/them',[ProductController::class, 'store'])->name('product.store');

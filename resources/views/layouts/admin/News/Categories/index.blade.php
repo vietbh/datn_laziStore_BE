@@ -84,7 +84,7 @@
                        <tr class="text-dark">
                            <th scope="col"><input class="form-check-input" type="checkbox"></th>
                            <th scope="col">Ngày tạo</th>
-                           <th scope="col">Tên danh mục</th>
+                           <th scope="col">Tên danh mục tin</th>
                            <th scope="col">Slug</th>
                            <th scope="col">Thứ tự</th>
                            <th scope="col">Trạng thái</th>
