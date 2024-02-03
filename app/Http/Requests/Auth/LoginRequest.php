@@ -28,8 +28,15 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'email' => ['required', 'string',],
             'password' => ['required', 'string'],
+        ];
+    }
+    public function messages(): array
+    {
+        return [
+            'email.required' => 'Không được bỏ trống trường này',
+            'password.required' => 'Không được bỏ trống trường này',
         ];
     }
 
@@ -46,7 +53,8 @@ class LoginRequest extends FormRequest
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                // 'email' => trans('auth.failed'),
+                'login' => 'Tài khoản này không tồn tại',
             ]);
         }
 
