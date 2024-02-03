@@ -25,11 +25,6 @@ Route::get('/', function () {
     return redirect()->route('home');
 });
 
-// Đăng nhập
-Route::get('/admin/dang-nhap-quan-tri-vien',function(){
-    return view('layouts.admin.login');
-})->name('admin.login');
-
 
 Route::get('/dashboard', function () {
     // return view('dashboard');
