@@ -25,6 +25,11 @@ Route::get('/', function () {
     return redirect()->route('home');
 });
 
+// Đăng nhập
+Route::get('/admin/dang-nhap-quan-tri-vien',function(){
+    return view('layouts.admin.login');
+})->name('admin.login');
+
 
 Route::get('/dashboard', function () {
     // return view('dashboard');
@@ -106,5 +111,6 @@ Route::middleware(['auth','role:0'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
 
 require __DIR__.'/auth.php';
