@@ -15,12 +15,12 @@
         </div>
         <div class="navbar-nav w-100">            
             <a href="{{ route('home') }}" class="nav-item nav-link {{request()->routeIs('home') == 1 ? 'active':''}}"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-            <a href="{{ route('chart.index') }}" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Thống kê</a>
-            <a href="{{ route('guest.index') }}" class="nav-item nav-link"><i class="fas fa-users me-2"></i>Khách hàng</a>
-            <a href="{{ route('payment.index') }}" class="nav-item nav-link"><i class="fas fa-cash-register me-2"></i>Đơn hàng</a>
-            <a href="{{ route('hot.index') }}" class="nav-item nav-link"><i class="fa fa-fire me-2"></i>Sản phẩm hot</a>
-            <a href="{{ route('discount.index') }}" class="nav-item nav-link"><i class="fa fa-ticket-alt me-2"></i>Mã giảm giá</a>
-            <a href="{{ route('delivery.index') }}" class="nav-item nav-link"><i class="fa fa-truck me-2"></i>Vận chuyển</a>
+            <a href="{{ route('chart.index') }}" class="nav-item nav-link {{request()->routeIs('chart.index') == 1 ? 'active':''}}"><i class="fa fa-chart-bar me-2"></i>Thống kê</a>
+            <a href="{{ route('guest.index') }}" class="nav-item nav-link {{request()->routeIs('guest.index') == 1 ? 'active':''}}"><i class="fas fa-users me-2"></i>Khách hàng</a>
+            <a href="{{ route('payment.index') }}" class="nav-item nav-link {{request()->routeIs('payment.index') == 1 ? 'active':''}}"><i class="fas fa-cash-register me-2"></i>Đơn hàng</a>
+            <a href="{{ route('hot.index') }}" class="nav-item nav-link {{request()->routeIs('hot.index') == 1 ? 'active':''}}"><i class="fa fa-fire me-2"></i>Sản phẩm hot</a>
+            <a href="{{ route('discount.index') }}" class="nav-item nav-link {{request()->routeIs('discount.index') == 1 ? 'active':''}}"><i class="fa fa-ticket-alt me-2"></i>Mã giảm giá</a>
+            <a href="{{ route('delivery.index') }}" class="nav-item nav-link {{request()->routeIs('delivery.index') == 1 ? 'active':''}}"><i class="fa fa-truck me-2"></i>Vận chuyển</a>
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle 
                 {{request()->routeIs('product.cat.index') 
@@ -57,11 +57,11 @@
                     <a href="{{ route('news.index') }}" class="dropdown-item {{request()->routeIs('news.index') == 1 ? 'active':''}}">Tin tức</a>
                 </div>
             </div>
-            <a href="{{ route('contact.index') }}" class="nav-item nav-link"><i class="far fa-question-circle me-2"></i>Tư vấn</a>
-            <a href="{{ route('policy.index') }}" class="nav-item nav-link"><i class="fas fa-certificate me-2"></i></i>Chính sách</a>
-            <a href="{{ route('slide.index') }}" class="nav-item nav-link"><i class="far fa-question-circle me-2"></i>Slide quảng cáo</a>
-            <a href="{{ route('role.index') }}" class="nav-item nav-link"><i class="fas fa-key me-2"></i>Vai trò</a>
-            <a href="{{ route('lazi.index') }}" class="nav-item nav-link"><i class="fas fa-store me-2"></i>Tới cửa hàng</a>
+            <a href="{{ route('contact.index') }}" class="nav-item nav-link {{request()->routeIs('contact.index') == 1 ? 'active':''}}"><i class="far fa-question-circle me-2"></i>Tư vấn</a>
+            <a href="{{ route('policy.index') }}" class="nav-item nav-link {{request()->routeIs('policy.index') == 1 ? 'active':''}}"><i class="fas fa-certificate me-2"></i></i>Chính sách</a>
+            <a href="{{ route('slide.index') }}" class="nav-item nav-link {{request()->routeIs('slide.index ') == 1 ? 'active':''}}"><i class="far fa-question-circle me-2"></i>Slide quảng cáo</a>
+            <a href="{{ route('role.index') }}" class="nav-item nav-link {{request()->routeIs('role.index') == 1 ? 'active':''}}"><i class="fas fa-key me-2"></i>Vai trò</a>
+            <a href="{{ route('lazi.index') }}" class="nav-item nav-link {{request()->routeIs('lazi.index') == 1 ? 'active':''}}"><i class="fas fa-store me-2"></i>Tới cửa hàng</a>
         </div>
     </nav>
 </div>

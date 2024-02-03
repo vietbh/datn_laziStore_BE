@@ -146,15 +146,6 @@ myModal.show();
         </div>
 
     </div>
-    {{-- <div class="btn-toolbar float-end" role="toolbar">
-    <div class="btn-group me-2" role="group" aria-label="Second group">
-        <button type="button" class="btn btn-secondary"><<</button>
-        <button type="button" class="btn btn-secondary">5</button>
-        <button type="button" class="btn btn-secondary">6</button>
-        <button type="button" class="btn btn-secondary">7</button>
-        <button type="button" class="btn btn-secondary">>></button>
-    </div>
-    </div> --}}
     </div>
 <!-- Table Cate End -->
 

@@ -12,7 +12,7 @@ class UserGuestController extends Controller
     public function index()
     {
         //
-        return var_dump('Trang khách hàng');
+        return view('layouts.admin.User.index');
 
     }
 

@@ -69,13 +69,13 @@
    <div class="container-fluid pt-4 px-4">
        <div class="bg-light text-center rounded p-4">
            <div class="d-flex align-items-center justify-content-between mb-4">
-               <h6 class="mb-0">Tất cả danh mục sản phẩm</h6>
+               <h6 class="mb-0">Danh sách khách hàng</h6>
                <!-- Button trigger modal -->
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoriesModal">
                     Thêm danh mục
                 </button>
             <!-- Modal -->
-            @include('layouts.admin.components.catProModal')
+            {{-- @include('layouts.admin.components.catProModal') --}}
             <!--End Modal -->
            </div>
            <div class="table-responsive" style="height: 30rem">
@@ -92,7 +92,7 @@
                        </tr>
                    </thead>
                    <tbody>
-                    @foreach ($categories as $category)
+                    {{-- @foreach ($categories as $category)
                         <tr>
                             <td><input class="form-check-input" type="checkbox"></td>
                             <td>{{$category->created_at}}</td>
@@ -111,7 +111,7 @@
                             </div>
                             </td>
                         </tr>
-                    @endforeach                      
+                    @endforeach                       --}}
                    </tbody>
                </table>
            </div>
