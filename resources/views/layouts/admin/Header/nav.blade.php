@@ -80,7 +80,7 @@
             </a>
             <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                 <a href="{{ route('profile.edit') }}" class="dropdown-item">Thông tin cá nhân</a>
-                <a href="{{ route('dashboard') }}" class="dropdown-item">Cài đặt</a>
+                {{-- <a href="{{ route('dashboard') }}" class="dropdown-item">Cài đặt</a> --}}
                 <a href="{{ route('logout') }}" >
                 <form action="{{ route('logout') }}" method="post">
                     @csrf

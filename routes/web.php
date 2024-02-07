@@ -19,6 +19,7 @@ use App\Http\Controllers\ProductHotController;
 use App\Http\Controllers\RoleAdminController;
 use App\Http\Controllers\SlideAdsController;
 use App\Http\Controllers\UserGuestController;
+use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {

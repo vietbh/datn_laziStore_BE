@@ -12,7 +12,7 @@ class ProductHotController extends Controller
     public function index()
     {
         //
-        return var_dump('Trang sản phẩm hot');
+        return view('layouts.admin.ProductHot.index');
     }
 
     /**

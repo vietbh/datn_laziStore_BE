@@ -78,7 +78,7 @@
             @include('layouts.admin.components.catProModal')
             <!--End Modal -->
            </div>
-           <div class="table-responsive" style="height: 30rem">
+           <div class="table-responsive" style="height: 100vh">
                <table class="table text-start align-middle table-bordered table-hover mb-0" >
                    <thead>
                        <tr class="text-dark">

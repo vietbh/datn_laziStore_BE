@@ -44,12 +44,12 @@
 
 
         <!-- Sidebar Start -->
-        @include('layouts.admin.sideBar')
+        @include('layouts.admin.Header.sideBar')
         <!-- Sidebar End -->
         
         <!-- Content Start -->
         <div class="content">
-            @include('layouts.admin.nav')   
+            @include('layouts.admin.Header.nav')   
             
             @yield('content')
 

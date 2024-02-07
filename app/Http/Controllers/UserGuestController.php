@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserGuestController extends Controller
@@ -12,7 +13,8 @@ class UserGuestController extends Controller
     public function index()
     {
         //
-        return view('layouts.admin.User.index');
+        $users = User::all();
+        return view('layouts.admin.User.index',compact('users'));
 
     }
 

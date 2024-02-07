@@ -27,69 +27,65 @@ class ProductController extends Controller
         return view('layouts.admin.Product.index',$data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request,Product $product,ProductVariation $productVariation)
+    public function store(Request $request, Product $product, ProductVariation $productVariation)
     {
         $request->validate([
-            'name' => 'required',
-            'seo_keywords' => 'required',
+            'name' => 'required|unique:products,name',
+            'seo_keywords' => 'required|unique:products,seo_keywords',
             'categories_product_id' => 'required',
             'brand_id' => 'required',
-            // 'colors' => 'required|array', // Thêm validation cho trường colors
-            'color_type'=>'required',
-            'price'=>'required',
-            'price_sale'=>'required|lt:price',
-            'quantity'=>'required|min:1',
+            'color_type' => 'required',
+            'price' => 'required',
+            'price_sale' => 'required|lt:price',
+            'quantity' => 'required|min:1',
         ]);
     
         $file = $request->file('image_url'); // Lấy file từ request
+        $path = null;
+        $url = null;
+    
         if ($file) {
             // Tiếp tục xử lý hoặc trả về đường dẫn đã lưu
-            $path = $file->store('images_product','public'); // Lưu file vào thư mục 'folder_name'
+            $path = $file->store('images_product', 'public'); // Lưu file vào thư mục 'folder_name'
             $url = asset(Storage::url($path));
         }
-        
-        $product->name                  = $request->name;
-        $product->seo_keywords          = Str::slug($request->seo_keywords);
-        $product->slug                  = Str::slug($request->name);
+    
+        $product->name = $request->name;
+        $product->seo_keywords = Str::slug($request->seo_keywords);
+        $product->slug = Str::slug($request->name);
         $product->categories_product_id = $request->categories_product_id;
-        $product->brand_id              = $request->brand_id;
-        $product->image_path            = $path;
-        $product->image_url             = $url ;
-        $product->description           = $request->description;
-        $product->show_hide             = $request->show_hide;
+        $product->brand_id = $request->brand_id;
+        $product->image_path = $path;
+        $product->image_url = $url;
+        $product->description = $request->description;
+        $product->show_hide = $request->show_hide;
         $product->save();
     
         $productVariation->color_type = $request->color_type;
         $productVariation->product_id = $product->id;
-        $productVariation->price      = $request->price;
+        $productVariation->price = $request->price;
         $productVariation->price_sale = $request->price_sale;
-        $productVariation->quantity   = $request->quantity ;
+        $productVariation->quantity = $request->quantity;
         $productVariation->save();
-        // $colors = $request->input('colors');
-        // dd($request);
-        // // foreach ($colors as $color) {
-        //     $productVariation->color_type = $color['color_type'];
-        //     $productVariation->product_id = $product->id;
-        //     $productVariation->price = $color['price'];
-        //     $productVariation->price_sale = $color['price_sale'];
-        //     $productVariation->quantity = $color['quantity'];
-        //     $productVariation->save();
-        // }
+
+        $jsonString = $request->colors;
+        // Chuyển đổi chuỗi JSON thành mảng
+        $colors = json_decode($jsonString, true);
+    
+        if (isset($colors)) {
+            foreach ($colors as $color) {
+                $productVariation = new ProductVariation();
+                $productVariation->color_type = $color['color_type'];
+                $productVariation->product_id = $product->id;
+                $productVariation->price = $color['price'];
+                $productVariation->price_sale = $color['price_sale'];
+                $productVariation->quantity = $color['quantity'];
+                $productVariation->save();
+            }
+        }
     
         return redirect()->route('product.index')->with('success', 'Thêm sản phẩm thành công');
-    }
-    /**
+    }    /**
      * Display the specified resource.
      */
     public function show(string $id)

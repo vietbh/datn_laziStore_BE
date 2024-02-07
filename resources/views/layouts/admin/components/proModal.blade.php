@@ -1,9 +1,3 @@
-<style>
-    .ck-editor__editable_inline {
-        min-height: 25rem;
-        max-height: 45rem;
-    }
-    </style>
 <div class="modal fade" id="addProductModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen modal-dialog-centered">
     <div class="modal-content">
@@ -48,6 +42,8 @@
                                         @enderror" id="name"
                                         @isset($product)
                                             value="{{$product->name}}"
+                                        @else
+                                        value="{{old('name')}}"        
                                         @endisset
                                         placeholder="Nhập tên sản phẩm (vd:Iphone15,Samsung A23,...)"
                                         aria-describedby="name">
@@ -60,6 +56,8 @@
                                         <input type="text" name="seo_keywords" class="form-control" 
                                         @isset($product)
                                             value="{{$product->seo_keywords}}"
+                                        @else
+                                        value="{{old('seo_keywords')}}"        
                                         @endisset
                                         id="seo_keywords">   
                                         @error('seo_keywords')
@@ -76,6 +74,8 @@
                                         @enderror" name="categories_product_id" 
                                         @isset($product)
                                             value="{{$product->categories_product_id}}"
+                                        @else
+                                        value="{{old('categories_product_id')}}"    
                                         @endisset
                                         id="categories_product_id">
                                             <option value="" selected disabled>Chọn danh mục sản phẩm</option>
@@ -95,6 +95,8 @@
                                         @enderror" name="brand_id" 
                                         @isset($product)
                                             value="{{$product->brand_id}}"
+                                        @else
+                                        value="{{old('brand_id')}}"    
                                         @endisset
                                         id="brand_id">
                                             <option value="" selected disabled>Chọn thương hiệu sản phẩm</option>
@@ -116,12 +118,14 @@
                                             @enderror" id="image_url"
                                             @isset($product)
                                                 value="{{$product->image_url}}"
+                                            @else
+                                            value="{{old('image_url')}}"        
                                             @endisset
                                             aria-describedby="image_url">
                                             @error('image_url')
                                                 <div id="image_url" class="form-text text-danger">{{ $message }}</div>
                                             @enderror
-                                            <button type="button" class="btn btn-secondary ms-1">Thêm</button>
+                                            {{-- <button type="button" class="btn btn-secondary ms-1">Thêm</button> --}}
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-xl-6 mb-3">
@@ -129,6 +133,8 @@
                                         <select class="form-select" name="show_hide" 
                                         @isset($product)
                                             value="{{$product->show_hide}}"
+                                        @else
+                                        value="{{old('show_hide')}}"    
                                         @endisset
                                         id="show_hide">
                                             <option value="show">Hiện</option>
@@ -136,6 +142,8 @@
                                         </select>    
                                     </div>
                                 </div>    
+                                @include('layouts.admin.components.colorModal')
+                                @include('layouts.admin.components.speciModal')    
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-xl-12">
                                         <label for="description" class="form-label">Mô tả ngắn</label>
@@ -146,19 +154,7 @@
                                         </div>
                                     </div>
                                 </div>     
-                                <div class="row mb-3">
-                                    <div class="col-sm-12 col-xl-12">
-                                        <label for="detail_description" class="form-label">Mô tả chi tiết</label>
-                                        <div name="detail_description" class="form-control " id="editor" >
-                                        @isset($product)
-                                            {{$product->detail_description}}
-                                        @endisset
-                                        </div>
-                                    </div>
-                                </div>     
-                                @include('layouts.admin.components.colorModal')
-                                {{-- @include('layouts.admin.components.speciModal')     --}}
-                                <div class=" mb-3 float-end">
+                                <div class="mb-3 float-end">
                                     <button type="submit" class="btn btn-primary">
                                         @isset($product)
                                         Sửa
@@ -170,7 +166,7 @@
                                     <a href="{{ route('product.index') }}" class="btn btn-danger">
                                         Đóng
                                     </a>
-                                        @else
+                                    @else
                                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
                                     @endisset
                                 </div>
@@ -183,11 +179,141 @@
     </div>
     </div>
 </div>
-    <script type="module">
-        ClassicEditor.create( document.querySelector('#editor') , {language: 'vi'} )
-        .then( editors => { editors.setData( '' ); } )
-        .catch( error => {console.error( error )} );
-        ClassicEditor.create( document.querySelector('#description') , {language: 'vi'} )
-        .then( editor => { editor.setData( '' ); } )
-        .catch( error => {console.error( error )} );
-    </script>
+<script type="module">
+    ClassicEditor.create( document.querySelector('#description') , {language: 'vi'} )
+    .then( editor => { editor.setData(''); } )
+    .catch( error => {console.error( error )} );
+    // add input color
+    const formColor = document.getElementById('formColor');
+
+function createInputSection(inputId,color,price,price_sale,quantity) {
+  return `
+    <div id="i${inputId}">
+      <h6>Màu sản phẩm thứ ${inputId}</h6>
+      <hr/>
+      <div class="row mb-3">
+        <div class="col-sm-12 col-xl-3 mb-3">
+          <label for="color_type" class="form-label">Màu sắc <span class="text-danger text-small">(*)</span></label>
+          <input type="color" 
+            class="form-control"
+            @isset($product)
+            value="{{$product->color_type}}"
+            @endisset
+            value='${color}'
+            disabled
+            id="color_type">
+        </div>
+        <div class="col-sm-12 col-xl-3 mb-3">
+          <label for="price" class="form-label ">Giá gốc(vnđ) <span class="text-danger text-small">(*)</span></label>
+          <input type="text" class="form-control @error('price') 
+            is-invalid
+            @enderror" 
+            id="price"
+            @isset($product)
+            value="{{$product->price}}"
+            @endisset
+            placeholder="Nhập giá tiền (vd:300=300.000đ)"
+            value='${price}'
+            disabled
+            aria-describedby="price">
+          @error('price')
+          <div id="price" class="form-text text-danger">{{ $message }}</div>
+          @enderror
+        </div>
+        <div class="col-sm-12 col-xl-3 mb-3">
+          <label for="price_sale" class="form-label ">Giá khuyến mãi(vnđ) <span class="text-danger text-small">(*)</span></label>
+          <input type="text" class="form-control @error('price_sale') 
+            is-invalid
+            @enderror" id="price_sale"
+            @isset($product)
+            value="{{$product->price_sale}}"
+            @endisset
+            placeholder="Nhập giá tiền (vd:300=300.000đ)(Lưu ý:giá sale nhỏ hơn giá gốc)"
+            value='${price_sale}'
+            disabled
+            aria-describedby="price_sale">
+          @error('price_sale')
+          <div id="price_sale" class="form-text text-danger">{{ $message }}</div>
+          @enderror
+        </div>
+        <div class="col-sm-12 col-xl-3 mb-3">
+          <label for="quantity" class="form-label">Số lượng <span class="text-danger text-small">(*)</span></label>
+          <div class="d-flex justify-content-around">
+            <input type="text" class="form-control h-55 @error('quantity') 
+              is-invalid
+              @enderror" id="quantity"
+              @isset($product)
+              value="{{$product->quantity}}"
+              @endisset
+              placeholder="Nhập số lượng sản phẩm"
+              value='${quantity}'
+              disabled
+              aria-describedby="quantity">
+            @error('quantity')
+            <div id="quantity" class="form-text text-danger">{{ $message }}</div>
+            @enderror
+            <button type="button" class="btn-close btn-danger mt-2 ms-1 delete-color" data-input="${inputId}" aria-label="Close"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+let arrColors = [];
+function addInput() {
+    const arrColor = {};
+    const idInput = ['color_type', 'price', 'price_sale', 'quantity'];
+    const inputSelectors = idInput.map(element => {
+        return document.querySelector(`input[name=${element}]`);
+    });
+
+    let isEmpty = true; // Kiểm tra xem dữ liệu đầu vào có trống không hay không
+
+    inputSelectors.forEach(inputSelector => {
+        if (inputSelector.value !== '') {
+            arrColor[inputSelector.name] = inputSelector.value;
+            isEmpty = false;
+        } else {
+            arrColor[inputSelector.name] = '';
+        }
+        if (inputSelector.name === 'color_type' && inputSelector.value !== "#000000") {
+            inputSelector.value = "#000000";
+        } else if (inputSelector.name !== 'color_type') {
+            inputSelector.value = '';
+        }
+    });
+
+    if (!isEmpty) {
+        arrColors.push(arrColor);
+    }
+
+    const inputSection = createInputSection(arrColors.length + 1, arrColor.color_type, arrColor.price, arrColor.price_sale, arrColor.quantity);
+    formColor.insertAdjacentHTML('afterend', inputSection);
+    document.querySelector('input[name=colors]').value = JSON.stringify(arrColors);
+}
+function deleteInput(inputId) {
+    console.log(inputId);
+  const inputElement = document.querySelector(`#i${inputId}`);
+  if (inputElement) {
+    inputElement.remove();
+  }
+
+  // Xóa phần tử khỏi mảng arrColors
+  const index = arrColors.findIndex(color => color.inputId === inputId);
+  if (index !== -1) {
+    arrColors.splice(index, 1);
+  }
+
+  // Cập nhật giá trị của input[name=colors]
+  document.querySelector('input[name=colors]').value = JSON.stringify(arrColors);
+}
+formColor.addEventListener('click', function (event) {
+    if (event.target.classList.contains('delete-color')) {
+        alert('xóa')
+        const inputId = event.target.dataset.input;
+        deleteInput(inputId);
+    }
+});
+
+document.getElementById('addColor').addEventListener('click', addInput);
+</script>

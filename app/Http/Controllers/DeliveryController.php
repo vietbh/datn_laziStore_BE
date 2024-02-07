@@ -12,7 +12,7 @@ class DeliveryController extends Controller
     public function index()
     {
         //
-        return var_dump('Trang vận chuyển');
+        return view('layouts.admin.Delivery.index');
     }
 
     /**

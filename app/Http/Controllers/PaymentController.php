@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Payment;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
@@ -12,7 +13,8 @@ class PaymentController extends Controller
     public function index()
     {
         //
-        return var_dump('Trang đơn hàng');
+        $orders = Payment::all();
+        return view('layouts.admin.Payment.index',compact('orders'));
     }
 
     /**

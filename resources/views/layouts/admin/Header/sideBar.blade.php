@@ -59,7 +59,7 @@
             </div>
             <a href="{{ route('contact.index') }}" class="nav-item nav-link {{request()->routeIs('contact.index') == 1 ? 'active':''}}"><i class="far fa-question-circle me-2"></i>Tư vấn</a>
             <a href="{{ route('policy.index') }}" class="nav-item nav-link {{request()->routeIs('policy.index') == 1 ? 'active':''}}"><i class="fas fa-certificate me-2"></i></i>Chính sách</a>
-            <a href="{{ route('slide.index') }}" class="nav-item nav-link {{request()->routeIs('slide.index ') == 1 ? 'active':''}}"><i class="far fa-question-circle me-2"></i>Slide quảng cáo</a>
+            <a href="{{ route('slide.index') }}" class="nav-item nav-link {{request()->routeIs('slide.index') == 1 ? 'active':''}}"><i class="far fa-question-circle me-2"></i>Slide quảng cáo</a>
             <a href="{{ route('role.index') }}" class="nav-item nav-link {{request()->routeIs('role.index') == 1 ? 'active':''}}"><i class="fas fa-key me-2"></i>Vai trò</a>
             <a href="{{ route('lazi.index') }}" class="nav-item nav-link {{request()->routeIs('lazi.index') == 1 ? 'active':''}}"><i class="fas fa-store me-2"></i>Tới cửa hàng</a>
         </div>

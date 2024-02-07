@@ -12,7 +12,7 @@ class RoleAdminController extends Controller
     public function index()
     {
         //
-        return var_dump('Trang vai trò admin');
+        return view('layouts.admin.RoleAdmin.index');
 
     }
 

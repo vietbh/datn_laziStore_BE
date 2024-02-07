@@ -80,14 +80,6 @@ myModal.show();
    </div>
    <!-- Sale & Revenue End -->
 
-   {{-- Breadcrum --}}
-   <div class="container-fluid pt-4 px-4">
-       <div class="bg-light text-center rounded p-4">
-        kkk
-       </div>
-   </div>
-   {{-- Breadcrum End--}}
-
    <!-- Table Cate Start -->
    <div class="container-fluid pt-4 px-4">
     <div class="bg-light text-center rounded p-4">
@@ -101,17 +93,27 @@ myModal.show();
          @include('layouts.admin.components.proModal')
          <!--End Modal -->
         </div>
-        <div class="table-responsive" style="height: 30rem">
+        <div class="table-responsive" style="height: 100vh">
             <table class="table text-start align-middle table-bordered table-hover mb-0" >
                 <thead>
                     <tr class="text-dark">
                         <th scope="col"><input class="form-check-input" type="checkbox"></th>
                         <th scope="col">Ngày tạo</th>
                         <th scope="col">Tên sản phẩm</th>
-                        <th scope="col">Seo</th>
                         <th scope="col">Hình ảnh</th>
-                        <th scope="col">Màu sắc</th>
-                        <th scope="col">Giá</th>
+                        <th scope="col" class="text-center" style="width: 45%">
+                            <div class="row">
+                                <div class="col-sm-12 col-lg-3 ">
+                                    <p>Màu sắc</p>
+                                </div>
+                                <div class="col-sm-12 col-lg-5 ">
+                                    <p>Giá bán</p>
+                                </div>
+                                <div class="col-sm-12 col-lg-4 ">
+                                    <p>Số lượng</p> 
+                                </div>
+                            </div>
+                        </th>
                         <th scope="col">Trạng thái</th>
                         <th scope="col" colspan="2">Action</th>
                     </tr>
@@ -122,12 +124,23 @@ myModal.show();
                          <td><input class="form-check-input" type="checkbox"></td>
                          <td>{{$product->created_at}}</td>
                          <td>{{$product->name}}</td>
-                         <td>{{$product->seo_keywords}}</td>
                          <td><img src="{{ $product->image_url }}" class="rounded" width="100" height="100" alt=""/></td>
-                         @foreach ($product->variations as $variation)
-                             <td><input type="color" class="rounded w-100" disabled value="{{ $variation->color_type }}"/></td>
-                             <td>{{number_format($variation->price_sale*1000)}} vnđ</td>
-                         @endforeach 
+                        <td>
+                            @foreach ($product->variations as $variation)
+                                <div class="row p-1 text-center">
+                                    <div class="col-sm-12 col-lg-3">
+                                        <input type="color" class="rounded w-100" disabled value="{{ $variation->color_type }}"/>
+                                    </div>
+                                    <div class="col-sm-12 col-lg-5">
+                                        <p>{{number_format($variation->price_sale*1000)}} <span style="font-size: 14px">vnđ</span></p>
+                                    </div>
+                                    <div class="col-sm-12 col-lg-4">
+                                        <p>{{number_format($variation->quantity)}} <span style="font-size: 14px">chiếc</span></p>
+                                    </div>
+                                    <hr>
+                                </div>
+                            @endforeach 
+                        </td>
                          <td>{{$product->show_hide=='show'?'Hiện':'Ẩn'}}</td>
                          <td>
                          <div class="d-flex justify-content-around">

@@ -12,7 +12,7 @@ class SlideAdsController extends Controller
     public function index()
     {
         //
-        return var_dump('Trang slide quảng cáo');
+        return view('layouts.admin.SlideAds.index');
 
     }
 

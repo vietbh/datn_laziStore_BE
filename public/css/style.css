@@ -275,3 +275,8 @@
     background: var(--dark);
     border-color: var(--primary);
 }
+
+.ck-editor__editable_inline {
+    min-height: 25rem;
+    max-height: 45rem;
+}

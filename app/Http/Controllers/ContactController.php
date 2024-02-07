@@ -12,7 +12,7 @@ class ContactController extends Controller
     public function index()
     {
         //
-        return var_dump('Trang tư vấn');
+        return view('layouts.admin.Contact.index');
 
     }
 

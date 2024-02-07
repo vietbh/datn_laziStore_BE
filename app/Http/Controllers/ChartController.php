@@ -12,7 +12,7 @@ class ChartController extends Controller
     public function index()
     {
         //
-        return var_dump('Trang thông kê');
+        return view('layouts.admin.Chart.index');
     }
 
     /**

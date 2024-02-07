@@ -12,7 +12,7 @@ class PolicyController extends Controller
     public function index()
     {
         //
-        return var_dump('Trang chính sách');
+        return view('layouts.admin.Policy.index');
 
     }
 
