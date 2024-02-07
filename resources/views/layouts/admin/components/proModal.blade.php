@@ -147,7 +147,10 @@
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-xl-12">
                                         <label for="description" class="form-label">Mô tả ngắn</label>
-                                        <div name="description" class="form-control ck-editor__editable_inline" id="description">
+                                        <div name="description"
+                                        id="description"
+                                        class="form-control ck-editor__editable_inline" 
+                                        >
                                         @isset($product)
                                             {{$product->description}}
                                         @endisset
@@ -180,11 +183,11 @@
     </div>
 </div>
 <script type="module">
-    ClassicEditor.create( document.querySelector('#description') , {language: 'vi'} )
+    ClassicEditor.create(document.querySelector('#description') , {language: 'vi'} )
     .then( editor => { editor.setData(''); } )
     .catch( error => {console.error( error )} );
     // add input color
-    const formColor = document.getElementById('formColor');
+const formColor = document.getElementById('formColor');
 
 function createInputSection(inputId,color,price,price_sale,quantity) {
   return `
@@ -193,65 +196,42 @@ function createInputSection(inputId,color,price,price_sale,quantity) {
       <hr/>
       <div class="row mb-3">
         <div class="col-sm-12 col-xl-3 mb-3">
-          <label for="color_type" class="form-label">Màu sắc <span class="text-danger text-small">(*)</span></label>
-          <input type="color" 
+          <label for="${color}" class="form-label">Màu sắc <span class="text-danger text-small">(*)</span></label>
+          <input type="text" 
             class="form-control"
-            @isset($product)
-            value="{{$product->color_type}}"
-            @endisset
             value='${color}'
             disabled
-            id="color_type">
+            id="${color}">
         </div>
         <div class="col-sm-12 col-xl-3 mb-3">
-          <label for="price" class="form-label ">Giá gốc(vnđ) <span class="text-danger text-small">(*)</span></label>
-          <input type="text" class="form-control @error('price') 
-            is-invalid
-            @enderror" 
-            id="price"
+          <label for="${price}" class="form-label ">Giá gốc(vnđ) <span class="text-danger text-small">(*)</span></label>
+          <input type="text" class="form-control 
+            id="${price}"
             @isset($product)
             value="{{$product->price}}"
             @endisset
-            placeholder="Nhập giá tiền (vd:300=300.000đ)"
             value='${price}'
             disabled
             aria-describedby="price">
-          @error('price')
-          <div id="price" class="form-text text-danger">{{ $message }}</div>
-          @enderror
         </div>
         <div class="col-sm-12 col-xl-3 mb-3">
-          <label for="price_sale" class="form-label ">Giá khuyến mãi(vnđ) <span class="text-danger text-small">(*)</span></label>
-          <input type="text" class="form-control @error('price_sale') 
-            is-invalid
-            @enderror" id="price_sale"
-            @isset($product)
-            value="{{$product->price_sale}}"
-            @endisset
-            placeholder="Nhập giá tiền (vd:300=300.000đ)(Lưu ý:giá sale nhỏ hơn giá gốc)"
+          <label for="${price_sale}" class="form-label ">Giá khuyến mãi(vnđ) <span class="text-danger text-small">(*)</span></label>
+          <input type="text" class="form-control 
+            id="${price_sale}"
             value='${price_sale}'
             disabled
             aria-describedby="price_sale">
-          @error('price_sale')
-          <div id="price_sale" class="form-text text-danger">{{ $message }}</div>
-          @enderror
         </div>
         <div class="col-sm-12 col-xl-3 mb-3">
-          <label for="quantity" class="form-label">Số lượng <span class="text-danger text-small">(*)</span></label>
+          <label for="${quantity}" class="form-label">Số lượng <span class="text-danger text-small">(*)</span></label>
           <div class="d-flex justify-content-around">
-            <input type="text" class="form-control h-55 @error('quantity') 
-              is-invalid
-              @enderror" id="quantity"
-              @isset($product)
-              value="{{$product->quantity}}"
-              @endisset
-              placeholder="Nhập số lượng sản phẩm"
+            <input
+              type="text"
+              class="form-control"
               value='${quantity}'
               disabled
-              aria-describedby="quantity">
-            @error('quantity')
-            <div id="quantity" class="form-text text-danger">{{ $message }}</div>
-            @enderror
+              id="${quantity}"
+              aria-describedby="quantity"/>
             <button type="button" class="btn-close btn-danger mt-2 ms-1 delete-color" data-input="${inputId}" aria-label="Close"></button>
           </div>
         </div>
@@ -260,40 +240,52 @@ function createInputSection(inputId,color,price,price_sale,quantity) {
   `;
 }
 let arrColors = [];
+function createErrorSection(idError,message){
+    return `<div id="message-${idError}" class="form-text text-danger"> ${message}</div>`;
+}
+let count = 0;
 function addInput() {
     const arrColor = {};
     const idInput = ['color_type', 'price', 'price_sale', 'quantity'];
+    let isEmpty = true; // Kiểm tra xem dữ liệu đầu vào có trống không hay không
     const inputSelectors = idInput.map(element => {
         return document.querySelector(`input[name=${element}]`);
     });
 
-    let isEmpty = true; // Kiểm tra xem dữ liệu đầu vào có trống không hay không
-
-    inputSelectors.forEach(inputSelector => {
-        if (inputSelector.value !== '') {
+    inputSelectors.forEach((inputSelector,index,array) => {
+        const input = document.querySelector(`#${inputSelector.name}`);
+        if (inputSelector.value == '') {
+            input.addEventListener('input',function(){
+                const message = document.querySelector(`#message-${inputSelector.name}`);
+                if(message)message.remove();    
+            });
+            if(count < array.length ){
+                const errorSection = createErrorSection(inputSelector.name,'Vui lòng không bỏ trống trường này');            
+                input.insertAdjacentHTML('afterend', errorSection);
+                ++count;
+            }   
+        }else{
             arrColor[inputSelector.name] = inputSelector.value;
+        } 
+        let size = 0;
+        size = Object.keys(arrColor).length;
+        if(array.length === size){
+            count = 0;
             isEmpty = false;
-        } else {
-            arrColor[inputSelector.name] = '';
-        }
-        if (inputSelector.name === 'color_type' && inputSelector.value !== "#000000") {
-            inputSelector.value = "#000000";
-        } else if (inputSelector.name !== 'color_type') {
-            inputSelector.value = '';
+            inputSelectors.forEach(inputSelector=>inputSelector.value='');
         }
     });
 
     if (!isEmpty) {
         arrColors.push(arrColor);
+        const inputSection = createInputSection(arrColors.length, arrColor.color_type, arrColor.price, arrColor.price_sale, arrColor.quantity);
+        document.querySelector('#initial-color').innerHTML = `Màu sản phẩm thứ ${arrColors.length+1}`;
+        formColor.insertAdjacentHTML('afterend', inputSection);
+        document.querySelector('input[name=colors]').value = JSON.stringify(arrColors);
     }
-
-    const inputSection = createInputSection(arrColors.length + 1, arrColor.color_type, arrColor.price, arrColor.price_sale, arrColor.quantity);
-    formColor.insertAdjacentHTML('afterend', inputSection);
-    document.querySelector('input[name=colors]').value = JSON.stringify(arrColors);
 }
 function deleteInput(inputId) {
-    console.log(inputId);
-  const inputElement = document.querySelector(`#i${inputId}`);
+      const inputElement = document.querySelector(`#i${inputId}`);
   if (inputElement) {
     inputElement.remove();
   }
@@ -307,13 +299,16 @@ function deleteInput(inputId) {
   // Cập nhật giá trị của input[name=colors]
   document.querySelector('input[name=colors]').value = JSON.stringify(arrColors);
 }
-formColor.addEventListener('click', function (event) {
-    if (event.target.classList.contains('delete-color')) {
+const btnDel = document.querySelector('#delete-color');
+if(btnDel !== null){
+    btnDel.addEventListener('click', function (event) {
         alert('xóa')
-        const inputId = event.target.dataset.input;
-        deleteInput(inputId);
-    }
-});
+        if (event.target.classList.contains('delete-color')) {
+            const inputId = event.target.dataset.input;
+            deleteInput(inputId);
+        }
+    });
+}
 
 document.getElementById('addColor').addEventListener('click', addInput);
 </script>

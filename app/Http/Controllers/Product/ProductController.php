@@ -63,8 +63,8 @@ class ProductController extends Controller
     
         $productVariation->color_type = $request->color_type;
         $productVariation->product_id = $product->id;
-        $productVariation->price = $request->price;
-        $productVariation->price_sale = $request->price_sale;
+        $productVariation->price = number_format($request->price*1000,2);
+        $productVariation->price_sale = number_format($request->price_sale*1000,2);
         $productVariation->quantity = $request->quantity;
         $productVariation->save();
 
@@ -77,8 +77,8 @@ class ProductController extends Controller
                 $productVariation = new ProductVariation();
                 $productVariation->color_type = $color['color_type'];
                 $productVariation->product_id = $product->id;
-                $productVariation->price = $color['price'];
-                $productVariation->price_sale = $color['price_sale'];
+                $productVariation->price = number_format($color['price']*1000,2);
+                $productVariation->price_sale = number_format($color['price_sale']*1000,2);
                 $productVariation->quantity = $color['quantity'];
                 $productVariation->save();
             }

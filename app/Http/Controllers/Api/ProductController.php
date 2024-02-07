@@ -21,7 +21,6 @@ class ProductController extends Controller
             }
         }
         $data = $products;
-        // $data = $products;
         return response()->json($data);
     }
     /**
