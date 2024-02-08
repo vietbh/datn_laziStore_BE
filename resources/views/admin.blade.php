@@ -87,7 +87,8 @@
     <script src="{{ asset('lib/tempusdominus/js/moment-timezone.min.js') }}"></script>
     <script src="{{ asset('lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js') }}"></script>
     {{-- Text editor --}}
-    <script src="{{ url('https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js') }}"></script>
+    {{-- <script src="{{ url('https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js') }}"></script> --}}
+    <script src="{{ asset('ckeditor5-build-classic/ckeditor.js') }}"></script>
     <!-- Template Javascript -->
     <script src="{{ asset('js/main.js') }}"></script>
 </body>

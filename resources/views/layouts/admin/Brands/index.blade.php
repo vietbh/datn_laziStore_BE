@@ -104,8 +104,7 @@
                            <th scope="col"><input class="form-check-input" type="checkbox"></th>
                            <th scope="col">Ngày tạo</th>
                            <th scope="col">Tên thương hiệu</th>
-                           <th scope="col">Slug</th>
-                           <th scope="col">Thứ tự</th>
+                           <th scope="col">Quốc gia</th>
                            <th scope="col">Trạng thái</th>
                            <th scope="col" colspan="2">Action</th>
                        </tr>
@@ -116,7 +115,6 @@
                             <td><input class="form-check-input" type="checkbox"></td>
                             <td>{{$brand->created_at}}</td>
                             <td>{{$brand->name}}</td>
-                            <td>{{$brand->slug}}</td>
                             <td>{{$brand->country}}</td>
                             <td>{{$brand->show_hide=='show'?'Hiện':'Ẩn'}}</td>
                             <td>
