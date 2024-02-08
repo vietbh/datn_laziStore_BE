@@ -131,6 +131,7 @@
                                     <div class="col-sm-12 col-xl-6 mb-3">
                                         <label for="show_hide" class="form-label">Trạng thái (mặc định sẽ là Hiện)</label>
                                         <select class="form-select" name="show_hide" 
+                                        autocomplete="off"
                                         @isset($product)
                                             value="{{$product->show_hide}}"
                                         @else
@@ -146,15 +147,14 @@
                                 @include('layouts.admin.components.speciModal')    
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-xl-12">
-                                        <label for="description" class="form-label">Mô tả ngắn</label>
-                                        <div name="description"
+                                        <label for="description" class="form-label">Mô tả sản phẩm</label>
+                                        <input name="description"
                                         id="description"
                                         class="form-control ck-editor__editable_inline" 
-                                        >
                                         @isset($product)
-                                            {{$product->description}}
+                                            value='{{$product->description}}'
                                         @endisset
-                                        </div>
+                                        />
                                     </div>
                                 </div>     
                                 <div class="mb-3 float-end">
@@ -192,7 +192,6 @@ const formColor = document.getElementById('formColor');
 function createInputSection(inputId,color,price,price_sale,quantity) {
   return `
     <div id="i${inputId}">
-      <h6>Màu sản phẩm thứ ${inputId}</h6>
       <hr/>
       <div class="row mb-3">
         <div class="col-sm-12 col-xl-3 mb-3">
@@ -201,16 +200,15 @@ function createInputSection(inputId,color,price,price_sale,quantity) {
             class="form-control"
             value='${color}'
             disabled
+            name="color_type"
             id="${color}">
         </div>
         <div class="col-sm-12 col-xl-3 mb-3">
           <label for="${price}" class="form-label ">Giá gốc(vnđ) <span class="text-danger text-small">(*)</span></label>
           <input type="text" class="form-control 
             id="${price}"
-            @isset($product)
-            value="{{$product->price}}"
-            @endisset
             value='${price}'
+            name="price"
             disabled
             aria-describedby="price">
         </div>
@@ -219,6 +217,7 @@ function createInputSection(inputId,color,price,price_sale,quantity) {
           <input type="text" class="form-control 
             id="${price_sale}"
             value='${price_sale}'
+            name="price_sale"
             disabled
             aria-describedby="price_sale">
         </div>
@@ -279,36 +278,29 @@ function addInput() {
     if (!isEmpty) {
         arrColors.push(arrColor);
         const inputSection = createInputSection(arrColors.length, arrColor.color_type, arrColor.price, arrColor.price_sale, arrColor.quantity);
-        document.querySelector('#initial-color').innerHTML = `Màu sản phẩm thứ ${arrColors.length+1}`;
-        formColor.insertAdjacentHTML('afterend', inputSection);
+        // document.querySelector('#initial-color').innerHTML = `Màu sản phẩm thứ ${arrColors.length+1}`;
+        formColor.insertAdjacentHTML('afterbegin', inputSection);
         document.querySelector('input[name=colors]').value = JSON.stringify(arrColors);
     }
 }
 function deleteInput(inputId) {
       const inputElement = document.querySelector(`#i${inputId}`);
   if (inputElement) {
-    inputElement.remove();
+    // Xóa phần tử khỏi mảng arrColors
+    const index = arrColors.findIndex(color => color.color_type === inputElement.querySelector('input[name=color_type]').value);
+    if (index !== -1) {
+      arrColors.splice(index, 1);
+      inputElement.remove();
+    }
   }
-
-  // Xóa phần tử khỏi mảng arrColors
-  const index = arrColors.findIndex(color => color.inputId === inputId);
-  if (index !== -1) {
-    arrColors.splice(index, 1);
-  }
-
   // Cập nhật giá trị của input[name=colors]
   document.querySelector('input[name=colors]').value = JSON.stringify(arrColors);
 }
-const btnDel = document.querySelector('#delete-color');
-if(btnDel !== null){
-    btnDel.addEventListener('click', function (event) {
-        alert('xóa')
-        if (event.target.classList.contains('delete-color')) {
-            const inputId = event.target.dataset.input;
-            deleteInput(inputId);
-        }
-    });
-}
-
+formColor.addEventListener('click', function (event) {
+    if (event.target.classList.contains('delete-color')) {
+        const inputId = event.target.dataset.input;
+        deleteInput(inputId);
+    }
+});
 document.getElementById('addColor').addEventListener('click', addInput);
 </script>

@@ -124,7 +124,7 @@ myModal.show();
                          <td><input class="form-check-input" type="checkbox"></td>
                          <td>{{$product->created_at}}</td>
                          <td>{{$product->name}}</td>
-                         <td><img src="{{ $product->image_url }}" class="rounded" width="100" height="100" alt=""/></td>
+                         <td><img src="{{ $product->image_url }}" loading="lazy" class="rounded" width="100" height="100" alt=""/></td>
                         <td>
                             @foreach ($product->variations as $variation)
                                 <div class="row p-1 text-center">
