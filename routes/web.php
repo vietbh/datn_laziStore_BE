@@ -68,6 +68,7 @@ Route::middleware(['auth','role:0'])->group(function () {
     //Sản phẩm
     Route::get('/admin/san-pham',[ProductController::class, 'index'])->name('product.index');
     Route::post('/admin/san-pham/them',[ProductController::class, 'store'])->name('product.store');
+    Route::post('/admin/san-pham/them-hinh-anh-mo-ta',[ProductController::class, 'upload'])->name('ckeditor.upload');
     Route::get('/admin/san-pham/edit/{id}',[ProductController::class, 'edit'])->name('product.edit');
     Route::put('/admin/san-pham/edit/{id}',[ProductController::class, 'update'])->name('product.update');
     Route::delete('/admin/san-pham/xoa/{id}',[ProductController::class, 'destroy'])->name('product.delete');

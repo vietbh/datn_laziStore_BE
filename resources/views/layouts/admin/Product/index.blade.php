@@ -44,7 +44,7 @@ myModal.show();
                <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                    <i class="fa fa-chart-line fa-3x text-primary"></i>
                    <div class="ms-3">
-                       <p class="mb-2">Today Sale</p>
+                       <p class="mb-2">Số lượng </p>
                        <h6 class="mb-0">$1234</h6>
                    </div>
                </div>
@@ -71,11 +71,11 @@ myModal.show();
                <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                    <i class="fa fa-chart-pie fa-3x text-primary"></i>
                    <div class="ms-3">
-                       <p class="mb-2">Total Revenue</p>
-                       <h6 class="mb-0">$1234</h6>
+                       <p class="mb-2">Tổng sản phẩm</p>
+                       <h6 class="mb-0">{{count($products)}} sản phẩm</h6>
                    </div>
                </div>
-           </div>
+           </div
        </div>
    </div>
    <!-- Sale & Revenue End -->
@@ -101,7 +101,7 @@ myModal.show();
                         <th scope="col">Ngày tạo</th>
                         <th scope="col">Tên sản phẩm</th>
                         <th scope="col">Hình ảnh</th>
-                        <th scope="col" class="text-center" style="width: 45%">
+                        <th scope="col" class="text-center" style="width: 40%">
                             <div class="row">
                                 <div class="col-sm-12 col-lg-3 ">
                                     <p>Màu sắc</p>
@@ -127,7 +127,7 @@ myModal.show();
                          <td><img src="{{ $product->image_url }}" loading="lazy" class="rounded" width="100" height="100" alt=""/></td>
                         <td>
                             @foreach ($product->variations as $variation)
-                                <div class="row p-1 text-center">
+                                <div class="row p-2 text-center">
                                     <div class="col-sm-12 col-lg-3">
                                         <input type="color" class="rounded w-100" disabled value="{{ $variation->color_type }}"/>
                                     </div>
@@ -137,7 +137,6 @@ myModal.show();
                                     <div class="col-sm-12 col-lg-4">
                                         <p>{{number_format($variation->quantity)}} <span style="font-size: 14px">chiếc</span></p>
                                     </div>
-                                    <hr>
                                 </div>
                             @endforeach 
                         </td>
