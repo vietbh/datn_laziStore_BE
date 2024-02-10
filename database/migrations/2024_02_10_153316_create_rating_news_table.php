@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('specifications_products', function (Blueprint $table) {
+        Schema::create('rating_news', function (Blueprint $table) {
             $table->increments('id')->unsigned();
-            $table->string('name');
-            $table->string('value');
-            $table->boolean('show_hide')->default(true);
-            $table->unsignedInteger('product_id')->nullable();
-            $table->foreign('product_id')->references('id')->on('products');
+            $table->integer('rating');
+            $table->dateTime('review_date');
+            $table->unsignedInteger('news_id');
+            $table->unsignedInteger('user_id');
+            $table->foreign('news_id')->references('id')->on('news');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('specifications_products');
+        Schema::dropIfExists('rating_news');
     }
 };

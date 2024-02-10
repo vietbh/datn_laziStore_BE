@@ -12,7 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('news', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id')->unsigned();
+            $table->string('title')->unique();
+            $table->string('slug');
+            $table->string('seo_keywords')->unique();
+            $table->longText('desciption');
+            $table->string('author',50);
+            $table->dateTime('datetime_create');
+            $table->integer('views')->default(0);
+            $table->boolean('show')->default(true);
+            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('categories_news_id');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('categories_news_id')->references('id')->on('categories_news');
             $table->timestamps();
         });
     }

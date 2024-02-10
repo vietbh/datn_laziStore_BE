@@ -5,9 +5,9 @@
         <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">
             @isset($category)
-                Sửa danh mục sản phẩm {{$category->title}}
+                Sửa danh mục tin tức {{$category->title}}
             @else
-                Thêm danh mục sản phẩm
+                Thêm danh mục tin tức
             @endisset
         </h5>
         @isset($category)
@@ -98,3 +98,4 @@
     </div>
     </div>
 </div>
+

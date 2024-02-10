@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('brands', function (Blueprint $table) {
-            // $table->id();
-            $table->increments('id');
-            $table->string('name');
-            $table->string('slug');
-            $table->string('country');
-            $table->char('show_hide')->default('show');
+            $table->increments('id')->unsigned();
+            $table->string('name',100)->unique();
+            $table->string('slug',255);
+            $table->string('index')->default(1);
+            $table->string('country',100);
+            $table->boolean('show_hide')->default(true);
             $table->timestamps();
         });
     }

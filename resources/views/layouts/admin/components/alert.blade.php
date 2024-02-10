@@ -2,7 +2,6 @@
     <i class="fa fa-exclamation-circle me-2"></i>
         {{session('success')}}
         {{session('error')}}
-    {{-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> --}}
 </div>
 <script type="module">
     setTimeout(() => {

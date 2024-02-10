@@ -12,7 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tags_news', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
+            $table->string('name')->unique();
+            $table->string('slug');
+            $table->string('index')->default(1);
+            $table->boolean('show')->default(true);
             $table->timestamps();
         });
     }

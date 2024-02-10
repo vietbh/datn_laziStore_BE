@@ -1,22 +1,16 @@
-<style>
-    .ck-editor__editable_inline {
-        min-height: 25rem;
-        max-height: 45rem;
-    }
-    </style>
 <div class="modal fade" id="addNewsModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen modal-dialog-centered">
     <div class="modal-content">
         <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">
-            @isset($product)
-                Sửa sản phẩm <strong>{{$product->name}}</strong>
+            @isset($news)
+                Sửa tin tức <strong>{{$news->name}}</strong>
             @else
-                Thêm sản phẩm
+                Thêm tin tức
             @endisset
         </h5>
-        @isset($product)
-        <a href="{{ route('product.index') }}" class="btn-close" aria-label="Close">
+        @isset($news)
+        <a href="{{ route('news.index') }}" class="btn-close" aria-label="Close">
         </a>
         @else
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -28,28 +22,28 @@
                     <div class="col-sm-12 col-xl-12">
                         <div class="bg-light rounded h-100 p-4 text-start">
                             <form 
-                            @isset($product)
-                                action="{{ route('product.update',['id'=>$product->id]) }}"
+                            @isset($news)
+                                action="{{ route('news.update',['id'=>$news->id]) }}"
                             @else
-                                action="{{ route('product.store') }}"
+                                action="{{ route('news.store') }}"
                             @endisset
                             method="POST" enctype="multipart/form-data">
                                 @csrf
-                                @isset($product)
+                                @isset($news)
                                 @method('put')
                                 @else
                                 @method('post')
                                 @endisset
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-xl-6 mb-3">
-                                        <label for="name" class="form-label ">Tên sản phẩm <span class="text-danger text-small">(*)</span></label>
+                                        <label for="name" class="form-label ">Tên tin tức <span class="text-danger text-small">(*)</span></label>
                                         <input type="text" name="name" class="form-control @error('name') 
                                         is-invalid
                                         @enderror" id="name"
-                                        @isset($product)
-                                            value="{{$product->name}}"
+                                        @isset($news)
+                                            value="{{$news->name}}"
                                         @endisset
-                                        placeholder="Nhập tên sản phẩm (vd:Iphone15,Samsung A23,...)"
+                                        placeholder="Nhập tên tin tức (vd:Iphone15,Samsung A23,...)"
                                         aria-describedby="name">
                                         @error('name')
                                         <div id="name" class="form-text text-danger">{{ $message }}</div>
@@ -58,8 +52,8 @@
                                     <div class="col-sm-12 col-xl-6 mb-3">
                                         <label for="seo_keywords" class="form-label">Từ khóa SEO<span class="text-danger text-small">(*)</span></label>
                                         <input type="text" name="seo_keywords" class="form-control" 
-                                        @isset($product)
-                                            value="{{$product->seo_keywords}}"
+                                        @isset($news)
+                                            value="{{$news->seo_keywords}}"
                                         @endisset
                                         id="seo_keywords">   
                                         @error('seo_keywords')
@@ -74,8 +68,8 @@
                                         @error('categories_product_id') 
                                         is-invalid
                                         @enderror" name="categories_product_id" 
-                                        @isset($product)
-                                            value="{{$product->categories_product_id}}"
+                                        @isset($news)
+                                            value="{{$news->categories_product_id}}"
                                         @endisset
                                         id="categories_product_id">
                                             <option value="" selected disabled>Chọn danh mục </option>
@@ -93,8 +87,8 @@
                                         @error('brand_id') 
                                         is-invalid
                                         @enderror" name="brand_id" 
-                                        @isset($product)
-                                            value="{{$product->brand_id}}"
+                                        @isset($news)
+                                            value="{{$news->brand_id}}"
                                         @endisset
                                         id="brand_id">
                                             <option value="" selected disabled>Chọn tag</option>
@@ -114,7 +108,7 @@
                                             <input type="file" name="image_url" class="form-control @error('image_url') 
                                             is-invalid
                                             @enderror" id="image_url"
-                                            @isset($product)
+                                            @isset($news)
                                                 value="{{$product->image_url}}"
                                             @endisset
                                             aria-describedby="image_url">
@@ -136,6 +130,7 @@
                                         </select>    
                                     </div>
                                 </div>    
+                                @include('layouts.admin.components.colorModal')
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-xl-12">
                                         <label for="description" class="form-label">Mô tả ngắn</label>
@@ -146,8 +141,6 @@
                                         </div>
                                     </div>
                                 </div>     
-                                @include('layouts.admin.components.colorModal')
-                                {{-- @include('layouts.admin.components.speciModal')     --}}
                                 <div class=" mb-3 float-end">
                                     <button type="submit" class="btn btn-primary">
                                         @isset($product)
@@ -173,8 +166,8 @@
     </div>
     </div>
 </div>
-    <script type="module">
-        ClassicEditor.create( document.querySelector('#description') , {language: 'vi'} )
-        .then( editor => { editor.setData( '' ); } )
-        .catch( error => {console.error( error )} );
-    </script>
+<script type="module">
+    ClassicEditor.create( document.querySelector('#description') , {language: 'vi'} )
+    .then( editor => { editor.setData( '' ); } )
+    .catch( error => {console.error( error )} );
+</script>

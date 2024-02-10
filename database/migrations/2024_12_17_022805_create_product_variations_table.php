@@ -12,13 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('product_variations', function (Blueprint $table) {
-            // $table->id();
-            $table->increments('id');
+            $table->increments('id')->unsigned();
             $table->string('color_type');
             $table->decimal('price',10,2);
             $table->decimal('price_sale',10,2);
             $table->integer('quantity');
-            $table->unsignedInteger('product_id')->nullable();
+            $table->unsignedInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products');
             $table->timestamps();
         });
