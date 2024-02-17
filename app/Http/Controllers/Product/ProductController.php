@@ -20,7 +20,6 @@ class ProductController extends Controller
     {
         //
         $products = Product::all();
-        // dd($products);
         $categories = CategoriesProduct::all();
         $brands = Brands::all();
         $data = compact('products','categories','brands');
@@ -38,12 +37,12 @@ class ProductController extends Controller
             'price' => 'required',
             'price_sale' => 'required|lt:price',
             'quantity' => 'required|min:1',
-        ]);
+        ],[
+
+        ]
+    );
     
-        $file = $request->file('image_url'); // Lấy file từ request
-        $path = null;
-        $url = null;
-    
+        $file = $request->file('image_url'); // Lấy file từ request    
         if ($file) {
             // Tiếp tục xử lý hoặc trả về đường dẫn đã lưu
             $path = $file->store('images_product', 'public'); // Lưu file vào thư mục 'folder_name'
@@ -60,34 +59,31 @@ class ProductController extends Controller
         $product->description = $request->description;
         $product->show_hide = $request->show_hide;
         $product->save();
-    
         $productVariation->color_type = $request->color_type;
         $productVariation->product_id = $product->id;
-        $productVariation->price = number_format($request->price*1000,2);
-        $productVariation->price_sale = number_format($request->price_sale*1000,2);
+        $productVariation->price = $request->price*1000;
+        $productVariation->price_sale = $request->price_sale*1000;
         $productVariation->quantity = $request->quantity;
+        $productVariation->quantity_availible = $request->quantity;
         $productVariation->save();
 
         $jsonString = $request->colors;
         // Chuyển đổi chuỗi JSON thành mảng
-        $colors = json_decode($jsonString, true);
-    
+        $colors = json_decode($jsonString, true);  
         if (isset($colors)) {
             foreach ($colors as $color) {
                 $productVariation = new ProductVariation();
                 $productVariation->color_type = $color['color_type'];
                 $productVariation->product_id = $product->id;
-                $productVariation->price = number_format($color['price']*1000,2);
-                $productVariation->price_sale = number_format($color['price_sale']*1000,2);
+                $productVariation->price = $color['price']*1000;
+                $productVariation->price_sale = $color['price_sale']*1000;
                 $productVariation->quantity = $color['quantity'];
+                $productVariation->quantity_available = $color['quantity'];
                 $productVariation->save();
             }
         }
-    
         return redirect()->route('product.index')->with('success', 'Thêm sản phẩm thành công');
-    }    /**
-     * Display the specified resource.
-     */
+    }
     public function upload(Request $request){
         if($request->hasFile('upload')){
             $originName = $request->file('upload')->getClientOriginalName();
@@ -102,17 +98,17 @@ class ProductController extends Controller
             return response()->json(['fileName' => $fileName, 'uploaded'=> 1, 'url'=> $url]);
         }
     }
-    public function show(string $id)
-    {
-        //
-    }
-
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
         //
+        $product = Product::findOrFail($id);
+        $categories = CategoriesProduct::all();
+        $brands = Brands::all();
+        $data = compact('product','categories','brands');
+        return view('layouts.admin.Product.edit',$data);
     }
 
     /**

@@ -1,26 +1,27 @@
 @extends('admin')
 @section('content')
-    @if (session('success')||session('error'))
+    @if (session('success'))
         @include('layouts.admin.components.alert')
     @endif
-    @if($errors->any())
-        <script type="module"> 
+    @error('title')
+    <script type="module"> 
             var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
             keyboard: false
             })
             myModal.toggle();
             myModal.show();
-        </script>
-    @endif    
-    @isset($category)
-        <script type="module"> 
-                var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
-                keyboard: false
-                })
-                myModal.toggle();
-                myModal.show();
-        </script>
-    @endisset
+    </script>
+    @enderror
+    
+    @if (isset($category))
+    <script type="module"> 
+            var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
+            keyboard: false
+            })
+            myModal.toggle();
+            myModal.show();
+    </script>
+    @endif
    <!-- Sale & Revenue Start -->
    <div class="container-fluid pt-4 px-4">
        <div class="row g-4">
@@ -68,14 +69,7 @@
    <div class="container-fluid pt-4 px-4">
        <div class="bg-light text-center rounded p-4">
            <div class="d-flex align-items-center justify-content-between mb-4">
-               <h6 class="mb-0">Tất cả danh mục sản phẩm</h6>
-               <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoriesModal">
-                    Thêm danh mục
-                </button>
-            <!-- Modal -->
-            @include('layouts.admin.components.catProModal')
-            <!--End Modal -->
+               <h4 class="mb-0">Danh sách bình luận sản phẩm</h4>
            </div>
            <div class="table-responsive" style="height: 100vh">
                <table class="table text-start align-middle table-bordered table-hover mb-0" >
@@ -84,7 +78,6 @@
                            <th scope="col"><input class="form-check-input" type="checkbox"></th>
                            <th scope="col">Ngày tạo</th>
                            <th scope="col">Tên danh mục</th>
-                           <th scope="col">Tên danh mục cha</th>
                            <th scope="col">Slug</th>
                            <th scope="col">Thứ tự</th>
                            <th scope="col">Trạng thái</th>
@@ -92,12 +85,11 @@
                        </tr>
                    </thead>
                    <tbody>
-                    @foreach ($categories as $category)
+                    {{-- @foreach ($categories as $category)
                         <tr>
                             <td><input class="form-check-input" type="checkbox"></td>
                             <td>{{$category->created_at}}</td>
-                            <td>{{$category->name}}</td>
-                            <td>{{$category->parent ? $category->parent->name : 'Trống'}}</td>
+                            <td>{{$category->title}}</td>
                             <td>{{$category->slug}}</td>
                             <td>{{$category->index}}</td>
                             <td>{{$category->show_hide=='show'?'Hiện':'Ẩn'}}</td>
@@ -112,7 +104,7 @@
                             </div>
                             </td>
                         </tr>
-                    @endforeach                      
+                    @endforeach                       --}}
                    </tbody>
                </table>
            </div>

@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('detail_users', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('full_name',);
+            $table->increments('id')->unsigned();
+            $table->string('full_name',50);
             $table->string('address',225);
-            $table->string('phone_numbers',15);
+            $table->string('phone_numbers',22);
             $table->string('google_map',255)->nullable();
             $table->boolean('status')->default(false);
             $table->unsignedInteger('user_id');

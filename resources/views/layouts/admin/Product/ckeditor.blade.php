@@ -6,15 +6,11 @@
     },
     toolbar: {
         items: [  
-            'fontfamily', 'fontsize', '|',
             'heading', '|',        
-            'alignment', '|',
-            'fontColor', 'fontBackgroundColor', '|',
-            'bold', 'italic', 'underline', 'subscript', 'superscript', '|',
+            'bold', 'italic', '|',
             'link', '|',
             'outdent', 'indent', '|',
-            'bulletedList', 'numberedList', 'todoList', '|',
-            'code', 'codeBlock', '|',
+            'bulletedList', 'numberedList', '|',
             'insertTable', '|',
             'uploadImage', '|',
             'ckfinder',
@@ -52,7 +48,7 @@
         supportAllValues: true
     }
     })
-    .then( editor => { editor.setData(''); })
+    .then( editor => { editor.setData('') })
     .catch( error => {console.error( error )} );
     // add input color
     const formColor = document.getElementById('formColor');

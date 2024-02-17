@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('policies', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('id')->unsigned();
             $table->string('name');
             $table->text('value');
             $table->boolean('show_hide')->default(true);

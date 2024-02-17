@@ -3,25 +3,45 @@
     @if (session('success'))
         @include('layouts.admin.components.alert')
     @endif
-    @error('title')
-    <script type="module"> 
+    @if($errors->any())
+        <script type="module"> 
             var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
             keyboard: false
             })
             myModal.toggle();
             myModal.show();
-    </script>
-    @enderror
-    
-    @if (isset($category))
-    <script type="module"> 
+        </script>
+    @endif   
+    @isset($category)
+        <script type="module"> 
             var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
             keyboard: false
             })
             myModal.toggle();
             myModal.show();
-    </script>
-    @endif
+        </script>
+    @endisset
+    @php
+        $modal = [
+            'id'=>'addCategoriesModal',
+            'title'=>'danh mục tin tức',
+            'name'=>'',
+            'param'=>'',
+            'route'=>[
+                'index'=>'news.cat.index',
+                'store'=>'news.cat.store',
+                'update'=>'news.cat.update',
+                'delete'=>'news.cat.delete',
+            ],
+            'selections'=>[
+                'Tên danh mục'=>['name'=>'Nhập tên của danh mục (vd:Sức khỏe,Công nghệ,...)'],
+                'Thứ tự'=>['index'=>'Nhập thứ tự hiện của danh mục (vd:1,2,3,...)'],
+            ],
+            'inputSelect' =>[
+                'Danh mục cha'=>['parent_id'=>'Chọn danh mục cha(Nếu có)']
+            ],
+        ];
+    @endphp
    <!-- Sale & Revenue Start -->
    <div class="container-fluid pt-4 px-4">
        <div class="row g-4">
@@ -72,19 +92,19 @@
                <h6 class="mb-0">Tất cả danh mục tin tức</h6>
                <!-- Button trigger modal -->
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoriesModal">
-                    <i class="fas fa-plus me-1"></i> Thêm
+                    <i class="fas fa-plus me-1"></i> Thêm danh mục
                 </button>
             <!-- Modal -->
-            @include('layouts.admin.components.catNewsModal')
+            @include('layouts.admin.components.modalAdd')
             <!--End Modal -->
            </div>
            <div class="table-responsive" style="height: 100vh">
                <table class="table text-start align-middle table-bordered table-hover mb-0" >
                    <thead>
                        <tr class="text-dark">
-                           <th scope="col"><input class="form-check-input" type="checkbox"></th>
                            <th scope="col">Ngày tạo</th>
                            <th scope="col">Tên danh mục tin</th>
+                           <th scope="col">Danh mục cha</th>
                            <th scope="col">Slug</th>
                            <th scope="col">Thứ tự</th>
                            <th scope="col">Trạng thái</th>
@@ -92,40 +112,34 @@
                        </tr>
                    </thead>
                    <tbody>
-                    {{-- @foreach ($categories as $category)
-                        <tr>
-                            <td><input class="form-check-input" type="checkbox"></td>
+                    @foreach ($categories as $category)
+                        @php
+                            $modal['name']=$category->name;
+                            $modal['param']=$category->id;
+                        @endphp
+                        <tr title="{{$category->name}}">
                             <td>{{$category->created_at}}</td>
-                            <td>{{$category->title}}</td>
+                            <td>{{$category->name}}</td>
+                            <td>{{$category->parent?$category->parent->name:'Trống'}}</td>
                             <td>{{$category->slug}}</td>
                             <td>{{$category->index}}</td>
-                            <td>{{$category->show_hide=='show'?'Hiện':'Ẩn'}}</td>
+                            <td>{{$category->show_hide ? 'Hiện' : 'Ẩn'}}</td>
                             <td>
-                            <div class="d-flex justify-content-evenly">
-                                <a class="btn btn-sm btn-primary" href="{{ route('product.cat.edit', ['id' => $category->id]) }}">Edit</a>
-                                <form action="{{ route('product.cat.delete', ['id' => $category->id]) }}" method="POST">
-                                    @csrf
-                                    @method('delete')
-                                    <button class="btn btn-sm btn-danger" type="submit">Xóa</button>
-                                </form>
-                            </div>
+                                <div class="d-flex justify-content-evenly">
+                                    <a class="btn btn-sm btn-primary" href="{{ route('news.cat.edit', ['id' => $category->id]) }}">Edit</a>
+                                    @if ($category->id != 1)
+                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#comfirmModal{{$category->id}}">Xóa</button>
+                                    @endif
+                                </div>
                             </td>
                         </tr>
-                    @endforeach                       --}}
+                        {{-- Modal Comfirm --}}
+                        @include('layouts.admin.components.comfirmModal')
+                    @endforeach        
                    </tbody>
                </table>
            </div>
-           
        </div>
-       {{-- <div class="btn-toolbar float-end" role="toolbar">
-       <div class="btn-group me-2" role="group" aria-label="Second group">
-           <button type="button" class="btn btn-secondary"><<</button>
-           <button type="button" class="btn btn-secondary">5</button>
-           <button type="button" class="btn btn-secondary">6</button>
-           <button type="button" class="btn btn-secondary">7</button>
-           <button type="button" class="btn btn-secondary">>></button>
-       </div>
-       </div> --}}
    </div>
    <!-- Table Cate End -->
 

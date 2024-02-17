@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ChartController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\CommentNewsController;
+use App\Http\Controllers\CommentProductController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashBoardController;
@@ -51,8 +53,10 @@ Route::middleware(['auth','role:0'])->group(function () {
     Route::get('/admin/san-pham-hot',[ProductHotController::class, 'index'])->name('hot.index');
     // Vận chuyển
     Route::get('/admin/van-chuyen',[DeliveryController::class, 'index'])->name('delivery.index');
-    // Bình luận
-    Route::get('/admin/binh-luan',[CommentController::class, 'index'])->name('comment.index');
+    // Bình luận sản phẩm
+    Route::get('/admin/binh-luan-san-pham',[CommentProductController::class, 'index'])->name('comment.product.index');
+    // Bình luận tin tức
+    Route::get('/admin/binh-luan-tin-tuc',[CommentNewsController::class, 'index'])->name('comment.news.index');
     // Tư vấn
     Route::get('/admin/tu-van',[ContactController::class, 'index'])->name('contact.index');
     // Chính sách

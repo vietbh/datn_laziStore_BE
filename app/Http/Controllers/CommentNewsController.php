@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Role;
 use Illuminate\Http\Request;
 
-class RoleAdminController extends Controller
+class CommentNewsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,9 +12,7 @@ class RoleAdminController extends Controller
     public function index()
     {
         //
-        $roles = Role::all();
-        return view('layouts.admin.RoleAdmin.index',compact('roles'));
-
+        return view('layouts.admin.Comment.News.index');
     }
 
     /**

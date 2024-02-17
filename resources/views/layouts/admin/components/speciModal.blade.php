@@ -1,4 +1,4 @@
-<div class="modal-content mb-3">
+{{-- <div class="modal-content mb-3">
     <div class="modal-header">
         <h5 class="modal-title">
             @isset($product)
@@ -156,4 +156,4 @@
         </div>
     </div>
 </div>
-
+ --}}

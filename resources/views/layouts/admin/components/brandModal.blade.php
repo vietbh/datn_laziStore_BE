@@ -52,12 +52,26 @@
                                 <div class="mb-3">
                                     <label for="country" class="form-label">Quốc gia (*)</label>
                                     <input type="text" name="country" class="form-control" 
+                                    autocomplete="country"
                                     @isset($brand)
                                         value="{{$brand->country}}"
                                     @endisset
-                                    id="index">   
+                                    id="country">   
                                     @error('country')
-                                    <div id="country" class="form-text text-danger">{{ $message }}</div>
+                                    <div class="form-text text-danger">{{ $message }}</div>
+                                    @enderror
+
+                                </div>
+                                <div class="mb-3">
+                                    <label for="country" class="form-label">Thứ tự</label>
+                                    <input type="text" name="index" class="form-control" 
+                                    @isset($brand)
+                                        value="{{$brand->index}}"
+                                    @endisset
+                                    autocomplete="index"
+                                    id="index">   
+                                    @error('index')
+                                    <div class="form-text text-danger">{{ $message }}</div>
                                     @enderror
 
                                 </div>
@@ -68,8 +82,8 @@
                                         value="{{$brand->show_hide}}"
                                     @endisset
                                     id="show_hide">
-                                        <option value="show">Hiện</option>
-                                        <option value="hide">Ẩn</option>
+                                        <option value='1' >Hiện</option>
+                                        <option value='0' >Ẩn</option>
                                     </select>
                                 </div>
                                 <div class="mb-3 float-end ">

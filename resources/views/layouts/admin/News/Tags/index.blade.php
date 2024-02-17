@@ -1,12 +1,9 @@
 @extends('admin')
 @section('content')
-    @if (session('success'))
+    @if (session('success')||session('error'))
         @include('layouts.admin.components.alert')
     @endif
-    @if (session('error'))
-        @include('layouts.admin.components.alert')
-    @endif
-    @error('title')
+    @if($errors->any())
         <script type="module">
             var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
                 keyboard: false
@@ -14,17 +11,35 @@
             myModal.toggle();
             myModal.show();
         </script>
-    @enderror
+    @endif
+    @isset($category)
+        <script type="module">
+            var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
+                keyboard: false
+            })
+            myModal.toggle();
+            myModal.show();
+        </script>
+    @endisset
+    @php
+        $modal = [
+            'id'=>'addTagsModal',
+            'title'=>'tag tin tức',
+            'name'=>'',
+            'param'=>'',
+            'route'=>[
+                'index'=>'news.tag.index',
+                'store'=>'news.tag.store',
+                'update'=>'news.tag.update',
+                'delete'=>'news.tag.delete',
+            ],
+            'selections'=>[
+                'Tên Tag tin tức'=>['name'=>'Nhập tên của tag tin tức (vd:Sức khỏe,Công nghệ,...)'],
+                'Thứ tự'=>['index'=>'Nhập thứ tự hiện của tag (vd:1,2,3,...)'],
+            ],
+        ];
+    @endphp
 
-    @if (isset($category))
-        <script type="module">
-            var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
-                keyboard: false
-            })
-            myModal.toggle();
-            myModal.show();
-        </script>
-    @endif
     <!-- Sale & Revenue Start -->
     <div class="container-fluid pt-4 px-4">
         <div class="row g-4">
@@ -74,20 +89,19 @@
             <div class="d-flex align-items-center justify-content-between mb-4">
                 <h6 class="mb-0">Tất cả tag tin tức</h6>
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoriesModal">
-                    <i class="fas fa-plus me-1"></i> Thêm
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTagsModal">
+                    <i class="fas fa-plus me-1"></i> Thêm Tag
                 </button>
                 <!-- Modal -->
-                @include('layouts.admin.components.catNewsModal')
+                @include('layouts.admin.components.modalAdd')
                 <!--End Modal -->
             </div>
             <div class="table-responsive" style="height: 100vh">
                 <table class="table text-start align-middle table-bordered table-hover mb-0">
                     <thead>
                         <tr class="text-dark">
-                            <th scope="col"><input class="form-check-input" type="checkbox"></th>
                             <th scope="col">Ngày tạo</th>
-                            <th scope="col">Tên tag</th>
+                            <th scope="col">Tên Tag</th>
                             <th scope="col">Slug</th>
                             <th scope="col">Thứ tự</th>
                             <th scope="col">Trạng thái</th>
@@ -95,26 +109,28 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- @foreach ($categories as $category)
-                        <tr>
-                            <td><input class="form-check-input" type="checkbox"></td>
-                            <td>{{$category->created_at}}</td>
-                            <td>{{$category->title}}</td>
-                            <td>{{$category->slug}}</td>
-                            <td>{{$category->index}}</td>
-                            <td>{{$category->show_hide=='show'?'Hiện':'Ẩn'}}</td>
-                            <td>
-                            <div class="d-flex justify-content-evenly">
-                                <a class="btn btn-sm btn-primary" href="{{ route('product.cat.edit', ['id' => $category->id]) }}">Edit</a>
-                                <form action="{{ route('product.cat.delete', ['id' => $category->id]) }}" method="POST">
-                                    @csrf
-                                    @method('delete')
-                                    <button class="btn btn-sm btn-danger" type="submit">Xóa</button>
-                                </form>
-                            </div>
-                            </td>
-                        </tr>
-                    @endforeach                       --}}
+                        @foreach ($tags as $tag)
+                            @php
+                                $modal['name']=$tag->name;
+                                $modal['param']=$tag->id;
+                            @endphp
+                            <tr title="{{$tag->name}}">
+                                <td>{{$tag->created_at}}</td>
+                                <td>{{$tag->name}}</td>
+                                <td>{{$tag->slug}}</td>
+                                <td>{{$tag->index}}</td>
+                                <td>{{$tag->show_hide ? 'Hiện' : 'Ẩn'}}</td>
+                                <td>
+                                    <div class="d-flex justify-content-evenly">
+                                        <a class="btn btn-sm btn-primary" href="{{ route('news.tag.edit', ['id' => $tag->id]) }}">Edit</a>
+                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#comfirmModal{{$tag->id}}">
+                                            Xóa
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            @include('layouts.admin.components.comfirmModal')
+                        @endforeach                      
                     </tbody>
                 </table>
             </div>

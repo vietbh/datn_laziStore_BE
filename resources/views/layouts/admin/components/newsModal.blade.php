@@ -1,15 +1,15 @@
-<div class="modal fade" id="addNewsModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="addNewsModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="true" aria-labelledby="addNewsModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen modal-dialog-centered">
     <div class="modal-content">
         <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">
-            @isset($news)
-                Sửa tin tức <strong>{{$news->name}}</strong>
+        <h5 class="modal-title" id="addNewsModalLabel">
+            @isset($new)
+                Sửa tin tức <strong>{{$new->title}}</strong>
             @else
                 Thêm tin tức
             @endisset
         </h5>
-        @isset($news)
+        @isset($new)
         <a href="{{ route('news.index') }}" class="btn-close" aria-label="Close">
         </a>
         @else
@@ -22,14 +22,14 @@
                     <div class="col-sm-12 col-xl-12">
                         <div class="bg-light rounded h-100 p-4 text-start">
                             <form 
-                            @isset($news)
-                                action="{{ route('news.update',['id'=>$news->id]) }}"
+                            @isset($new)
+                                action="{{ route('news.update',['id'=>$new->id]) }}"
                             @else
                                 action="{{ route('news.store') }}"
                             @endisset
                             method="POST" enctype="multipart/form-data">
                                 @csrf
-                                @isset($news)
+                                @isset($new)
                                 @method('put')
                                 @else
                                 @method('post')
@@ -40,8 +40,8 @@
                                         <input type="text" name="name" class="form-control @error('name') 
                                         is-invalid
                                         @enderror" id="name"
-                                        @isset($news)
-                                            value="{{$news->name}}"
+                                        @isset($new)
+                                            value="{{$new->name}}"
                                         @endisset
                                         placeholder="Nhập tên tin tức (vd:Iphone15,Samsung A23,...)"
                                         aria-describedby="name">
@@ -52,8 +52,8 @@
                                     <div class="col-sm-12 col-xl-6 mb-3">
                                         <label for="seo_keywords" class="form-label">Từ khóa SEO<span class="text-danger text-small">(*)</span></label>
                                         <input type="text" name="seo_keywords" class="form-control" 
-                                        @isset($news)
-                                            value="{{$news->seo_keywords}}"
+                                        @isset($new)
+                                            value="{{$new->seo_keywords}}"
                                         @endisset
                                         id="seo_keywords">   
                                         @error('seo_keywords')
@@ -68,8 +68,8 @@
                                         @error('categories_product_id') 
                                         is-invalid
                                         @enderror" name="categories_product_id" 
-                                        @isset($news)
-                                            value="{{$news->categories_product_id}}"
+                                        @isset($new)
+                                            value="{{$new->categories_product_id}}"
                                         @endisset
                                         id="categories_product_id">
                                             <option value="" selected disabled>Chọn danh mục </option>
@@ -82,34 +82,45 @@
                                         @enderror
                                     </div>
                                     <div class="col-sm-12 col-xl-6 mb-3">
-                                        <label for="brand_id" class="form-label ">Tag <span class="text-danger text-small">(*)</span></label>
-                                        <select class="form-select  
-                                        @error('brand_id') 
-                                        is-invalid
-                                        @enderror" name="brand_id" 
-                                        @isset($news)
-                                            value="{{$news->brand_id}}"
-                                        @endisset
-                                        id="brand_id">
-                                            <option value="" selected disabled>Chọn tag</option>
-                                            {{-- @foreach ($brands as $brand)
-                                                <option value="{{$brand->id}}">{{$brand->name}}</option>
-                                            @endforeach --}}
+                                        <label for="tag_id" class="form-label ">Tag <span class="text-danger text-small">(*)</span></label>
+                                        <select class="selectpicker" id="tag_id" multiple aria-label="size 3 select example">
+                                            <option value="1">One</option>
+                                            <option value="2">Two</option>
+                                            <option value="3">Three</option>
+                                            <option value="4">Four</option>
                                         </select>
-                                        @error('brand_id')
-                                            <div id="brand_id" class="form-text text-danger">{{ $message }}</div>
-                                        @enderror
+                                        {{-- <select class="selectpicker  
+                                        @error('tag_id') 
+                                        is-invalid
+                                        @enderror" 
+                                        name="tag_id"
+                                        multiple 
+                                        @isset($new)
+                                            value="{{$new->tag_id}}"
+                                        @endisset
+                                        id="tag_id">
+                                            <option value="" selected disabled>Chọn tag</option>
+                                            @foreach ($tags as $tag)
+                                                <option value="{{$tag->id}}">{{$tag->name}}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('tag_id')
+                                            <div class="form-text text-danger">{{ $message }}</div>
+                                        @enderror --}}
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-xl-6 mb-3">
                                         <label for="image_url" class="form-label ">Chọn hình ảnh <span class="text-danger text-small">(*)</span></label>
                                         <div class="d-flex justify-content-around">
-                                            <input type="file" name="image_url" class="form-control @error('image_url') 
-                                            is-invalid
-                                            @enderror" id="image_url"
-                                            @isset($news)
-                                                value="{{$product->image_url}}"
+                                            <input type="file" name="image_url"
+                                            class="form-control 
+                                            @error('image_url') 
+                                                is-invalid
+                                            @enderror"
+                                            id="image_url"
+                                            @isset($new)
+                                                value="{{$new->image_url}}"
                                             @endisset
                                             aria-describedby="image_url">
                                             @error('image_url')
@@ -121,16 +132,15 @@
                                     <div class="col-sm-12 col-xl-6 mb-3">
                                         <label for="show_hide" class="form-label">Trạng thái (mặc định sẽ là Hiện)</label>
                                         <select class="form-select" name="show_hide" 
-                                        @isset($product)
-                                            value="{{$product->show_hide}}"
+                                        @isset($new)
+                                            value="{{$new->show_hide}}"
                                         @endisset
                                         id="show_hide">
-                                            <option value="show">Hiện</option>
-                                            <option value="hide">Ẩn</option>
+                                            <option value="1">Hiện</option>
+                                            <option value="0">Ẩn</option>
                                         </select>    
                                     </div>
                                 </div>    
-                                @include('layouts.admin.components.colorModal')
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-xl-12">
                                         <label for="description" class="form-label">Mô tả ngắn</label>
@@ -143,18 +153,16 @@
                                 </div>     
                                 <div class=" mb-3 float-end">
                                     <button type="submit" class="btn btn-primary">
-                                        @isset($product)
+                                        @isset($new)
                                         Sửa
                                     @else
                                         Thêm mới
                                     @endisset
                                     </button>
-                                    @isset($product)
-                                    <a href="{{ route('product.index') }}" class="btn btn-danger">
-                                        Đóng
-                                    </a>
-                                        @else
-                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
+                                    @isset($new)
+                                        <a href="{{ route('news.index') }}" class="btn btn-danger">Đóng</a>
+                                    @else
+                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
                                     @endisset
                                 </div>
                             </form>

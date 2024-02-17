@@ -16,11 +16,11 @@ return new class extends Migration
             $table->string('title')->unique();
             $table->string('slug');
             $table->string('seo_keywords')->unique();
-            $table->longText('desciption');
+            $table->longText('description');
             $table->string('author',50);
             $table->dateTime('datetime_create');
             $table->integer('views')->default(0);
-            $table->boolean('show')->default(true);
+            $table->boolean('show_hide')->default(true);
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('categories_news_id');
             $table->foreign('user_id')->references('id')->on('users');

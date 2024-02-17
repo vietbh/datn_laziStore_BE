@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\News;
 
 use App\Http\Controllers\Controller;
+use App\Models\News;
+use App\Models\TagsNews;
 use Illuminate\Http\Request;
 
 class NewsController extends Controller
@@ -13,7 +15,9 @@ class NewsController extends Controller
     public function index()
     {
         //
-        return view('layouts.admin.News.index');
+        $news = News::all();
+        $tags = TagsNews::all();
+        return view('layouts.admin.News.index',compact('news','tags'));
     }
 
     /**
@@ -22,6 +26,7 @@ class NewsController extends Controller
     public function create()
     {
         //
+
     }
 
     /**
@@ -30,6 +35,9 @@ class NewsController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+
+        ]);
     }
 
     /**

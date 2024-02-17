@@ -1,4 +1,4 @@
-<div class="modal fade" id="addProductModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="addProductModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="true" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen modal-dialog-centered">
     <div class="modal-content">
         <div class="modal-header">
@@ -80,7 +80,7 @@
                                         id="categories_product_id">
                                             <option value="" selected disabled>Chọn danh mục sản phẩm</option>
                                             @foreach ($categories as $category)
-                                                <option value="{{$category->id}}">{{$category->title}}</option>
+                                                <option value="{{$category->id}}">{{$category->name}}</option>
                                             @endforeach
                                         </select>
                                         @error('categories_product_id')
@@ -138,8 +138,8 @@
                                         value="{{old('show_hide')}}"    
                                         @endisset
                                         id="show_hide">
-                                            <option value="show">Hiện</option>
-                                            <option value="hide">Ẩn</option>
+                                            <option value="1">Hiện</option>
+                                            <option value="0">Ẩn</option>
                                         </select>    
                                     </div>
                                 </div>    
@@ -148,13 +148,15 @@
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-xl-12">
                                         <label for="description" class="form-label">Mô tả sản phẩm</label>
-                                        <input name="description"
+                                        <textarea
+                                        name="description"
                                         id="description"
                                         class="form-control ck-editor__editable_inline" 
+                                        >
                                         @isset($product)
                                             value='{{$product->description}}'
                                         @endisset
-                                        />
+                                        </textarea>
                                     </div>
                                 </div>     
                                 <div class="mb-3 float-end">

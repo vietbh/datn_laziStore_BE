@@ -12,11 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tags_news', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('id')->unsigned();
             $table->string('name')->unique();
             $table->string('slug');
             $table->string('index')->default(1);
-            $table->boolean('show')->default(true);
+            $table->unsignedInteger('parent_tag_id')->nullable();
+            $table->foreign('parent_tag_id')->references('id')->on('tags_news');
+            $table->boolean('show_hide')->default(true);
             $table->timestamps();
         });
     }

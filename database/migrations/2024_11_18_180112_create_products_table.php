@@ -26,8 +26,6 @@ return new class extends Migration
             $table->unsignedInteger('brand_id')->nullable();            
             $table->foreign('categories_product_id')->references('id')->on('categories_products');
             $table->foreign('brand_id')->references('id')->on('brands');
-            $table->integer('quantity_available')->default(0);
-            $table->integer('quantity_sold')->default(0);
             $table->boolean('show_hide')->default(true);
             $table->timestamps();
         });

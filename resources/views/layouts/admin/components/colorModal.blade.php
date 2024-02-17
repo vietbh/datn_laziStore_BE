@@ -148,8 +148,8 @@
                                     @enderror
                                 </div>
                             </div>
-                        @endisset
                             <div id="formColor"></div>
+                        @endisset
                     </div>
                 </div>
             </div>

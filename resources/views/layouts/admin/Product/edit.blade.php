@@ -1,294 +1,187 @@
 @extends('admin')
 @section('content')
-
-        <!-- Form Start -->
-        <div class="container-fluid pt-4 px-4">
-            <div class="row g-4">
-                <div class="col-sm-12 col-xl-6">
-                    <div class="bg-light rounded h-100 p-4">
-                        <h6 class="mb-4">Basic Form</h6>
-                        <form>
-                            <div class="mb-3">
-                                <label for="exampleInputEmail1" class="form-label">Email address</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1"
-                                    aria-describedby="emailHelp">
-                                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="exampleInputPassword1" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="exampleInputPassword1">
-                            </div>
-                            <div class="mb-3 form-check">
-                                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                                <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Sign in</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-xl-6">
-                    <div class="bg-light rounded h-100 p-4">
-                        <h6 class="mb-4">Horizontal Form</h6>
-                        <form>
-                            <div class="row mb-3">
-                                <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
-                                <div class="col-sm-10">
-                                    <input type="email" class="form-control" id="inputEmail3">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
-                                <div class="col-sm-10">
-                                    <input type="password" class="form-control" id="inputPassword3">
-                                </div>
-                            </div>
-                            <fieldset class="row mb-3">
-                                <legend class="col-form-label col-sm-2 pt-0">Radios</legend>
-                                <div class="col-sm-10">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="gridRadios"
-                                            id="gridRadios1" value="option1" checked>
-                                        <label class="form-check-label" for="gridRadios1">
-                                            First radio
-                                        </label>
+    <div class="container">
+        <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+            @isset($product)
+                Sửa sản phẩm <strong>{{$product->name}}</strong>
+            @else
+                Thêm sản phẩm
+            @endisset
+        </h5>
+        @isset($product)
+        <a href="{{ route('product.index') }}" class="btn-close" aria-label="Close">
+        </a>
+        @else
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        @endisset
+        </div>
+        <div class="modal-body p-0">
+            <div class="container-fluid pt-4 px-4 mb-4" >
+                <div class="row g-4">
+                    <div class="col-sm-12 col-xl-12">
+                        <div class="bg-light rounded h-100 p-4 text-start">
+                            <form 
+                            @isset($product)
+                                action="{{ route('product.update',['id'=>$product->id]) }}"
+                            @else
+                                action="{{ route('product.store') }}"
+                            @endisset
+                            method="POST" enctype="multipart/form-data">
+                                @csrf
+                                @isset($product)
+                                @method('put')
+                                @else
+                                @method('post')
+                                @endisset
+                                <div class="row mb-3">
+                                    <div class="col-sm-12 col-xl-6 mb-3">
+                                        <label for="name" class="form-label ">Tên sản phẩm <span class="text-danger text-small">(*)</span></label>
+                                        <input type="text" name="name" class="form-control @error('name') 
+                                        is-invalid
+                                        @enderror" id="name"
+                                        @isset($product)
+                                            value="{{$product->name}}"
+                                        @else
+                                        value="{{old('name')}}"        
+                                        @endisset
+                                        placeholder="Nhập tên sản phẩm (vd:Iphone15,Samsung A23,...)"
+                                        aria-describedby="name">
+                                        @error('name')
+                                        <div id="name" class="form-text text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="gridRadios"
-                                            id="gridRadios2" value="option2">
-                                        <label class="form-check-label" for="gridRadios2">
-                                            Second radio
-                                        </label>
-                                    </div>
-                                </div>
-                            </fieldset>
-                            <div class="row mb-3">
-                                <legend class="col-form-label col-sm-2 pt-0">Checkbox</legend>
-                                <div class="col-sm-10">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="gridCheck1">
-                                        <label class="form-check-label" for="gridCheck1">
-                                            Check me out
-                                        </label>
+                                    <div class="col-sm-12 col-xl-6 mb-3">
+                                        <label for="seo_keywords" class="form-label">Từ khóa SEO<span class="text-danger text-small">(*)</span></label>
+                                        <input type="text" name="seo_keywords" class="form-control" 
+                                        @isset($product)
+                                            value="{{$product->seo_keywords}}"
+                                        @else
+                                        value="{{old('seo_keywords')}}"        
+                                        @endisset
+                                        id="seo_keywords">   
+                                        @error('seo_keywords')
+                                        <div id="seo_keywords" class="form-text text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Sign in</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-xl-6">
-                    <div class="bg-light rounded h-100 p-4">
-                        <h6 class="mb-4">Floating Label</h6>
-                        <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="floatingInput"
-                                placeholder="name@example.com">
-                            <label for="floatingInput">Email address</label>
+                                <div class="row mb-3">
+                                    <div class="col-sm-12 col-xl-6 mb-3">
+                                        <label for="categories_product_id" class="form-label ">Danh mục sản phẩm <span class="text-danger text-small">(*)</span></label>
+                                        <select class="form-select  
+                                        @error('categories_product_id') 
+                                        is-invalid
+                                        @enderror" 
+                                        name="categories_product_id" 
+                                        @isset($product)
+                                            value="{{$product->categories_product_id}}"
+                                        @else
+                                        value="{{old('categories_product_id')}}"    
+                                        @endisset
+                                        id="categories_product_id">
+                                            @foreach ($categories as $category)
+                                                <option value="{{$category->id}}">{{$category->name}}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('categories_product_id')
+                                            <div id="categories_product_id" class="form-text text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="col-sm-12 col-xl-6 mb-3">
+                                        <label for="brand_id" class="form-label ">Thương hiệu <span class="text-danger text-small">(*)</span></label>
+                                        <select class="form-select  
+                                        @error('brand_id') 
+                                        is-invalid
+                                        @enderror" name="brand_id" 
+                                        @isset($product)
+                                            value="{{$product->brand_id}}"
+                                        @else
+                                        value="{{old('brand_id')}}"    
+                                        @endisset
+                                        id="brand_id">
+                                            @foreach ($brands as $brand)
+                                                <option value="{{$brand->id}}">{{$brand->name}}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('brand_id')
+                                            <div class="form-text text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-sm-12 col-xl-6 mb-3">
+                                        <label for="image_url" class="form-label ">Chọn hình ảnh <span class="text-danger text-small">(*)</span></label>
+                                        <div class="d-flex justify-content-around">
+                                            <img src="{{$product->image_url}}" class="rounded-3 me-2" width="100" height="100" aria-describedby="image_url">
+                                            <input type="file" name="image_url" class="form-control @error('image_url') 
+                                            is-invalid
+                                            @enderror" id="image_url"
+                                            @isset($product)
+                                                value="{{$product->image_url}}"
+                                            @else
+                                            value="{{old('image_url')}}"        
+                                            @endisset
+                                            autocomplete="image_url"
+                                            aria-describedby="image_url">
+                                            @error('image_url')
+                                                <div class="form-text text-danger">{{ $message }}</div>
+                                            @enderror
+                                            {{-- <button type="button" class="btn btn-secondary ms-1">Thêm</button> --}}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-xl-6 mb-3">
+                                        <label for="show_hide" class="form-label">Trạng thái (mặc định sẽ là Hiện)</label>
+                                        <select class="form-select" name="show_hide" 
+                                        autocomplete="show_hide"
+                                        @isset($product)
+                                            value="{{$product->show_hide}}"
+                                        @else
+                                        value="{{old('show_hide')}}"    
+                                        @endisset
+                                        id="show_hide">
+                                            <option value="1">Hiện</option>
+                                            <option value="0">Ẩn</option>
+                                        </select>    
+                                    </div>
+                                </div>    
+                                @include('layouts.admin.components.colorModal')
+                                @include('layouts.admin.components.speciModal')    
+                                <div class="row mb-3">
+                                    <div class="col-sm-12 col-xl-12">
+                                        <label for="description" class="form-label">Mô tả sản phẩm</label>
+                                        <textarea
+                                        name="description"
+                                        id="description"
+                                        class="form-control ck-editor__editable_inline" 
+                                        >
+                                        @isset($product)
+                                            value='{{$product->description}}'
+                                        @endisset
+                                        </textarea>
+                                    </div>
+                                </div>     
+                                <div class="mb-3 float-end">
+                                    <button type="submit" class="btn btn-primary">
+                                        @isset($product)
+                                        Sửa
+                                    @else
+                                        Thêm mới
+                                    @endisset
+                                    </button>
+                                    @isset($product)
+                                    <a href="{{ route('product.index') }}" class="btn btn-danger">
+                                        Đóng
+                                    </a>
+                                    @else
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
+                                    @endisset
+                                </div>
+                            </form>
                         </div>
-                        <div class="form-floating mb-3">
-                            <input type="password" class="form-control" id="floatingPassword"
-                                placeholder="Password">
-                            <label for="floatingPassword">Password</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <select class="form-select" id="floatingSelect"
-                                aria-label="Floating label select example">
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                            <label for="floatingSelect">Works with selects</label>
-                        </div>
-                        <div class="form-floating">
-                            <textarea class="form-control" placeholder="Leave a comment here"
-                                id="floatingTextarea" style="height: 150px;"></textarea>
-                            <label for="floatingTextarea">Comments</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-xl-6">
-                    <div class="bg-light rounded h-100 p-4">
-                        <h6 class="mb-4">File Input</h6>
-                        <div class="mb-3">
-                            <label for="formFile" class="form-label">Default file input example</label>
-                            <input class="form-control" type="file" id="formFile">
-                        </div>
-                        <div class="mb-3">
-                            <label for="formFileMultiple" class="form-label">Multiple files input example</label>
-                            <input class="form-control" type="file" id="formFileMultiple" multiple>
-                        </div>
-                        <div class="mb-3">
-                            <label for="formFileSm" class="form-label">Small file input example</label>
-                            <input class="form-control form-control-sm" id="formFileSm" type="file">
-                        </div>
-                        <div>
-                            <label for="formFileLg" class="form-label">Large file input example</label>
-                            <input class="form-control form-control-lg" id="formFileLg" type="file">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-xl-6">
-                    <div class="bg-light rounded h-100 p-4">
-                        <h6 class="mb-4">Select</h6>
-                        <select class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
-                            <option selected>Open this select menu</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
-                        <select class="form-select mb-3" aria-label="Default select example">
-                            <option selected>Open this select menu</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
-                        <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-                            <option selected>Open this select menu</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
-                        <select class="form-select" multiple aria-label="multiple select example">
-                            <option selected>Open this select menu</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-xl-6">
-                    <div class="bg-light rounded h-100 p-4">
-                        <h6 class="mb-4">Check, Radio & Switch</h6>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                            <label class="form-check-label" for="flexCheckDefault">
-                                Default checkbox
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                            <label class="form-check-label" for="flexCheckChecked">
-                                Checked checkbox
-                            </label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                            <label class="form-check-label" for="inlineCheckbox1">1</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
-                            <label class="form-check-label" for="inlineCheckbox2">2</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3"
-                                disabled>
-                            <label class="form-check-label" for="inlineCheckbox3">3 (disabled)</label>
-                        </div>
-                        <hr>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                id="flexRadioDefault1">
-                            <label class="form-check-label" for="flexRadioDefault1">
-                                Default radio
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                id="flexRadioDefault2" checked>
-                            <label class="form-check-label" for="flexRadioDefault2">
-                                Default checked radio
-                            </label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
-                                value="option1">
-                            <label class="form-check-label" for="inlineRadio1">1</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2"
-                                value="option2">
-                            <label class="form-check-label" for="inlineRadio2">2</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3"
-                                value="option3" disabled>
-                            <label class="form-check-label" for="inlineRadio3">3 (disabled)</label>
-                        </div>
-                        <hr>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch"
-                                id="flexSwitchCheckDefault">
-                            <label class="form-check-label" for="flexSwitchCheckDefault">Default switch checkbox
-                                input</label>
-                        </div>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch"
-                                id="flexSwitchCheckChecked" checked>
-                            <label class="form-check-label" for="flexSwitchCheckChecked">Checked switch checkbox
-                                input</label>
-                        </div>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch"
-                                id="flexSwitchCheckDisabled" disabled>
-                            <label class="form-check-label" for="flexSwitchCheckDisabled">Disabled switch checkbox
-                                input</label>
-                        </div>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch"
-                                id="flexSwitchCheckCheckedDisabled" checked disabled>
-                            <label class="form-check-label" for="flexSwitchCheckCheckedDisabled">Disabled checked
-                                switch checkbox input</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-xl-6">
-                    <div class="bg-light rounded h-100 p-4">
-                        <h6 class="mb-4">Input Group</h6>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="basic-addon1">@</span>
-                            <input type="text" class="form-control" placeholder="Username" aria-label="Username"
-                                aria-describedby="basic-addon1">
-                        </div>
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Recipient's username"
-                                aria-label="Recipient's username" aria-describedby="basic-addon2">
-                            <span class="input-group-text" id="basic-addon2">@example.com</span>
-                        </div>
-                        <label for="basic-url" class="form-label">Your vanity URL</label>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="basic-addon3">https://example.com/users/</span>
-                            <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">$</span>
-                            <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
-                            <span class="input-group-text">.00</span>
-                        </div>
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Username" aria-label="Username">
-                            <span class="input-group-text">@</span>
-                            <input type="text" class="form-control" placeholder="Server" aria-label="Server">
-                        </div>
-                        <div class="input-group">
-                            <span class="input-group-text">With textarea</span>
-                            <textarea class="form-control" aria-label="With textarea"></textarea>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-xl-6">
-                    <div class="bg-light rounded h-100 p-4">
-                        <h6 class="mb-4">Sizing</h6>
-                        <input class="form-control form-control-lg mb-3" type="text" placeholder=".form-control-lg"
-                            aria-label=".form-control-lg example">
-                        <input class="form-control mb-3" type="text" placeholder="Default input"
-                            aria-label="default input example">
-                        <input class="form-control form-control-sm" type="text" placeholder=".form-control-sm"
-                            aria-label=".form-control-sm example">
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Form End -->
-
+    </div>
+    @include('layouts.admin.Product.ckeditor')
 @endsection

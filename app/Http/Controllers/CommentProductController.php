@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class CommentController extends Controller
+class CommentProductController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -12,8 +12,7 @@ class CommentController extends Controller
     public function index()
     {
         //
-        return var_dump('Trang bình luận');
-
+        return view('layouts.admin.Comment.Product.index');
     }
 
     /**

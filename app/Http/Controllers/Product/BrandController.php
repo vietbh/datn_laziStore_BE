@@ -26,10 +26,8 @@ class BrandController extends Controller
      */
     public function store(Request $request,Brands $brands)
     {
-        //
-        // dd($request);
-        $validated = $request->validate([
-            'name' => 'required|unique:brands|max:255',
+        $request->validate([
+            'name' => 'required|unique:brands,name|max:255',
             'country' => 'required',
             
         ],[
@@ -67,12 +65,11 @@ class BrandController extends Controller
     {
         //
         $brand = Brands::findOrFail($id);
-        $validated = $request->validate([
-            'name' => 'required|unique:brands|max:255',
+        $request->validate([
+            'name' => "required|max:255|unique:brands,name,".$id,
             'country' => 'required|min:1'
         ],[
             'name.required'=>'Không được để trống trường này!',
-            'name.unique'=>'Đã tồn tại thương hiệu này rồi!',
             'country.required'=>'Không được để trống trường này!',
         ]);
         $slug = Str::slug($request->name); 

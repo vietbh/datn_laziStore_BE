@@ -23,14 +23,12 @@
             <a href="{{ route('delivery.index') }}" class="nav-item nav-link {{request()->routeIs('delivery.index') == 1 ? 'active':''}}"><i class="fa fa-truck me-2"></i>Vận chuyển</a>
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle 
-                {{request()->routeIs('product.cat.index') 
-                || request()->routeIs('product.index')
-                || request()->routeIs('brand.index')
+                {{request()->routeIs('comment.product.index') 
+                || request()->routeIs('comment.news.index')
                 == 1 ? 'active':''}} " data-bs-toggle="dropdown"><i class="fa fa-comments me-2"></i>Bình luận</a>
                 <div class="dropdown-menu bg-transparent border-0">
-                    <a href="{{ route('comment.index') }}" class="dropdown-item {{request()->routeIs('brand.index') == 1 ? 'active':''}}">Thương hiệu</a>
-                    <a href="{{ route('product.cat.index') }}" class="dropdown-item {{request()->routeIs('product.cat.index') == 1 ? 'active':''}}">Danh mục</a>
-                    <a href="{{ route('product.index') }}" class="dropdown-item {{request()->routeIs('product.index') == 1 ? 'active':''}}">Sản phẩm</a>
+                    <a href="{{ route('comment.product.index') }}" class="dropdown-item {{request()->routeIs('comment.product.index') == 1 ? 'active':''}}">Bình luận sản phẩm</a>
+                    <a href="{{ route('comment.news.index') }}" class="dropdown-item {{request()->routeIs('comment.news.index') == 1 ? 'active':''}}">Bình luận tin tức</a>
                 </div>
             </div>
             <div class="nav-item dropdown">
