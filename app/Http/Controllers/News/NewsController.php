@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\News;
 
 use App\Http\Controllers\Controller;
+use App\Models\CategoriesNews;
 use App\Models\News;
 use App\Models\TagsNews;
 use Illuminate\Http\Request;
@@ -17,7 +18,8 @@ class NewsController extends Controller
         //
         $news = News::all();
         $tags = TagsNews::all();
-        return view('layouts.admin.News.index',compact('news','tags'));
+        $categories = CategoriesNews::all();
+        return view('layouts.admin.News.index',compact('news','tags','categories'));
     }
 
     /**

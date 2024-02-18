@@ -103,12 +103,14 @@
                             <td>{{$category->show_hide=='show'?'Hiện':'Ẩn'}}</td>
                             <td>
                             <div class="d-flex justify-content-evenly">
-                                <a class="btn btn-sm btn-primary" href="{{ route('product.cat.edit', ['id' => $category->id]) }}">Edit</a>
-                                <form action="{{ route('product.cat.delete', ['id' => $category->id]) }}" method="POST">
-                                    @csrf
-                                    @method('delete')
-                                    <button class="btn btn-sm btn-danger" type="submit">Xóa</button>
-                                </form>
+                                @if ($category->id !== 1)
+                                    <a class="btn btn-sm btn-primary" href="{{ route('product.cat.edit', ['id' => $category->id]) }}">Edit</a>
+                                    <form action="{{ route('product.cat.delete', ['id' => $category->id]) }}" method="POST">
+                                        @csrf
+                                        @method('delete')
+                                        <button class="btn btn-sm btn-danger" type="submit">Xóa</button>
+                                    </form>
+                                @endif
                             </div>
                             </td>
                         </tr>

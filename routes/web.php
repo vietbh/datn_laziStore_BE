@@ -99,12 +99,14 @@ Route::middleware(['auth','role:0'])->group(function () {
     Route::post('/admin/tag-tin-tuc/them',[TagNewsController::class, 'store'])->name('news.tag.store');
     Route::get('/admin/tag-tin-tuc/edit/{id}',[TagNewsController::class, 'edit'])->name('news.tag.edit');
     Route::put('/admin/tag-tin-tuc/edit/{id}',[TagNewsController::class, 'update'])->name('news.tag.update');
+    Route::get('/admin/tag-tin-tuc/xoa/{id}',[TagNewsController::class, 'show'])->name('news.tag.show');
     Route::delete('/admin/tag-tin-tuc/xoa/{id}',[TagNewsController::class, 'destroy'])->name('news.tag.delete');
     //Danh mục tin tức
     Route::get('/admin/danh-muc-tin-tuc',[CategoriesNewsController::class, 'index'])->name('news.cat.index');
     Route::post('/admin/danh-muc-tin-tuc/them',[CategoriesNewsController::class, 'store'])->name('news.cat.store');
     Route::get('/admin/danh-muc-tin-tuc/edit/{id}',[CategoriesNewsController::class, 'edit'])->name('news.cat.edit');
     Route::put('/admin/danh-muc-tin-tuc/edit/{id}',[CategoriesNewsController::class, 'update'])->name('news.cat.update');
+    Route::get('/admin/danh-muc-tin-tuc/xoa/{id}',[CategoriesNewsController::class, 'show'])->name('news.cat.show');
     Route::delete('/admin/danh-muc-tin-tuc/xoa/{id}',[CategoriesNewsController::class, 'destroy'])->name('news.cat.delete');
 
     // 

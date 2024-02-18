@@ -53,6 +53,9 @@ class TagNewsController extends Controller
     public function show(string $id)
     {
         //
+        $tagDelete = TagsNews::findOrFail($id);
+        $tags = TagsNews::all();
+        return view('layouts.admin.News.Tags.index',compact('tags','tagDelete'));
     }
 
     /**
@@ -61,14 +64,14 @@ class TagNewsController extends Controller
     public function edit(string $id)
     {
         //
-        $tagsNew = TagsNews::findOrFail($id);
-        $tagsNews = TagsNews::all();
+        $tag = TagsNews::findOrFail($id);
+        $tags = TagsNews::all();
         // $categories_parent = TagsNews::where([
         //     ['id','!=',1],
         //     ['id','!=',$id],
         //     ['parent_category_id',null],
         // ])->get();
-        return view('layouts.admin.News.Tags.index',compact('tagsNew','tagsNews'));
+        return view('layouts.admin.News.Tags.index',compact('tag','tags'));
 
     }
 

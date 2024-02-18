@@ -124,5 +124,4 @@ $modal = `  var myModal = new bootstrap.Modal(document.getElementById('addNewsMo
        </div>
    </div>
    <!-- Table Cate End -->
-
 @endsection

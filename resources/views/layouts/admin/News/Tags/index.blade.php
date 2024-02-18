@@ -12,15 +12,6 @@
             myModal.show();
         </script>
     @endif
-    @isset($category)
-        <script type="module">
-            var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
-                keyboard: false
-            })
-            myModal.toggle();
-            myModal.show();
-        </script>
-    @endisset
     @php
         $modal = [
             'id'=>'addTagsModal',
@@ -38,8 +29,36 @@
                 'Thứ tự'=>['index'=>'Nhập thứ tự hiện của tag (vd:1,2,3,...)'],
             ],
         ];
-    @endphp
-
+        @endphp
+    @isset($tag)
+        @php
+            $model = $tag;
+        @endphp
+        <script type="module">
+            setTimeout(() => {
+                var myModal = new bootstrap.Modal(document.getElementById('addTagsModal'),{
+                    keyboard: false
+                })
+                myModal.toggle();
+                myModal.show();
+            }, 0);
+        </script>
+    @endisset
+    @isset($tagDelete)
+        @php
+            $modal['name']=$tagDelete->name;
+            $modal['param'] = $tagDelete->id;
+        @endphp
+        <script type="module">
+            setTimeout(() => {
+                var myModal = new bootstrap.Modal(document.getElementById('comfirmModal'),{
+                    keyboard: false
+                })
+                myModal.toggle();
+                myModal.show();
+            },0);
+        </script>
+    @endisset
     <!-- Sale & Revenue Start -->
     <div class="container-fluid pt-4 px-4">
         <div class="row g-4">
@@ -89,11 +108,10 @@
             <div class="d-flex align-items-center justify-content-between mb-4">
                 <h6 class="mb-0">Tất cả tag tin tức</h6>
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTagsModal">
-                    <i class="fas fa-plus me-1"></i> Thêm Tag
-                </button>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTagsModal"><i class="fas fa-plus me-1"></i>Thêm Tag</button>
                 <!-- Modal -->
                 @include('layouts.admin.components.modalAdd')
+                @include('layouts.admin.components.comfirmModal')
                 <!--End Modal -->
             </div>
             <div class="table-responsive" style="height: 100vh">
@@ -109,28 +127,23 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($tags as $tag)
-                            @php
-                                $modal['name']=$tag->name;
-                                $modal['param']=$tag->id;
-                            @endphp
-                            <tr title="{{$tag->name}}">
-                                <td>{{$tag->created_at}}</td>
-                                <td>{{$tag->name}}</td>
-                                <td>{{$tag->slug}}</td>
-                                <td>{{$tag->index}}</td>
-                                <td>{{$tag->show_hide ? 'Hiện' : 'Ẩn'}}</td>
-                                <td>
-                                    <div class="d-flex justify-content-evenly">
-                                        <a class="btn btn-sm btn-primary" href="{{ route('news.tag.edit', ['id' => $tag->id]) }}">Edit</a>
-                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#comfirmModal{{$tag->id}}">
-                                            Xóa
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            @include('layouts.admin.components.comfirmModal')
-                        @endforeach                      
+                        @isset($tags)
+                            @foreach ($tags as $tag)
+                                <tr title="{{$tag->name}}">
+                                    <td>{{$tag->created_at}}</td>
+                                    <td>{{$tag->name}}</td>
+                                    <td>{{$tag->slug}}</td>
+                                    <td>{{$tag->index}}</td>
+                                    <td>{{$tag->show_hide ? 'Hiện' : 'Ẩn'}}</td>
+                                    <td>
+                                        <div class="d-flex justify-content-evenly">
+                                            <a href="{{ route('news.tag.edit', ['id' => $tag->id]) }}" class="btn btn-sm btn-primary" id="edit">Edit</a>
+                                            <a href="{{ route('news.tag.show', ['id'=>$tag->id]) }}" class="btn btn-sm btn-danger" id="delete" >Xóa</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach                      
+                        @endisset
                     </tbody>
                 </table>
             </div>

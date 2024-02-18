@@ -3,13 +3,13 @@
     <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title">
-                @isset($category)
-                    Sửa {{$modal['title']}} {{$category->name}}
+                @isset($model)
+                    Sửa {{$modal['title']}}
                 @else
                     Thêm {{$modal['title']}}
                 @endisset
             </h5>
-            @isset($category)
+            @isset($model)
                 <a href="{{ route($modal['route']['index']) }}" class="btn-close" aria-label="Close"></a>
             @else
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -21,14 +21,14 @@
                     <div class="col-sm-12 col-xl-12">
                         <div class="bg-light rounded h-100 p-4 text-start">
                             <form 
-                            @isset($category)
-                                action="{{ route($modal['route']['update'],['id'=>$category->id]) }}"
+                            @isset($model)
+                                action="{{ route($modal['route']['update'],['id'=>$model->id]) }}"
                             @else
                                 action="{{ route($modal['route']['store']) }}"
                             @endisset
                             method="POST">
                                 @csrf
-                                @isset($category)
+                                @isset($model)
                                     @method('put')
                                 @else
                                     @method('post')
@@ -43,10 +43,13 @@
                                                     is-invalid
                                                 @enderror"
                                                 id="{{$name}}"
-                                                @isset($category)
-                                                    value="{{$category->$name}}"
+                                                @isset($model)
+                                                    value="{{$model->$name}}"
+                                                @else
+                                                    value="{{old($name)}}"
                                                 @endisset
                                                 placeholder="{{$place}}"
+                                                autocomplete="{{$name}}"
                                                 aria-describedby="{{$name}}">
                                                 @error($name)
                                                     <div class="form-text text-danger">{{ $message }}</div>
@@ -62,8 +65,8 @@
                                                 <label for="{{$name}}" class="form-label">{{$label}}</label>
                                                 <select class="form-select" 
                                                 name="{{$name}}" 
-                                                @isset($category)
-                                                    value="{{$category->parent_category_id}}"
+                                                @isset($modal['model'])
+                                                    value="{{$modal['model']->parent_category_id}}"
                                                 @endisset
                                                 autocomplete="{{$name}}"
                                                 id="{{$name}}">
@@ -81,8 +84,10 @@
                                 <div class="mb-3">
                                     <label for="show_hide" class="form-label">Trạng thái (mặc định sẽ là Hiện)</label>
                                     <select class="form-select" name="show_hide" 
-                                    @isset($category)
-                                        value="{{$category->show_hide}}"
+                                    @isset($model)
+                                        value="{{$model->show_hide}}"
+                                    @else
+                                        value="{{old('show_hide')}}"
                                     @endisset
                                     id="show_hide">
                                         <option value="1">Hiện</option>
@@ -91,13 +96,13 @@
                                 </div>
                                 <div class="mb-3 float-end ">
                                     <button type="submit" class="btn btn-primary">
-                                        @isset($category)
+                                        @isset($model)
                                             Sửa
                                         @else
                                             Thêm mới
                                         @endisset
                                     </button>
-                                    @isset($category)
+                                    @isset($model)
                                         <a href="{{ route($modal['route']['index']) }}" class="btn btn-danger">Đóng</a>
                                     @else
                                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>

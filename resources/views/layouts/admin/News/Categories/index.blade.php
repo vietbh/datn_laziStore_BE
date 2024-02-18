@@ -12,15 +12,6 @@
             myModal.show();
         </script>
     @endif   
-    @isset($category)
-        <script type="module"> 
-            var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
-            keyboard: false
-            })
-            myModal.toggle();
-            myModal.show();
-        </script>
-    @endisset
     @php
         $modal = [
             'id'=>'addCategoriesModal',
@@ -42,6 +33,33 @@
             ],
         ];
     @endphp
+    @isset($category)
+        @php
+            $model = $category;
+        @endphp
+        <script type="module"> 
+            var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
+            keyboard: false
+            })
+            myModal.toggle();
+            myModal.show();
+        </script>
+    @endisset
+    @isset($categoryDelete)
+        @php
+            $modal['name']=$categoryDelete->name;
+            $modal['param']=$categoryDelete->id;
+            $model = $categoryDelete;
+        @endphp
+        <script type="module"> 
+            var myModal = new bootstrap.Modal(document.getElementById('comfirmModal'), {
+            keyboard: false
+            })
+            myModal.toggle();
+            myModal.show();
+        </script>
+    @endisset
+
    <!-- Sale & Revenue Start -->
    <div class="container-fluid pt-4 px-4">
        <div class="row g-4">
@@ -96,6 +114,8 @@
                 </button>
             <!-- Modal -->
             @include('layouts.admin.components.modalAdd')
+            {{-- Modal Comfirm --}}
+            @include('layouts.admin.components.comfirmModal')
             <!--End Modal -->
            </div>
            <div class="table-responsive" style="height: 100vh">
@@ -113,28 +133,22 @@
                    </thead>
                    <tbody>
                     @foreach ($categories as $category)
-                        @php
-                            $modal['name']=$category->name;
-                            $modal['param']=$category->id;
-                        @endphp
                         <tr title="{{$category->name}}">
                             <td>{{$category->created_at}}</td>
                             <td>{{$category->name}}</td>
-                            <td>{{$category->parent?$category->parent->name:'Trống'}}</td>
+                            <td>{{$category->parent ? $category->parent->name : 'Trống'}}</td>
                             <td>{{$category->slug}}</td>
                             <td>{{$category->index}}</td>
                             <td>{{$category->show_hide ? 'Hiện' : 'Ẩn'}}</td>
                             <td>
                                 <div class="d-flex justify-content-evenly">
-                                    <a class="btn btn-sm btn-primary" href="{{ route('news.cat.edit', ['id' => $category->id]) }}">Edit</a>
                                     @if ($category->id != 1)
-                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#comfirmModal{{$category->id}}">Xóa</button>
+                                        <a class="btn btn-sm btn-primary" href="{{ route('news.cat.edit', ['id' => $category->id]) }}">Edit</a>
+                                        <a class="btn btn-sm btn-danger"  href="{{ route('news.cat.show', ['id' => $category->id]) }}">Xóa</a>
                                     @endif
                                 </div>
                             </td>
                         </tr>
-                        {{-- Modal Comfirm --}}
-                        @include('layouts.admin.components.comfirmModal')
                     @endforeach        
                    </tbody>
                </table>

@@ -62,7 +62,7 @@
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <div class="col-sm-12 col-xl-6 mb-3">
+                                    <div class="col-sm-12 col-xl-12 mb-3">
                                         <label for="categories_product_id" class="form-label ">Danh mục bài viết <span class="text-danger text-small">(*)</span></label>
                                         <select class="form-select  
                                         @error('categories_product_id') 
@@ -73,22 +73,57 @@
                                         @endisset
                                         id="categories_product_id">
                                             <option value="" selected disabled>Chọn danh mục </option>
-                                            {{-- @foreach ($categories as $category)
-                                                <option value="{{$category->id}}">{{$category->title}}</option>
-                                            @endforeach --}}
+                                            @foreach ($categories as $category)
+                                                <option value="{{$category->id}}">{{$category->name}}</option>
+                                            @endforeach
                                         </select>
                                         @error('categories_product_id')
                                             <div id="categories_product_id" class="form-text text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                    <div class="col-sm-12 col-xl-6 mb-3">
+                                    <div class="col-sm-12 col-xl-12 mb-3">
                                         <label for="tag_id" class="form-label ">Tag <span class="text-danger text-small">(*)</span></label>
-                                        <select class="selectpicker" id="tag_id" multiple aria-label="size 3 select example">
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                            <option value="4">Four</option>
+                                        <!-- Multiple Select -->
+                                        <select class="js-example-basic-multiple" name="tag_id[]" multiple="multiple">
+                                            <option value="AL">Alabama</option>
+                                            <option value="WY">Wyoming</option>
                                         </select>
+                                        @error('tag_id')
+                                            <div class="form-text text-danger">{{ $message }}</div>
+                                        @enderror 
+
+                                        <script type="module">
+                                            let data = [
+                                                {
+                                                    id: 0,
+                                                    text: 'enhancement'
+                                                },
+                                                {
+                                                    id: 1,
+                                                    text: 'bug'
+                                                },
+                                                {
+                                                    id: 2,
+                                                    text: 'duplicate'
+                                                },
+                                                {
+                                                    id: 3,
+                                                    text: 'invalid'
+                                                },
+                                                {
+                                                    id: 4,
+                                                    text: 'wontfix'
+                                                }
+                                            ];
+                                            $('.js-example-basic-multiple').select2({
+                                                tags: "true",
+                                                data: data,
+                                                theme: "bootstrap-5",
+                                                width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+                                                placeholder: $( this ).data( 'Chọn tag' ),
+                                                dropdownCssClass: "select2--small",
+                                            });
+                                        </script> 
                                         {{-- <select class="selectpicker  
                                         @error('tag_id') 
                                         is-invalid
@@ -143,7 +178,7 @@
                                 </div>    
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-xl-12">
-                                        <label for="description" class="form-label">Mô tả ngắn</label>
+                                        <label for="description" class="form-label">Mô tả</label>
                                         <div name="description" class="form-control ck-editor__editable_inline" id="description">
                                         @isset($product)
                                             {{$product->description}}

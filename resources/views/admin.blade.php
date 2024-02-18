@@ -10,9 +10,7 @@
     <link href="{{ asset('favicon.ico') }}" rel="icon">
 
     <!-- Google Web Fonts -->
-    {{-- <link rel="preconnect" href="{{ url('https://fonts.googleapis.com') }}"> --}}
     <link rel="preconnect" href="{{ url('https://fonts.gstatic.com') }} " crossorigin>
-    {{-- <link href="{{ url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap') }}" rel="stylesheet"> --}}
     
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
@@ -27,8 +25,11 @@
 
     <!-- Template Stylesheet -->
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-    {{--  --}}
-
+    {{-- Multiple Select --}}
+    <!-- Styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
 </head>
 
 <body>
@@ -88,7 +89,11 @@
     <script src="{{ asset('ckeditor5-build-classic/ckeditor.js') }}"></script>
     <!-- Template Javascript -->
     <script src="{{ asset('js/main.js') }}"></script>
-    {{--  --}}
+    {{-- Multiple Select --}}
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
+  
 </body>
 
 </html>

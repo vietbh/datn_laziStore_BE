@@ -47,6 +47,19 @@ class CategoriesNewsController extends Controller
         return redirect()->route('news.cat.index')->with('success','Thêm mới danh mục thành công');
     }
 
+    public function show(string $id)
+    {
+        //
+        $categoryDelete = CategoriesNews::findOrFail($id);
+        $categories = CategoriesNews::all();
+        $categories_parent = CategoriesNews::where([
+            ['id','!=',1],
+            ['id','!=',$id],
+            ['parent_category_id',null],
+        ])->get();
+        return view('layouts.admin.News.Categories.index',compact('categoryDelete','categories','categories_parent'));
+
+    }
     public function edit(string $id)
     {
         //
