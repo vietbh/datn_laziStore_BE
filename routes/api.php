@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryProController;
 use App\Http\Controllers\Api\ProductController;
 use Illuminate\Http\Request;
@@ -23,3 +24,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // });
 Route::get('/san-pham',[ProductController::class,'index']);
 Route::get('/danh-muc-san-pham',[CategoryProController::class,'index']);
+Route::post('/login', [AuthController::class, 'login']);
