@@ -24,4 +24,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // });
 Route::get('/san-pham',[ProductController::class,'index']);
 Route::get('/danh-muc-san-pham',[CategoryProController::class,'index']);
+Route::get('/danh-muc-tin-tuc',[CategoryProController::class,'index']);
 Route::post('/login', [AuthController::class, 'login']);
