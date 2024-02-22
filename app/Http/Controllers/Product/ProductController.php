@@ -64,7 +64,7 @@ class ProductController extends Controller
         $productVariation->price = $request->price*1000;
         $productVariation->price_sale = $request->price_sale*1000;
         $productVariation->quantity = $request->quantity;
-        // $productVariation->quantity_availible = $request->quantity;
+        $productVariation->quantity_available = $request->quantity;
         $productVariation->save();
 
         $jsonString = $request->colors;
@@ -78,7 +78,7 @@ class ProductController extends Controller
                 $productVariation->price = $color['price']*1000;
                 $productVariation->price_sale = $color['price_sale']*1000;
                 $productVariation->quantity = $color['quantity'];
-                // $productVariation->quantity_available = $color['quantity'];
+                $productVariation->quantity_available = $color['quantity'];
                 $productVariation->save();
             }
         }

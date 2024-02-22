@@ -10,7 +10,7 @@ class ProductVariation extends Model
 {
     use HasFactory;
     protected $primaryKey = 'id';
-    protected $fillable = ['color_type','price','price_sale','quantity','quantity_availible'];
+    protected $fillable = ['color_type','price','price_sale','quantity','quantity_available'];
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class, 'product_id');

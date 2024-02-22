@@ -30,6 +30,15 @@ class DatabaseSeeder extends Seeder
             'name' => 'Category Unsign',
             'slug' => Str::slug('Category Unsign'),
         ]);
+        \App\Models\Brands::factory()->create([
+            'name' => 'Brands Unsign',
+            'country' =>'None',
+            'slug' => Str::slug('Brands Unsign'),
+        ]);
+        \App\Models\TagsNews::factory()->create([
+            'name' => 'Tags Unsign',
+            'slug' => Str::slug('Tags Unsign'),
+        ]);
         $variable =['admin','guest','editor_product','views'];
         foreach ($variable as $key => $value) {
             \App\Models\Role::factory()->create([
