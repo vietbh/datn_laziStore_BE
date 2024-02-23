@@ -3,17 +3,7 @@
     @if (session('success'))
         @include('layouts.admin.components.alert')
     @endif
-    @error('title')
-    <script type="module"> 
-            var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
-            keyboard: false
-            })
-            myModal.toggle();
-            myModal.show();
-    </script>
-    @enderror
-    
-    @if (isset($category))
+    @if($errors->any())
     <script type="module"> 
             var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
             keyboard: false
@@ -22,6 +12,15 @@
             myModal.show();
     </script>
     @endif
+    @isset($user)
+    <script type="module"> 
+            var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
+            keyboard: false
+            })
+            myModal.toggle();
+            myModal.show();
+    </script>
+    @endisset
    <!-- Sale & Revenue Start -->
    <div class="container-fluid pt-4 px-4">
        <div class="row g-4">
@@ -78,33 +77,28 @@
                <table class="table text-start align-middle table-bordered table-hover mb-0" >
                    <thead>
                        <tr class="text-dark">
-                           <th scope="col"><input class="form-check-input" type="checkbox"></th>
-                           <th scope="col">Ngày tạo</th>
+                           {{-- <th scope="col">Ngày tạo</th> --}}
                            <th scope="col">Tên khách hàng</th>
+                           <th scope="col">Email</th>
                            <th scope="col">Hình đại diện</th>
                            <th scope="col">Vai trò</th>
-                           <th scope="col">Trạng thái</th>
+                           {{-- <th scope="col">Trạng thái</th> --}}
                            <th scope="col" colspan="2">Action</th>
                        </tr>
                    </thead>
                    <tbody>
                     @foreach ($users as $user)
-                        <tr>
-                            <td><input class="form-check-input" type="checkbox"></td>
-                            <td>{{$user->created_at}}</td>
+                        <tr title="{{$user->name}}">
+                            {{-- <td>{{$user->created_at}}</td> --}}
+                            <td>{{$user->name}}</td>
+                            <td><img src="{{ asset('public/'.$user->image_url) }}" loading="lazy" class="w-100" width="100" height="100" alt="{{$user->image_url}}"/></td>
                             <td>{{$user->email}}</td>
-                            <td><img src="{{ asset('public/'.$user->image_url) }}" class="w-100" width="100" height="100" alt="{{$user->image_url}}"/></td>
                             <td>{{$user->role == 0 ? 'Quản trị':'Khách hàng'}}</td>
-                            <td>{{$user->show_hide=='show'?'Hiện':'Ẩn'}}</td>
+                            {{-- <td>{{$user->show_hide=='show'?'Hiện':'Ẩn'}}</td> --}}
                             <td>
-                            <div class="d-flex justify-content-evenly">
-                                <a class="btn btn-sm btn-primary" href="{{ route('product.cat.edit', ['id' => $user->id]) }}">Detail</a>
-                                {{-- <form action="{{ route('product.cat.delete', ['id' => $user->id]) }}" method="POST">
-                                    @csrf
-                                    @method('delete')
-                                    <button class="btn btn-sm btn-danger" type="submit">Xóa</button>
-                                </form> --}}
-                            </div>
+                                <div class="d-flex justify-content-evenly">
+                                    <a class="btn btn-sm btn-primary" href="{{ route('product.cat.edit', ['id' => $user->id]) }}">Detail</a>
+                                </div>
                             </td>
                         </tr>
                     @endforeach                      

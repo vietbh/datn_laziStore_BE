@@ -38,7 +38,7 @@ class ProductController extends Controller
             'price_sale' => 'required|lt:price',
             'quantity' => 'required|min:1',
         ],[
-
+            'name'
         ]
     );
     

@@ -61,7 +61,7 @@
                        <h6 class="mb-0">{{count($products)}} sản phẩm</h6>
                    </div>
                </div>
-           </div
+            </div>
        </div>
    </div>
    <!-- Sale & Revenue End -->
@@ -83,7 +83,6 @@
             <table class="table text-start align-middle table-bordered table-hover mb-0" >
                 <thead>
                     <tr class="text-dark">
-                        <th scope="col">Ngày tạo</th>
                         <th scope="col">Tên sản phẩm</th>
                         <th scope="col">Danh mục</th>
                         <th scope="col">Hình ảnh</th>
@@ -101,7 +100,6 @@
                 <tbody>
                  @foreach ($products as $product)
                      <tr title="{{$product->name}}">
-                         <td>{{$product->created_at}}</td>
                          <td>{{$product->name}}</td>
                          <td>{{$product->category->name}}</td>
                          <td><img src="{{ $product->image_url }}" loading="lazy" class="rounded" width="100" height="100" alt="{{ $product->image_url }}"/></td>

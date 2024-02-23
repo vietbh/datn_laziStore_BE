@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('seo_keywords',255)->unique();
             $table->string('slug',255)->unique();
             $table->string('product_type',255)->nullable();
-            $table->string('description');
+            $table->longText('description');
             $table->string('image_url',255);
             $table->string('image_path',255);
             $table->unsignedInteger('categories_product_id')->nullable();
