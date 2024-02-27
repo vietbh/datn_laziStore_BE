@@ -2,39 +2,41 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Validation\Rules;
 
 class AuthController extends Controller
 {
     public function login(Request $request){
         $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-            // 'device_name' => 'required',
+            'email' => 'required|string',
+            'password' => 'required|string',
         ]);
-        $user = User::where('email', $request->email)->first();
+        if(User::where('email', $request->email)->first()){
+            $user = User::where('email', $request->email)->first();
+        }else if(User::where('name', $request->email)->first()){
+            $user = User::where('name', $request->email)->first();
+        }
         if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
-                'email' => ['Tài khoản không tồn tại.'],
+                'login' => ['Tài khoản không tồn tại.'],
             ]);
         }
         $data = [
-            'id' => $user->id,
+           ['id' => $user->id,
             'name' => $user->name,
-            'email' => $user->email
+            'email' => $user->email]
         ];
         return response()->json($data);
      
         // return $user->createToken($request->device_name)->plainTextToken;       
     }
-    /**
-     * Display a listing of the resource.
-     */
+   
     public function index()
     {
         //
@@ -44,11 +46,12 @@ class AuthController extends Controller
     {
         //
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255', 'unique:'.User::class],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed',Rules\Password::defaults()],
         ],[
             'name.required' =>'Vui lòng không bỏ trống trường này.',
+            'name.unique' =>'Đã tồn tại tên này.',
             'email.required' =>'Vui lòng không bỏ trống trường này.',
             'email.lowercase' =>'Vui lòng không viết hoa trường này.',
             'email.email' =>'Vui lòng nhập đúng định dạng email.',
@@ -61,6 +64,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'remember_token' => Str::random(10),
         ]);
 
         // event(new Registered($user));
@@ -69,33 +73,21 @@ class AuthController extends Controller
         return response()->json($user);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         //
