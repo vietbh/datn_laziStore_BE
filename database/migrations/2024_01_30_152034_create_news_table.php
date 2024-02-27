@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('title')->unique();
             $table->string('slug');
             $table->string('seo_keywords')->unique();
+            $table->string('image_url',255);
+            $table->string('image_path',255);
             $table->longText('description');
             $table->string('author',50);
             $table->dateTime('datetime_create');

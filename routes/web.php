@@ -72,7 +72,7 @@ Route::middleware(['auth','role:0'])->group(function () {
     //Sản phẩm
     Route::get('/admin/san-pham',[ProductController::class, 'index'])->name('product.index');
     Route::post('/admin/san-pham/them',[ProductController::class, 'store'])->name('product.store');
-    Route::post('/admin/san-pham/them-hinh-anh-mo-ta',[ProductController::class, 'upload'])->name('ckeditor.upload');
+    Route::post('/admin/san-pham/hinh-anh-mo-ta',[ProductController::class, 'upload'])->name('ckeditor.product.upload');
     Route::get('/admin/san-pham/edit/{id}',[ProductController::class, 'edit'])->name('product.edit');
     Route::put('/admin/san-pham/edit/{id}',[ProductController::class, 'update'])->name('product.update');
     Route::delete('/admin/san-pham/xoa/{id}',[ProductController::class, 'destroy'])->name('product.delete');
@@ -91,6 +91,7 @@ Route::middleware(['auth','role:0'])->group(function () {
     //Iin tức
     Route::get('/admin/tin-tuc',[NewsController::class, 'index'])->name('news.index');
     Route::post('/admin/tin-tuc/them',[NewsController::class, 'store'])->name('news.store');
+    Route::post('/admin/san-pham/hinh-anh-mo-ta',[NewsController::class, 'upload'])->name('ckeditor.news.upload');
     Route::get('/admin/tin-tuc/edit/{id}',[NewsController::class, 'edit'])->name('news.edit');
     Route::put('/admin/tin-tuc/edit/{id}',[NewsController::class, 'update'])->name('news.update');
     Route::delete('/admin/tin-tuc/xoa/{id}',[NewsController::class, 'destroy'])->name('news.delete');

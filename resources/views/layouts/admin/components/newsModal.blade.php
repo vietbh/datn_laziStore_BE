@@ -36,17 +36,17 @@
                                 @endisset
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-xl-6 mb-3">
-                                        <label for="name" class="form-label ">Tên tin tức <span class="text-danger text-small">(*)</span></label>
-                                        <input type="text" name="name" class="form-control @error('name') 
+                                        <label for="title" class="form-label ">Tiêu đề tin tức <span class="text-danger text-small">(*)</span></label>
+                                        <input type="text" name="title" class="form-control @error('title') 
                                         is-invalid
-                                        @enderror" id="name"
+                                        @enderror" id="title"
                                         @isset($new)
-                                            value="{{$new->name}}"
+                                            value="{{$new->title}}"
                                         @endisset
                                         placeholder="Nhập tên tin tức (vd:Iphone15,Samsung A23,...)"
-                                        aria-describedby="name">
-                                        @error('name')
-                                        <div id="name" class="form-text text-danger">{{ $message }}</div>
+                                        aria-describedby="title">
+                                        @error('title')
+                                        <div class="form-text text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="col-sm-12 col-xl-6 mb-3">
@@ -55,6 +55,7 @@
                                         @isset($new)
                                             value="{{$new->seo_keywords}}"
                                         @endisset
+                                        placeholder="Vui lòng nhập trường này"
                                         id="seo_keywords">   
                                         @error('seo_keywords')
                                         <div id="seo_keywords" class="form-text text-danger">{{ $message }}</div>
@@ -62,14 +63,31 @@
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <div class="col-sm-12 col-xl-12 mb-3">
-                                        <label for="categories_product_id" class="form-label ">Danh mục bài viết <span class="text-danger text-small">(*)</span></label>
-                                        <select class="form-select  
-                                        @error('categories_product_id') 
+                                    <div class="col-sm-12 col-xl-6 mb-3">
+                                        <label for="author" class="form-label ">Tác giả<span class="text-danger text-small">(*)</span></label>
+                                        <input class="form-control 
+                                        @error('author') 
                                         is-invalid
-                                        @enderror" name="categories_product_id" 
+                                        @enderror" 
+                                        name="author" 
                                         @isset($new)
-                                            value="{{$new->categories_product_id}}"
+                                            value="{{$new->author}}"
+                                        @endisset
+                                        autocomplete="author"
+                                        placeholder="Vui lòng nhập tên tác giả"
+                                        id="author" />
+                                        @error('author')
+                                            <div class="form-text text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="col-sm-12 col-xl-6 mb-3">
+                                        <label for="categories_news_id" class="form-label ">Danh mục bài viết <span class="text-danger text-small">(*)</span></label>
+                                        <select class="form-select  
+                                        @error('categories_news_id') 
+                                        is-invalid
+                                        @enderror" name="categories_news_id" 
+                                        @isset($new)
+                                            value="{{$new->categories_news_id}}"
                                         @endisset
                                         id="categories_product_id">
                                             <option value="" selected disabled>Chọn danh mục </option>
@@ -85,63 +103,14 @@
                                         <label for="tag_id" class="form-label ">Tag <span class="text-danger text-small">(*)</span></label>
                                         <!-- Multiple Select -->
                                         <select class="js-example-basic-multiple" name="tag_id[]" multiple="multiple">
+                                            <option value="">Alabama</option>
                                             <option value="AL">Alabama</option>
                                             <option value="WY">Wyoming</option>
                                         </select>
                                         @error('tag_id')
                                             <div class="form-text text-danger">{{ $message }}</div>
                                         @enderror 
-
-                                        <script type="module">
-                                            let data = [
-                                                {
-                                                    id: 0,
-                                                    text: 'enhancement'
-                                                },
-                                                {
-                                                    id: 1,
-                                                    text: 'bug'
-                                                },
-                                                {
-                                                    id: 2,
-                                                    text: 'duplicate'
-                                                },
-                                                {
-                                                    id: 3,
-                                                    text: 'invalid'
-                                                },
-                                                {
-                                                    id: 4,
-                                                    text: 'wontfix'
-                                                }
-                                            ];
-                                            $('.js-example-basic-multiple').select2({
-                                                tags: "true",
-                                                data: data,
-                                                theme: "bootstrap-5",
-                                                width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
-                                                placeholder: $( this ).data( 'Chọn tag' ),
-                                                dropdownCssClass: "select2--small",
-                                            });
-                                        </script> 
-                                        {{-- <select class="selectpicker  
-                                        @error('tag_id') 
-                                        is-invalid
-                                        @enderror" 
-                                        name="tag_id"
-                                        multiple 
-                                        @isset($new)
-                                            value="{{$new->tag_id}}"
-                                        @endisset
-                                        id="tag_id">
-                                            <option value="" selected disabled>Chọn tag</option>
-                                            @foreach ($tags as $tag)
-                                                <option value="{{$tag->id}}">{{$tag->name}}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('tag_id')
-                                            <div class="form-text text-danger">{{ $message }}</div>
-                                        @enderror --}}
+                                        @include('layouts.admin.News.multiSelect')
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -178,12 +147,14 @@
                                 </div>    
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-xl-12">
-                                        <label for="description" class="form-label">Mô tả</label>
-                                        <div name="description" class="form-control ck-editor__editable_inline" id="description">
-                                        @isset($product)
-                                            {{$product->description}}
-                                        @endisset
-                                        </div>
+                                        <label for="description" class="form-label">Mô tả tin tức</label>
+                                        <textarea name="description" 
+                                        class="form-control ck-editor__editable_inline" 
+                                        id="description">
+                                            @isset($new)
+                                                {{$new->description}}
+                                            @endisset
+                                        </textarea>
                                     </div>
                                 </div>     
                                 <div class=" mb-3 float-end">
@@ -209,8 +180,4 @@
     </div>
     </div>
 </div>
-<script type="module">
-    ClassicEditor.create( document.querySelector('#description') , {language: 'vi'} )
-    .then( editor => { editor.setData( '' ); } )
-    .catch( error => {console.error( error )} );
-</script>
+@include('layouts.admin.News.ckeditor')

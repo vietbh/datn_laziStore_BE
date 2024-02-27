@@ -86,13 +86,11 @@ $modal = `  var myModal = new bootstrap.Modal(document.getElementById('addNewsMo
                <table class="table text-start align-middle table-bordered table-hover mb-0" >
                    <thead>
                        <tr class="text-dark">
-                           <th scope="col"><input class="form-check-input" type="checkbox"></th>
-                           <th scope="col">Ngày tạo</th>
                            <th scope="col">Tên tin tức</th>
                            <th scope="col">Danh mục</th>
-                           <th scope="col">Tag</th>
-                           <th scope="col">Slug</th>
-                           <th scope="col">Thứ tự</th>
+                           <th scope="col">Hình ảnh</th>
+                           <th scope="col">Tác giả</th>
+                           {{-- <th scope="col">Slug</th> --}}
                            <th scope="col">Trạng thái</th>
                            <th scope="col" colspan="2">Action</th>
                        </tr>
@@ -100,16 +98,15 @@ $modal = `  var myModal = new bootstrap.Modal(document.getElementById('addNewsMo
                    <tbody>
                         @foreach ($news as $new)
                             <tr title="{{$new->title}}">
-                                <td><input class="form-check-input" type="checkbox"></td>
-                                <td>{{$new->created_at}}</td>
                                 <td>{{$new->title}}</td>
-                                <td>{{$new->slug}}</td>
-                                <td>{{$new->index}}</td>
-                                <td>{{$new->show_hide=='show'?'Hiện':'Ẩn'}}</td>
+                                <td>{{$new->category->name}}</td>
+                                <td><img src="{{ $new->image_url }}" loading="lazy" class="rounded" width="100" height="100" alt="{{ $new->image_url }}"/></td>
+                                <td>{{$new->author}}</td>
+                                <td>{{$new->show_hide ? 'Hiện' : 'Ẩn'}}</td>
                                 <td>
                                 <div class="d-flex justify-content-evenly">
-                                    <a class="btn btn-sm btn-primary" href="{{ route('product.cat.edit', ['id' => $category->id]) }}">Edit</a>
-                                    <form action="{{ route('product.cat.delete', ['id' => $category->id]) }}" method="POST">
+                                    <a class="btn btn-sm btn-primary" href="{{ route('news.edit', ['id' => $new->id]) }}">Edit</a>
+                                    <form action="{{ route('news.delete', ['id' => $new->id]) }}" method="POST">
                                         @csrf
                                         @method('delete')
                                         <button class="btn btn-sm btn-danger" type="submit">Xóa</button>
@@ -124,4 +121,5 @@ $modal = `  var myModal = new bootstrap.Modal(document.getElementById('addNewsMo
        </div>
    </div>
    <!-- Table Cate End -->
+
 @endsection

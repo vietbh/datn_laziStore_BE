@@ -2,7 +2,7 @@
     ClassicEditor.create(document.querySelector('#description') , {
     language: 'vi',
     ckfinder: {
-        uploadUrl: '{{route('ckeditor.upload',['_token'=>csrf_token()])}}'
+        uploadUrl: '{{route('ckeditor.product.upload',['_token'=>csrf_token()])}}'
     },
     toolbar: {
         items: [  
