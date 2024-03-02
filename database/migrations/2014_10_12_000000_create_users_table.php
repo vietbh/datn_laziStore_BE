@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('google_name',50)->nullable();
             $table->string('google_email',255)->nullable();
             $table->string('google_avatar',255)->nullable();
-            $table->boolean('status')->default(true);
+            $table->string('status')->default('online');
             $table->tinyInteger('role')->default(1);
             $table->rememberToken();
             $table->timestamps();

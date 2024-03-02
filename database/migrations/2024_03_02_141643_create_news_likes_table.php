@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('comment_likes', function (Blueprint $table) {
+        Schema::create('news_likes', function (Blueprint $table) {
             $table->increments('id')->unsigned();
             $table->unsignedInteger('user_id');
-            $table->unsignedInteger('comment_products_id')->nullable();
-            $table->unsignedInteger('comment_news_id')->nullable();
+            $table->unsignedInteger('news_id')->nullable();
+            $table->foreign('news_id')->references('id')->on('news');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('comment_products_id')->references('id')->on('comment_products')->nullable();
-            $table->foreign('comment_news_id')->references('id')->on('comment_news')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('comment_likes');
+        Schema::dropIfExists('news_likes');
     }
 };

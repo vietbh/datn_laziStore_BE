@@ -15,19 +15,17 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->increments('id')->unsigned();
-            $table->string('name',255);
+            $table->string('name',255)->unique();
+            $table->string('slug',255);
             $table->string('seo_keywords',255)->unique();
-            $table->string('slug',255)->unique();
             $table->string('product_type',255)->nullable();
             $table->longText('description');
-            $table->string('image_url',255);
-            $table->string('image_path',255);
-            $table->unsignedInteger('categories_product_id')->nullable();
-            $table->unsignedInteger('brand_id')->nullable();            
-            $table->foreign('categories_product_id')->references('id')->on('categories_products');
-            $table->foreign('brand_id')->references('id')->on('brands');
             $table->string('status')->default('none');
             $table->boolean('show_hide')->default(true);
+            $table->unsignedInteger('categories_product_id');
+            $table->unsignedInteger('brand_id');            
+            $table->foreign('categories_product_id')->references('id')->on('categories_products');
+            $table->foreign('brand_id')->references('id')->on('brands');
             $table->timestamps();
         });
     }

@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('order_items', function (Blueprint $table) {
             $table->increments('id')->unsigned();
+            $table->integer('quantity');
+            $table->decimal('price',10,2);
             $table->unsignedInteger('order_id');
             $table->unsignedInteger('product_id');
             $table->foreign('order_id')->references('id')->on('orders');
             $table->foreign('product_id')->references('id')->on('product_variations');
-            $table->integer('quantity');
-            $table->decimal('price',10,2);
             $table->timestamps();
         });
     }

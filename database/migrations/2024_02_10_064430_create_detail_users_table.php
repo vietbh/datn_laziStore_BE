@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('full_name',50);
             $table->string('address',225);
             $table->string('phone_numbers',22);
+            $table->boolean('set_default')->default(false);
             $table->string('google_map',255)->nullable();
-            $table->boolean('status')->default(false);
             $table->unsignedInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();

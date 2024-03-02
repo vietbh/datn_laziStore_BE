@@ -20,8 +20,10 @@ return new class extends Migration
             $table->string('image_path',255);
             $table->longText('description');
             $table->string('author',50);
-            $table->dateTime('datetime_create');
-            $table->integer('views')->default(0);
+            $table->string('date_create');
+            $table->string('time_create');
+            $table->integer('position')->default(0);
+            $table->integer('views')->unsigned()->default(0);
             $table->boolean('show_hide')->default(true);
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('categories_news_id');

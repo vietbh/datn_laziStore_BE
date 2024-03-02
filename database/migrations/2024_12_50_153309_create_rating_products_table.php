@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('rating_products', function (Blueprint $table) {
             $table->increments('id')->unsigned();
-            $table->integer('rating');
-            $table->dateTime('review_date');
+            $table->integer('rating')->default(0);
+            $table->dateTime('date_rating');
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('user_id');
             $table->foreign('product_id')->references('id')->on('products');

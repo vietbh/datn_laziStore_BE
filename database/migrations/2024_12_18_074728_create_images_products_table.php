@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('images_products', function (Blueprint $table) {
             $table->increments('id')->unsigned();
-            $table->string('image_path',255);
-            $table->string('image_url',255);
-            $table->unsignedInteger('product_id');
-            $table->foreign('product_id')->references('id')->on('products');
+            $table->longText('image_path');
+            $table->longText('image_url');
+            $table->integer('position')->default(1);
+            $table->boolean('show_hide')->default(true);
+            $table->unsignedInteger('product_variations_id');
+            $table->foreign('product_variations_id')->references('id')->on('product_variations');
+            
             $table->timestamps();
         });
     }

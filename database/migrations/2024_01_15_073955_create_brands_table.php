@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('brands', function (Blueprint $table) {
             $table->increments('id')->unsigned();
-            $table->string('name',100)->unique();
+            $table->string('name',255)->unique();
             $table->string('slug',255);
-            $table->string('index')->default(1);
-            $table->string('country',100);
+            $table->string('position')->default(1);
+            $table->string('country',255);
             $table->boolean('show_hide')->default(true);
             $table->timestamps();
         });

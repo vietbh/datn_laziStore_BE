@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('phone_number',30);
             $table->string('title',500);
             $table->longText('content');
-            $table->timestamp('datetime_create');
+            $table->dateTime('datetime_create');
             $table->timestamps();
         });
     }

@@ -15,10 +15,10 @@ return new class extends Migration
             $table->increments('id')->unsigned();
             $table->string('name',255)->unique();
             $table->string('slug',255);
-            $table->integer('index')->default(1);
+            $table->integer('position')->default(1);
+            $table->boolean('show_hide')->default(true);
             $table->unsignedInteger('parent_category_id')->nullable();
             $table->foreign('parent_category_id')->references('id')->on('categories_products');
-            $table->boolean('show_hide')->default(true);
             $table->timestamps();
         });
     }

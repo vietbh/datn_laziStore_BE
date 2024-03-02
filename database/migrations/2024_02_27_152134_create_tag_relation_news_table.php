@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('tag_relation_news', function (Blueprint $table) {
             $table->id();
+            $table->unsignedInteger('tag_id')->unsigned()->nullable();
+            $table->unsignedInteger('news_id')->unsigned()->nullable();
+            $table->foreign('tag_id')->references('id')->on('tag');
+            $table->foreign('news_id')->references('id')->on('news');
             $table->timestamps();
         });
     }

@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('carts', function (Blueprint $table) {
+        Schema::create('product_relation_categories', function (Blueprint $table) {
             $table->increments('id')->unsigned();
-            $table->integer('amount')->unsigned();
-            $table->unsignedInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->unsignedInteger('categories_product_id');
+            $table->unsignedInteger('product_id');
+            $table->foreign('categories_product_id')->references('id')->on('categories_products');
+            $table->foreign('product_id')->references('id')->on('products');
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('carts');
+        Schema::dropIfExists('product_relation_categories');
     }
 };

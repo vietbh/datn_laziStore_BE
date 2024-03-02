@@ -15,6 +15,7 @@ return new class extends Migration
             $table->increments('id')->unsigned();
             $table->string('name');
             $table->text('value');
+            $table->integer('position')->default(1);
             $table->boolean('show_hide')->default(true);
             $table->timestamps();
         });

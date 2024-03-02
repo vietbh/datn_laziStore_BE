@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('address',255);
             $table->unsignedInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->dateTime('datetime_create');
+            $table->string('date_create');
+            $table->string('time_create');
             $table->timestamps();
         });
     }

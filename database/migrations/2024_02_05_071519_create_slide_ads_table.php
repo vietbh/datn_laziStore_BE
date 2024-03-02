@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('content');
             $table->string('image_url',255);
             $table->string('image_path',255);
+            $table->integer('position')->default(1);
             $table->string('link',255);
             $table->boolean('show_hide')->default(true);
             $table->timestamps();
