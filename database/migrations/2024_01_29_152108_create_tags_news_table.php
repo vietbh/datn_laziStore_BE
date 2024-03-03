@@ -15,7 +15,7 @@ return new class extends Migration
             $table->increments('id')->unsigned();
             $table->string('name')->unique();
             $table->string('slug');
-            $table->string('hashtag')->nullable();
+            // $table->string('hashtag')->nullable();
             $table->integer('position')->default(1);
             $table->boolean('show_hide')->default(true);
             $table->timestamps();
