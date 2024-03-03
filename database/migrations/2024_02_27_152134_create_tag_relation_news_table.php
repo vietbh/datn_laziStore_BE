@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tag_relation_news', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedInteger('tag_id')->unsigned()->nullable();
-            $table->unsignedInteger('news_id')->unsigned()->nullable();
-            $table->foreign('tag_id')->references('id')->on('tag');
+            $table->increments('id')->unsigned();
+            $table->unsignedInteger('tag_id');
+            $table->unsignedInteger('news_id');
+            $table->foreign('tag_id')->references('id')->on('tags');
             $table->foreign('news_id')->references('id')->on('news');
             $table->timestamps();
         });

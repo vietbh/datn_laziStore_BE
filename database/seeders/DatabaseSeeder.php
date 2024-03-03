@@ -35,14 +35,14 @@ class DatabaseSeeder extends Seeder
             'country' =>'None',
             'slug' => Str::slug('Brands Unsign'),
         ]);
-        \App\Models\TagsNews::factory()->create([
+        \App\Models\Tag::factory()->create([
             'name' => 'Tags Unsign',
             'slug' => Str::slug('Tags Unsign'),
         ]);
         $variable =['admin','guest','editor_product','views'];
         foreach ($variable as $key => $value) {
             \App\Models\Role::factory()->create([
-                'role_name' =>$value,
+                'role_name' => $value,
             ]);
         }
     }
