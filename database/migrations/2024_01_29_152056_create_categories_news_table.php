@@ -12,7 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('categories_news', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id')->unsigned();
+            $table->string('name')->unique();
+            $table->string('slug');
+            $table->integer('position')->default(1);
+            $table->boolean('show_hide')->default(true);
+            $table->unsignedInteger('parent_category_id')->nullable();
+            $table->foreign('parent_category_id')->references('id')->on('categories_news');
             $table->timestamps();
         });
     }

@@ -12,13 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('product_variations', function (Blueprint $table) {
-            // $table->id();
-            $table->increments('id');
+            $table->increments('id')->unsigned();
+            $table->longText('image_url');
+            $table->longText('image_path');
             $table->string('color_type');
             $table->decimal('price',10,2);
             $table->decimal('price_sale',10,2);
             $table->integer('quantity');
-            $table->unsignedInteger('product_id')->nullable();
+            $table->integer('position')->default(1);
+            $table->boolean('show_hide')->default(true);
+            $table->integer('quantity_available');
+            $table->integer('quantity_sold')->default(0);
+            $table->string('status')->default('none');
+            $table->unsignedInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products');
             $table->timestamps();
         });

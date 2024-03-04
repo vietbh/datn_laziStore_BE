@@ -14,7 +14,8 @@ class CategoryProController extends Controller
     public function index()
     {
         //
-    return response()->json(CategoriesProduct::all(), 200);
+        $categories = CategoriesProduct::where([['id','!=',1],['show_hide',true]])->get();
+        return response()->json($categories, 200);
     }
 
     /**

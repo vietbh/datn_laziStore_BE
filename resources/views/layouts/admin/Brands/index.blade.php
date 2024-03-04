@@ -116,7 +116,7 @@
                             <td>{{$brand->created_at}}</td>
                             <td>{{$brand->name}}</td>
                             <td>{{$brand->country}}</td>
-                            <td>{{$brand->show_hide=='show'?'Hiện':'Ẩn'}}</td>
+                            <td>{{$brand->show_hide ? 'Hiện':'Ẩn'}}</td>
                             <td>
                             <div class="d-flex justify-content-evenly">
                                 <a class="btn btn-sm btn-primary" href="{{ route('brand.edit', ['id' => $brand->id]) }}">Edit</a>

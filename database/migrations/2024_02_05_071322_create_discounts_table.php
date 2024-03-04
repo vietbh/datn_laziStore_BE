@@ -12,7 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('discounts', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id')->unsigned();
+            $table->string('discount_code',255)->unique();
+            $table->decimal('discount_price',10,2);
+            $table->integer('discount_total');
+            $table->integer('used_discount')->default(0);
+            $table->dateTime('start_date');
+            $table->dateTime('end_date');
+            $table->boolean('show_hide')->default(true);
+            $table->enum('status',['active','inactive'])->default('inactive');
             $table->timestamps();
         });
     }

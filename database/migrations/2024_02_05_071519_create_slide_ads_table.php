@@ -12,7 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('slide_ads', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id')->unsigned();
+            $table->string('title');
+            $table->string('content');
+            $table->string('image_url',255);
+            $table->string('image_path',255);
+            $table->integer('position')->default(1);
+            $table->string('link',255);
+            $table->boolean('show_hide')->default(true);
             $table->timestamps();
         });
     }

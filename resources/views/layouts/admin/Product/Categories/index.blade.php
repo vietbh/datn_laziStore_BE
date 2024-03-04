@@ -1,27 +1,26 @@
 @extends('admin')
 @section('content')
-    @if (session('success'))
+    @if (session('success')||session('error'))
         @include('layouts.admin.components.alert')
     @endif
-    @error('title')
-    <script type="module"> 
+    @if($errors->any())
+        <script type="module"> 
             var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
             keyboard: false
             })
             myModal.toggle();
             myModal.show();
-    </script>
-    @enderror
-    
-    @if (isset($category))
-    <script type="module"> 
-            var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
-            keyboard: false
-            })
-            myModal.toggle();
-            myModal.show();
-    </script>
-    @endif
+        </script>
+    @endif    
+    @isset($category)
+        <script type="module"> 
+                var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
+                keyboard: false
+                })
+                myModal.toggle();
+                myModal.show();
+        </script>
+    @endisset
    <!-- Sale & Revenue Start -->
    <div class="container-fluid pt-4 px-4">
        <div class="row g-4">
@@ -85,6 +84,7 @@
                            <th scope="col"><input class="form-check-input" type="checkbox"></th>
                            <th scope="col">Ngày tạo</th>
                            <th scope="col">Tên danh mục</th>
+                           <th scope="col">Tên danh mục cha</th>
                            <th scope="col">Slug</th>
                            <th scope="col">Thứ tự</th>
                            <th scope="col">Trạng thái</th>
@@ -96,18 +96,21 @@
                         <tr>
                             <td><input class="form-check-input" type="checkbox"></td>
                             <td>{{$category->created_at}}</td>
-                            <td>{{$category->title}}</td>
+                            <td>{{$category->name}}</td>
+                            <td>{{$category->parent ? $category->parent->name : 'Trống'}}</td>
                             <td>{{$category->slug}}</td>
                             <td>{{$category->index}}</td>
                             <td>{{$category->show_hide=='show'?'Hiện':'Ẩn'}}</td>
                             <td>
                             <div class="d-flex justify-content-evenly">
-                                <a class="btn btn-sm btn-primary" href="{{ route('product.cat.edit', ['id' => $category->id]) }}">Edit</a>
-                                <form action="{{ route('product.cat.delete', ['id' => $category->id]) }}" method="POST">
-                                    @csrf
-                                    @method('delete')
-                                    <button class="btn btn-sm btn-danger" type="submit">Xóa</button>
-                                </form>
+                                @if ($category->id !== 1)
+                                    <a class="btn btn-sm btn-primary" href="{{ route('product.cat.edit', ['id' => $category->id]) }}">Edit</a>
+                                    <form action="{{ route('product.cat.delete', ['id' => $category->id]) }}" method="POST">
+                                        @csrf
+                                        @method('delete')
+                                        <button class="btn btn-sm btn-danger" type="submit">Xóa</button>
+                                    </form>
+                                @endif
                             </div>
                             </td>
                         </tr>

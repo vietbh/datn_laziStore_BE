@@ -12,7 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('payments', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id')->unsigned();
+            $table->string('payment_number',255)->unique();
+            $table->string('payment_method',20);
+            $table->decimal('amount',10,2);
+            $table->enum('status',['pending', 'in_progress', 'completed'])->default('pending');
+            $table->string('payment_qr_code',100)->nullable();
+            $table->string('payment_momo_link',100)->nullable();
+            $table->unsignedInteger('order_id');
+            $table->unsignedInteger('user_id');
+            $table->foreign('order_id')->references('id')->on('orders');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->date('date_create');
+            $table->time('time_create');
             $table->timestamps();
         });
     }

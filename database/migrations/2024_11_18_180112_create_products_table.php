@@ -14,25 +14,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
-            // $table->id();
-            // $table->decimal('price',10,2);
-            // $table->integer('quantity_in_stock')->default(1);
-            $table->increments('id');
-            $table->string('name',255);
-            $table->string('seo_keywords',255)->nullable();
-            $table->string('slug',255)->unique();
+            $table->increments('id')->unsigned();
+            $table->string('name',255)->unique();
+            $table->string('slug',255);
+            $table->string('seo_keywords',255)->unique();
             $table->string('product_type',255)->nullable();
-            $table->string('description')->nullable();
-            $table->text('detail_description')->nullable();
-            $table->string('image_url',255);
-            $table->string('image_path',255);
-            $table->unsignedInteger('categories_product_id')->nullable();
-            $table->unsignedInteger('brand_id')->nullable();            
+            $table->longText('description');
+            $table->boolean('show_hide')->default(true);
+            $table->string('status')->default('none');
+            $table->unsignedInteger('categories_product_id');
+            $table->unsignedInteger('brand_id');            
             $table->foreign('categories_product_id')->references('id')->on('categories_products');
             $table->foreign('brand_id')->references('id')->on('brands');
-            $table->integer('quantity_available')->default(0);
-            $table->integer('quantity_sold')->default(0);
-            $table->char('show_hide')->default('show');
             $table->timestamps();
         });
     }

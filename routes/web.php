@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ChartController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\CommentNewsController;
+use App\Http\Controllers\CommentProductController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashBoardController;
@@ -51,8 +53,10 @@ Route::middleware(['auth','role:0'])->group(function () {
     Route::get('/admin/san-pham-hot',[ProductHotController::class, 'index'])->name('hot.index');
     // Vận chuyển
     Route::get('/admin/van-chuyen',[DeliveryController::class, 'index'])->name('delivery.index');
-    // Bình luận
-    Route::get('/admin/binh-luan',[CommentController::class, 'index'])->name('comment.index');
+    // Bình luận sản phẩm
+    Route::get('/admin/binh-luan-san-pham',[CommentProductController::class, 'index'])->name('comment.product.index');
+    // Bình luận tin tức
+    Route::get('/admin/binh-luan-tin-tuc',[CommentNewsController::class, 'index'])->name('comment.news.index');
     // Tư vấn
     Route::get('/admin/tu-van',[ContactController::class, 'index'])->name('contact.index');
     // Chính sách
@@ -68,7 +72,7 @@ Route::middleware(['auth','role:0'])->group(function () {
     //Sản phẩm
     Route::get('/admin/san-pham',[ProductController::class, 'index'])->name('product.index');
     Route::post('/admin/san-pham/them',[ProductController::class, 'store'])->name('product.store');
-    Route::post('/admin/san-pham/them-hinh-anh-mo-ta',[ProductController::class, 'upload'])->name('ckeditor.upload');
+    Route::post('/admin/san-pham/hinh-anh-mo-ta',[ProductController::class, 'upload'])->name('ckeditor.product.upload');
     Route::get('/admin/san-pham/edit/{id}',[ProductController::class, 'edit'])->name('product.edit');
     Route::put('/admin/san-pham/edit/{id}',[ProductController::class, 'update'])->name('product.update');
     Route::delete('/admin/san-pham/xoa/{id}',[ProductController::class, 'destroy'])->name('product.delete');
@@ -87,6 +91,7 @@ Route::middleware(['auth','role:0'])->group(function () {
     //Iin tức
     Route::get('/admin/tin-tuc',[NewsController::class, 'index'])->name('news.index');
     Route::post('/admin/tin-tuc/them',[NewsController::class, 'store'])->name('news.store');
+    Route::post('/admin/tin-tuc/hinh-anh-mo-ta',[NewsController::class, 'upload'])->name('ckeditor.news.upload');
     Route::get('/admin/tin-tuc/edit/{id}',[NewsController::class, 'edit'])->name('news.edit');
     Route::put('/admin/tin-tuc/edit/{id}',[NewsController::class, 'update'])->name('news.update');
     Route::delete('/admin/tin-tuc/xoa/{id}',[NewsController::class, 'destroy'])->name('news.delete');
@@ -95,12 +100,14 @@ Route::middleware(['auth','role:0'])->group(function () {
     Route::post('/admin/tag-tin-tuc/them',[TagNewsController::class, 'store'])->name('news.tag.store');
     Route::get('/admin/tag-tin-tuc/edit/{id}',[TagNewsController::class, 'edit'])->name('news.tag.edit');
     Route::put('/admin/tag-tin-tuc/edit/{id}',[TagNewsController::class, 'update'])->name('news.tag.update');
+    Route::get('/admin/tag-tin-tuc/xoa/{id}',[TagNewsController::class, 'show'])->name('news.tag.show');
     Route::delete('/admin/tag-tin-tuc/xoa/{id}',[TagNewsController::class, 'destroy'])->name('news.tag.delete');
     //Danh mục tin tức
     Route::get('/admin/danh-muc-tin-tuc',[CategoriesNewsController::class, 'index'])->name('news.cat.index');
     Route::post('/admin/danh-muc-tin-tuc/them',[CategoriesNewsController::class, 'store'])->name('news.cat.store');
     Route::get('/admin/danh-muc-tin-tuc/edit/{id}',[CategoriesNewsController::class, 'edit'])->name('news.cat.edit');
     Route::put('/admin/danh-muc-tin-tuc/edit/{id}',[CategoriesNewsController::class, 'update'])->name('news.cat.update');
+    Route::get('/admin/danh-muc-tin-tuc/xoa/{id}',[CategoriesNewsController::class, 'show'])->name('news.cat.show');
     Route::delete('/admin/danh-muc-tin-tuc/xoa/{id}',[CategoriesNewsController::class, 'destroy'])->name('news.cat.delete');
 
     // 

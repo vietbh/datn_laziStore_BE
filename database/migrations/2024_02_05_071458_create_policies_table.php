@@ -12,7 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('policies', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id')->unsigned();
+            $table->string('name');
+            $table->text('value');
+            $table->integer('position')->default(1);
+            $table->boolean('show_hide')->default(true);
             $table->timestamps();
         });
     }

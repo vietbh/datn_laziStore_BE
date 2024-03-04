@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use Illuminate\Http\Request;
 
 class RoleAdminController extends Controller
@@ -12,7 +13,8 @@ class RoleAdminController extends Controller
     public function index()
     {
         //
-        return view('layouts.admin.RoleAdmin.index');
+        $roles = Role::all();
+        return view('layouts.admin.RoleAdmin.index',compact('roles'));
 
     }
 
