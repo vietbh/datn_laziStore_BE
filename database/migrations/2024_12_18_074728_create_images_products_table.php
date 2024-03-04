@@ -17,8 +17,8 @@ return new class extends Migration
             $table->longText('image_url');
             $table->integer('position')->default(1);
             $table->boolean('show_hide')->default(true);
-            $table->unsignedInteger('product_variations_id');
-            $table->foreign('product_variations_id')->references('id')->on('product_variations');
+            $table->unsignedInteger('variation_gallery_id');
+            $table->foreign('variation_gallery_id')->references('id')->on('gallery_product_variations');
             
             $table->timestamps();
         });

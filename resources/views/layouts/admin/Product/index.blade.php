@@ -85,12 +85,12 @@
                     <tr class="text-dark">
                         <th scope="col">Tên sản phẩm</th>
                         <th scope="col">Danh mục</th>
-                        <th scope="col">Hình ảnh</th>
-                        <th scope="col" class="text-center" style="width: 40%">
+                        <th scope="col" class="text-center">
                             <div class="row">
+                                <div class="col-sm-12 col-lg-3 p-0">Hình ảnh</div>
                                 <div class="col-sm-12 col-lg-3 p-0">Màu sắc</div>
-                                <div class="col-sm-12 col-lg-5 p-0">Giá bán</div>
-                                <div class="col-sm-12 col-lg-4 p-0">Số lượng</div>
+                                <div class="col-sm-12 col-lg-3 p-0">Giá bán</div>
+                                <div class="col-sm-12 col-lg-3 p-0">Số lượng</div>
                             </div>
                         </th>
                         <th scope="col">Trạng thái</th>
@@ -102,17 +102,19 @@
                      <tr title="{{$product->name}}">
                          <td>{{$product->name}}</td>
                          <td>{{$product->category->name}}</td>
-                         <td><img src="{{ $product->image_url }}" loading="lazy" class="rounded" width="100" height="100" alt="{{ $product->image_url }}"/></td>
                         <td>
                             @foreach ($product->variations as $variation)
                                 <div class="row p-2 text-center">
                                     <div class="col-sm-12 col-lg-3">
+                                        <img src="{{ $variation->image_url }}" loading="lazy" class="rounded" width="100" height="100" alt="{{ $product->image_url }}"/>
+                                    </div>
+                                    <div class="col-sm-12 col-lg-3 d-flex align-items-center">
                                         <p class="text-uppercase">{{ $variation->color_type }}</p>
                                     </div>
-                                    <div class="col-sm-12 col-lg-5">
+                                    <div class="col-sm-12 col-lg-3 d-flex align-items-center">
                                         <p>{{number_format($variation->price_sale)}} <span style="font-size: 14px">vnđ</span></p>
                                     </div>
-                                    <div class="col-sm-12 col-lg-4">
+                                    <div class="col-sm-12 col-lg-3 d-flex align-items-center">
                                         <p>{{number_format($variation->quantity)}} <span style="font-size: 14px">chiếc</span></p>
                                     </div>
                                 </div>

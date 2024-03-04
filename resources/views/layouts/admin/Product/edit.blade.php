@@ -110,26 +110,6 @@
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-xl-6 mb-3">
-                                        <label for="image_url" class="form-label ">Chọn hình ảnh <span class="text-danger text-small">(*)</span></label>
-                                        <div class="d-flex justify-content-around">
-                                            <img src="{{$product->image_url}}" class="rounded-3 me-2" width="100" height="100" aria-describedby="image_url">
-                                            <input type="file" name="image_url" class="form-control @error('image_url') 
-                                            is-invalid
-                                            @enderror" id="image_url"
-                                            @isset($product)
-                                                value="{{$product->image_url}}"
-                                            @else
-                                            value="{{old('image_url')}}"        
-                                            @endisset
-                                            autocomplete="image_url"
-                                            aria-describedby="image_url">
-                                            @error('image_url')
-                                                <div class="form-text text-danger">{{ $message }}</div>
-                                            @enderror
-                                            {{-- <button type="button" class="btn btn-secondary ms-1">Thêm</button> --}}
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-xl-6 mb-3">
                                         <label for="show_hide" class="form-label">Trạng thái (mặc định sẽ là Hiện)</label>
                                         <select class="form-select" name="show_hide" 
                                         autocomplete="show_hide"
@@ -154,9 +134,7 @@
                                         id="description"
                                         class="form-control ck-editor__editable_inline" 
                                         >
-                                        @isset($product)
-                                            value='{{$product->description}}'
-                                        @endisset
+                                        {{$product->description}}
                                         </textarea>
                                     </div>
                                 </div>     

@@ -91,7 +91,7 @@ Route::middleware(['auth','role:0'])->group(function () {
     //Iin tức
     Route::get('/admin/tin-tuc',[NewsController::class, 'index'])->name('news.index');
     Route::post('/admin/tin-tuc/them',[NewsController::class, 'store'])->name('news.store');
-    Route::post('/admin/san-pham/hinh-anh-mo-ta',[NewsController::class, 'upload'])->name('ckeditor.news.upload');
+    Route::post('/admin/tin-tuc/hinh-anh-mo-ta',[NewsController::class, 'upload'])->name('ckeditor.news.upload');
     Route::get('/admin/tin-tuc/edit/{id}',[NewsController::class, 'edit'])->name('news.edit');
     Route::put('/admin/tin-tuc/edit/{id}',[NewsController::class, 'update'])->name('news.update');
     Route::delete('/admin/tin-tuc/xoa/{id}',[NewsController::class, 'destroy'])->name('news.delete');

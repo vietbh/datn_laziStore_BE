@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('seo_keywords',255)->unique();
             $table->string('product_type',255)->nullable();
             $table->longText('description');
-            $table->string('status')->default('none');
             $table->boolean('show_hide')->default(true);
+            $table->string('status')->default('none');
             $table->unsignedInteger('categories_product_id');
             $table->unsignedInteger('brand_id');            
             $table->foreign('categories_product_id')->references('id')->on('categories_products');

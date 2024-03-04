@@ -79,8 +79,8 @@
                        <tr class="text-dark">
                            {{-- <th scope="col">Ngày tạo</th> --}}
                            <th scope="col">Tên khách hàng</th>
-                           <th scope="col">Email</th>
                            <th scope="col">Hình đại diện</th>
+                           <th scope="col">Email</th>
                            <th scope="col">Vai trò</th>
                            {{-- <th scope="col">Trạng thái</th> --}}
                            <th scope="col" colspan="2">Action</th>

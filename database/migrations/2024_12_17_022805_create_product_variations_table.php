@@ -23,6 +23,7 @@ return new class extends Migration
             $table->boolean('show_hide')->default(true);
             $table->integer('quantity_available');
             $table->integer('quantity_sold')->default(0);
+            $table->string('status')->default('none');
             $table->unsignedInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products');
             $table->timestamps();

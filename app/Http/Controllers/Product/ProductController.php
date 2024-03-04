@@ -19,7 +19,7 @@ class ProductController extends Controller
     public function index()
     {
         //
-        $products = Product::all();
+        $products = Product::where('status','none')->get();
         $categories = CategoriesProduct::all();
         $brands = Brands::all();
         $data = compact('products','categories','brands');
@@ -28,9 +28,10 @@ class ProductController extends Controller
 
     public function store(Request $request, Product $product, ProductVariation $productVariation)
     {
+        $productExpt = Product::where('status','none')->get('id');
         $request->validate([
-            'name' => 'required|unique:products,name',
-            'seo_keywords' => 'required|unique:products,seo_keywords',
+            'name' => 'required|unique:'.Product::class,
+            'seo_keywords' => 'required|unique:'.Product::class,
             'categories_product_id' => 'required',
             'brand_id' => 'required',
             'color_type' => 'required',
@@ -38,27 +39,38 @@ class ProductController extends Controller
             'price_sale' => 'required|lt:price',
             'quantity' => 'required|min:1',
         ],[
-            'name'
+            'name.required' => 'Không được bỏ trống trường này.',
+            'name.unique' => 'Đã tồn tại tên sản phẩm này.',
+            'seo_keywords.required' => 'Không được bỏ trống trường này.',
+            'seo_keywords.unique' => 'Đã tồn tại từ khóa SEO này.',
+            'categories_product_id.required' => 'Không được bỏ trống trường này.',
+            'brand_id.required' => 'Không được bỏ trống trường này.',
+            'color_type.required' => 'Không được bỏ trống trường này.',
+            'price.required' => 'Không được bỏ trống trường này.',
+            'price_sale.required' => 'Không được bỏ trống trường này.',
+            'price_sale.lt' => 'Giá khuyến mãi phải nhỏ hơn giá gốc.',
+            'quantity.required' => 'Không được bỏ trống trường này.',
+            'quantity.min' => 'Không tồn tại số lượng 0.',
         ]
     );
-    
+  
+        $product->name = $request->name;
+        $product->slug = Str::slug($request->name);
+        $product->seo_keywords = Str::slug($request->seo_keywords);
+        $product->categories_product_id = $request->categories_product_id;
+        $product->brand_id = $request->brand_id;
+        $product->description = $request->description;
+        $product->show_hide = $request->show_hide;
+        $product->save();
+        // 
         $file = $request->file('image_url'); // Lấy file từ request    
         if ($file) {
             // Tiếp tục xử lý hoặc trả về đường dẫn đã lưu
             $path = $file->store('images_product', 'public'); // Lưu file vào thư mục 'folder_name'
             $url = asset(Storage::url($path));
         }
-    
-        $product->name = $request->name;
-        $product->seo_keywords = Str::slug($request->seo_keywords);
-        $product->slug = Str::slug($request->name);
-        $product->categories_product_id = $request->categories_product_id;
-        $product->brand_id = $request->brand_id;
-        $product->image_path = $path;
-        $product->image_url = $url;
-        $product->description = $request->description;
-        $product->show_hide = $request->show_hide;
-        $product->save();
+        $productVariation->image_path = $path;
+        $productVariation->image_url = $url;
         $productVariation->color_type = $request->color_type;
         $productVariation->product_id = $product->id;
         $productVariation->price = $request->price*1000;
@@ -72,7 +84,16 @@ class ProductController extends Controller
         $colors = json_decode($jsonString, true);  
         if (isset($colors)) {
             foreach ($colors as $color) {
+              $base64Image = $color['image_url'];
+                $imageData = base64_decode($base64Image);
+                $file = uniqid() . '.jpg';
+
+                $path = public_path('images_product/' . $file);
+                file_put_contents($path, $imageData);
+                $url = asset('images_product/' . $file);    
                 $productVariation = new ProductVariation();
+                $productVariation->image_path = $path;
+                $productVariation->image_url = $url;
                 $productVariation->color_type = $color['color_type'];
                 $productVariation->product_id = $product->id;
                 $productVariation->price = $color['price']*1000;
@@ -130,9 +151,14 @@ class ProductController extends Controller
         if(!Storage::exists('public/'. $path)){
             return redirect()->route('product.index')->with('error','Xóa hình ảnh không thành công!');
         };
-        Storage::delete('public/'. $path); // Xóa file
-        $product->variations()->delete();
-        $product->delete();
+        $product->variations()->update(['status'=>'delete by '.auth()->user()->name]);
+        $product->status = 'delete by '.auth()->user()->getAuthIdentifierName();
+        $product->update();
+        // $product->delete();
+
+        // Storage::delete('public/'. $path); // Xóa file
+        // $product->variations()->delete();
+        // $product->delete();
         return redirect()->route('product.index')->with('success','Xóa sản phẩm thành công!');
 
     }
