@@ -24,7 +24,7 @@ return new class extends Migration
             $table->integer('quantity_available');
             $table->integer('quantity_sold')->default(0);
             $table->string('status')->default('none');
-            $table->unsignedInteger('product_id');
+            $table->unsignedInteger('product_id')->nullable();
             $table->foreign('product_id')->references('id')->on('products');
             $table->timestamps();
         });

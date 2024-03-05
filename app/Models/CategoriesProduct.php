@@ -11,7 +11,7 @@ class CategoriesProduct extends Model
 {
     use HasFactory;
     protected $primaryKey="id";
-    protected $fillable = ['name','slug','index','show_hide','parent_category_id'];
+    protected $fillable = ['name','slug','position','show_hide','parent_category_id'];
     public function products() :HasMany
     {
         return $this->hasMany(Product::class);

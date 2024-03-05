@@ -72,11 +72,14 @@
         <div class="d-flex align-items-center justify-content-between mb-4">
             <h6 class="mb-0">Tất cả sản phẩm</h6>
             <!-- Button trigger modal -->
-             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
+             {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
                  Thêm sản phẩm
-             </button>
+            </button> --}}
+            <a href="{{ route('product.create') }}" class="btn btn-primary">
+                Thêm sản phẩm
+            </a>
          <!-- Modal -->
-         @include('layouts.admin.components.proModal')
+         {{-- @include('layouts.admin.components.proModal') --}}
          <!--End Modal -->
         </div>
         <div class="table-responsive" style="height: 100vh">

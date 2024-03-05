@@ -19,16 +19,34 @@ class ProductController extends Controller
     public function index()
     {
         //
-        $products = Product::where('status','none')->get();
+        $products = Product::all();
         $categories = CategoriesProduct::all();
         $brands = Brands::all();
         $data = compact('products','categories','brands');
+        $productVariations = ProductVariation::where('product_id',null)->get();
+        foreach ($productVariations as $productVariation) {
+            $path = $productVariation->image_path; // Đường dẫn tới file cần xóa trong thư mục 'public'
+            if($path){
+                if(!Storage::exists('public/'. $path)){
+                    return redirect()->route('product.index')->with('error','Xóa hình ảnh không thành công!');
+                };
+                $productVariation->delete();
+            }
+        }
         return view('layouts.admin.Product.index',$data);
     }
-
-    public function store(Request $request, Product $product, ProductVariation $productVariation)
+    public function create()
     {
-        $productExpt = Product::where('status','none')->get('id');
+        //
+        $categories = CategoriesProduct::where('show_hide',true)->get();
+        $brands = Brands::where('show_hide',true)->get();
+        $productVariations = ProductVariation::where('product_id',null)->get();
+        $data = compact('categories','brands','productVariations');
+        return view('layouts.admin.Product.store',$data);
+    }
+
+    public function store(Request $request, Product $product , ProductVariation $productVariation)
+    {
         $request->validate([
             'name' => 'required|unique:'.Product::class,
             'seo_keywords' => 'required|unique:'.Product::class,
@@ -63,46 +81,40 @@ class ProductController extends Controller
         $product->show_hide = $request->show_hide;
         $product->save();
         // 
-        $file = $request->file('image_url'); // Lấy file từ request    
-        if ($file) {
-            // Tiếp tục xử lý hoặc trả về đường dẫn đã lưu
-            $path = $file->store('images_product', 'public'); // Lưu file vào thư mục 'folder_name'
-            $url = asset(Storage::url($path));
-        }
-        $productVariation->image_path = $path;
-        $productVariation->image_url = $url;
-        $productVariation->color_type = $request->color_type;
-        $productVariation->product_id = $product->id;
-        $productVariation->price = $request->price*1000;
-        $productVariation->price_sale = $request->price_sale*1000;
-        $productVariation->quantity = $request->quantity;
-        $productVariation->quantity_available = $request->quantity;
-        $productVariation->save();
-
-        $jsonString = $request->colors;
-        // Chuyển đổi chuỗi JSON thành mảng
-        $colors = json_decode($jsonString, true);  
-        if (isset($colors)) {
-            foreach ($colors as $color) {
-              $base64Image = $color['image_url'];
-                $imageData = base64_decode($base64Image);
-                $file = uniqid() . '.jpg';
-
-                $path = public_path('images_product/' . $file);
-                file_put_contents($path, $imageData);
-                $url = asset('images_product/' . $file);    
-                $productVariation = new ProductVariation();
-                $productVariation->image_path = $path;
-                $productVariation->image_url = $url;
-                $productVariation->color_type = $color['color_type'];
-                $productVariation->product_id = $product->id;
-                $productVariation->price = $color['price']*1000;
-                $productVariation->price_sale = $color['price_sale']*1000;
-                $productVariation->quantity = $color['quantity'];
-                $productVariation->quantity_available = $color['quantity'];
-                $productVariation->save();
+        if($product->id){
+            $productVariations = ProductVariation::where('product_id',null)->get();
+            if($productVariations){
+                foreach ($productVariations as $productVariation) {
+                    $productVariation->product_id = $product->id;
+                    $productVariation->update();
+                }
             }
         }
+
+        // $jsonString = $request->colors;
+        // // Chuyển đổi chuỗi JSON thành mảng
+        // $colors = json_decode($jsonString, true);  
+        // if (isset($colors)) {
+        //     foreach ($colors as $color) {
+        //       $base64Image = $color['image_url'];
+        //         $imageData = base64_decode($base64Image);
+        //         $file = uniqid() . '.jpg';
+
+        //         $path = public_path('storage/images_product/' . $file);
+        //         file_put_contents($path, $imageData);
+        //         $url = asset('images_product/' . $file);    
+        //         $productVariation = new ProductVariation();
+        //         $productVariation->image_path = $path;
+        //         $productVariation->image_url = $url;
+        //         $productVariation->color_type = $color['color_type'];
+        //         $productVariation->product_id = $product->id;
+        //         $productVariation->price = $color['price']*1000;
+        //         $productVariation->price_sale = $color['price_sale']*1000;
+        //         $productVariation->quantity = $color['quantity'];
+        //         $productVariation->quantity_available = $color['quantity'];
+        //         $productVariation->save();
+        //     }
+        // }
         return redirect()->route('product.index')->with('success', 'Thêm sản phẩm thành công');
     }
     public function upload(Request $request){
@@ -151,15 +163,11 @@ class ProductController extends Controller
         if(!Storage::exists('public/'. $path)){
             return redirect()->route('product.index')->with('error','Xóa hình ảnh không thành công!');
         };
-        $product->variations()->update(['status'=>'delete by '.auth()->user()->name]);
-        $product->status = 'delete by '.auth()->user()->getAuthIdentifierName();
-        $product->update();
-        // $product->delete();
-
-        // Storage::delete('public/'. $path); // Xóa file
-        // $product->variations()->delete();
-        // $product->delete();
+        // $product->variations()->update(['status'=>'delete by '.auth()->user()->name]);
+        // $product->status = 'delete by '.auth()->user()->getAuthIdentifierName();
+        // $product->update();
+        $product->variations()->delete();
+        $product->delete();
         return redirect()->route('product.index')->with('success','Xóa sản phẩm thành công!');
-
     }
 }
