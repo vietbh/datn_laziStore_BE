@@ -31,17 +31,18 @@ class CategoriesProductController extends Controller
     {
         //
         $request->validate([
-            'name' => 'required|unique:categories_products,name|max:255',
-            'index' =>'numeric',
+            'name' => 'required|unique:'.CategoriesProduct::class,
+            'index' =>'required',
         ],[
             'name.required'=>'Không được để trống trường này!',
             'name.unique'=>'Đã tồn tại danh mục này rồi!',
+            'index.required'=>'Không được để trống trường này!',
             'index.numeric'=>'Vui lòng nhập số!',
         ]);
         $slug = Str::slug($request->name); 
         $categoriesProduct->name = $request->name;
         $categoriesProduct->slug = $slug;
-        $categoriesProduct->index = $request->index;
+        $categoriesProduct->position = $request->index;
         $categoriesProduct->parent_category_id = $request->parent_id;
         $categoriesProduct->show_hide = $request->show_hide;
         $categoriesProduct->save();

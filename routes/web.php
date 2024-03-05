@@ -18,6 +18,8 @@ use App\Http\Controllers\News\NewsController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\ProductHotController;
+use App\Http\Controllers\ProductSpecificationController;
+use App\Http\Controllers\ProductVariationController;
 use App\Http\Controllers\RoleAdminController;
 use App\Http\Controllers\SlideAdsController;
 use App\Http\Controllers\UserGuestController;
@@ -71,11 +73,17 @@ Route::middleware(['auth','role:0'])->group(function () {
     })->name('lazi.index');
     //Sản phẩm
     Route::get('/admin/san-pham',[ProductController::class, 'index'])->name('product.index');
+    Route::get('/admin/san-pham/them',[ProductController::class, 'create'])->name('product.create');
     Route::post('/admin/san-pham/them',[ProductController::class, 'store'])->name('product.store');
     Route::post('/admin/san-pham/hinh-anh-mo-ta',[ProductController::class, 'upload'])->name('ckeditor.product.upload');
     Route::get('/admin/san-pham/edit/{id}',[ProductController::class, 'edit'])->name('product.edit');
     Route::put('/admin/san-pham/edit/{id}',[ProductController::class, 'update'])->name('product.update');
     Route::delete('/admin/san-pham/xoa/{id}',[ProductController::class, 'destroy'])->name('product.delete');
+    // Varia
+    Route::post('/admin/san-pham/them-variation',[ProductVariationController::class, 'store'])->name('varia.store');
+    Route::put('/admin/san-pham/edit-variation/{id}',[ProductVariationController::class, 'update'])->name('varia.update');
+    // Speci
+    Route::post('/admin/san-pham/them-specification',[ProductSpecificationController::class, 'store'])->name('specifi.store');
     // Thương hiệu
     Route::get('/admin/san-pham/thuong-hieu',[BrandController::class, 'index'])->name('brand.index');
     Route::post('/admin/thuong-hieu/them',[BrandController::class, 'store'])->name('brand.store');
