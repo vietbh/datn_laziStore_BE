@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -30,7 +31,9 @@ class AuthController extends Controller
         $data = [
            ['id' => $user->id,
             'name' => $user->name,
-            'email' => $user->email]
+            'email' => $user->email,
+            'image_url' => $user->image_url
+            ]
         ];
         return response()->json($data);
      
@@ -69,8 +72,14 @@ class AuthController extends Controller
 
         // event(new Registered($user));
 
-        // Auth::login($user);
-        return response()->json($user);
+        Auth::login($user);
+        $data = array(
+            ['id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'image_url' => $user->image_url
+            ]);
+        return response()->json($data);
     }
 
     public function show(string $id)

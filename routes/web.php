@@ -80,10 +80,15 @@ Route::middleware(['auth','role:0'])->group(function () {
     Route::put('/admin/san-pham/edit/{id}',[ProductController::class, 'update'])->name('product.update');
     Route::delete('/admin/san-pham/xoa/{id}',[ProductController::class, 'destroy'])->name('product.delete');
     // Varia
-    Route::post('/admin/san-pham/them-variation',[ProductVariationController::class, 'store'])->name('varia.store');
-    Route::put('/admin/san-pham/edit-variation/{id}',[ProductVariationController::class, 'update'])->name('varia.update');
+    Route::post('/admin/them-variation',[ProductVariationController::class, 'store'])->name('varia.store');
+    Route::get('/admin/edit-variation/{id}',[ProductVariationController::class, 'edit'])->name('varia.edit');
+    Route::put('/admin/edit-variation/{id}',[ProductVariationController::class, 'update'])->name('varia.update');
+    Route::delete('/admin/delete-variation/{id}',[ProductVariationController::class, 'destroy'])->name('varia.delete');
     // Speci
     Route::post('/admin/san-pham/them-specification',[ProductSpecificationController::class, 'store'])->name('specifi.store');
+    Route::get('/admin/edit-specification/{id}',[ProductSpecificationController::class, 'edit'])->name('specifi.edit');
+    Route::put('/admin/edit-specification/{id}',[ProductSpecificationController::class, 'update'])->name('specifi.update');
+    Route::delete('/admin/delete-specification/{id}',[ProductSpecificationController::class, 'destroy'])->name('specifi.delete');
     // Thương hiệu
     Route::get('/admin/san-pham/thuong-hieu',[BrandController::class, 'index'])->name('brand.index');
     Route::post('/admin/thuong-hieu/them',[BrandController::class, 'store'])->name('brand.store');

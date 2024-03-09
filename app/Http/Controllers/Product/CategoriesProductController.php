@@ -32,11 +32,10 @@ class CategoriesProductController extends Controller
         //
         $request->validate([
             'name' => 'required|unique:'.CategoriesProduct::class,
-            'index' =>'required',
+            'index' =>'numeric',
         ],[
             'name.required'=>'Không được để trống trường này!',
             'name.unique'=>'Đã tồn tại danh mục này rồi!',
-            'index.required'=>'Không được để trống trường này!',
             'index.numeric'=>'Vui lòng nhập số!',
         ]);
         $slug = Str::slug($request->name); 

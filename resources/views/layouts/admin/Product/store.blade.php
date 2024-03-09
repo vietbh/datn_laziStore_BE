@@ -3,21 +3,7 @@
 
 @if (session('success') || session('error'))
     @include('layouts.admin.components.alert')
-@endif
-@if ($errors->has('image_url')
-    || $errors->has('color_type')
-    || $errors->has('price')
-    || $errors->has('price_sale')
-    || $errors->has('quantity')
-)
-<script type="module"> 
-    const myModal = new bootstrap.Modal(document.getElementById('addProductVariationModal'), {
-        keyboard: false
-    })
-    myModal.toggle();
-    myModal.show();
-</script>    
-@endif
+@endif      
 {{-- @if ($errors->has('image_url')
     || $errors->has('color_type')
 )
@@ -29,10 +15,15 @@
         myModal1.show();
     </script>    
 @endif --}}
-@if ($productVariations)
+@if (count($productVariationsCreate) > 0
+    ||$errors->has('image_url')
+    || $errors->has('color_type')
+    || $errors->has('price')
+    || $errors->has('price_sale')
+    || $errors->has('quantity'))
     <script type="module"> 
         const myModal = new bootstrap.Modal(document.getElementById('addProductVariationModal'), {
-            keyboard: false
+            keyboard: true
         })
         myModal.toggle();
         myModal.show();
@@ -159,7 +150,7 @@
                                         </button>
                                     </div>
                                     <div class="col-sm-12 col-xl-6 mb-3 px-3">
-                                        <button type="button" class="w-100 btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductSpecialModal">
+                                        <button type="button" class="w-100 btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductSpecifiModal">
                                             Thêm thông số sản phẩm
                                         </button>
                                     </div>
