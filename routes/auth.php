@@ -16,10 +16,10 @@ Route::middleware('guest')->group(function () {
                 ->name('register');
     Route::post('register', [RegisteredUserController::class, 'store']);
 
-    Route::get('admin/login', [AuthenticatedSessionController::class, 'create'])
+    Route::get('lazi-store-admin/login', [AuthenticatedSessionController::class, 'create'])
                 ->name('login');
 
-    Route::post('admin/login', [AuthenticatedSessionController::class, 'store']);
+    Route::post('lazi-store-admin/login', [AuthenticatedSessionController::class, 'store']);
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
                 ->name('password.request');

@@ -55,9 +55,11 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="index" class="form-label">Thứ tự của danh mục (Mặc định là 1)</label>
-                                    <input type="text" name="index" class="form-control" 
+                                    <input type="number" name="index" class="form-control" 
                                     @isset($category)
                                         value="{{$category->index}}"
+                                    @else
+                                        value="1"
                                     @endisset
                                     placeholder="Nhập thứ tự hiện của danh mục"
                                     autocomplete="index"

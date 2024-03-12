@@ -29,23 +29,35 @@ class CategoriesProductController extends Controller
      */
     public function store(Request $request, CategoriesProduct $categoriesProduct)
     {
-        //
+        // Kiểm tra và xác thực dữ liệu đầu vào
         $request->validate([
-            'name' => 'required|unique:'.CategoriesProduct::class,
-            'index' =>'numeric',
-        ],[
-            'name.required'=>'Không được để trống trường này!',
-            'name.unique'=>'Đã tồn tại danh mục này rồi!',
-            'index.numeric'=>'Vui lòng nhập số!',
+            'name' => 'required|unique:categories_products',
+            'index' => 'nullable|integer|min:1|max:99999',
+            'parent_id' => 'nullable|exists:categories_products,id',
+            'show_hide' => 'required|boolean',
+        ], [
+            'name.required' => 'Không được để trống trường này!',
+            'name.unique' => 'Đã tồn tại danh mục này rồi!',
+            'index.min' => 'Vui lòng nhập số lớn hơn hoặc bằng 1!',
+            'parent_id.exists' => 'Danh mục cha không hợp lệ!',
+            'show_hide.required' => 'Trường này là bắt buộc!',
+            'show_hide.boolean' => 'Giá trị không hợp lệ cho trường này!',
         ]);
-        $slug = Str::slug($request->name); 
+    
+        // Tạo slug từ tên danh mục
+        $slug = Str::slug($request->name);
+    
+        // Gán giá trị vào các thuộc tính của đối tượng CategoriesProduct
         $categoriesProduct->name = $request->name;
         $categoriesProduct->slug = $slug;
         $categoriesProduct->position = $request->index;
         $categoriesProduct->parent_category_id = $request->parent_id;
         $categoriesProduct->show_hide = $request->show_hide;
+    
+        // Lưu đối tượng CategoriesProduct vào cơ sở dữ liệu
         $categoriesProduct->save();
-        return redirect()->route('product.cat.index')->with('success','Thêm mới danh mục thành công');
+    
+        return redirect()->route('product.cat.index')->with('success', 'Thêm mới danh mục thành công');
     }
 
     /**
