@@ -29,6 +29,7 @@ Route::get('/san-pham',[ProductController::class,'index']);
 Route::get('/danh-muc-san-pham',[CategoryProController::class,'index']);
 Route::get('/danh-muc-san-pham/{slug}',[CategoryProController::class,'show']);
 Route::get('/danh-muc-tin-tuc',[CategoryProController::class,'index']);
+// Route::post('/lien-he',[Contact::class,'index']);
 
 //Auth 
 Route::post('/login', [AuthController::class, 'login']);

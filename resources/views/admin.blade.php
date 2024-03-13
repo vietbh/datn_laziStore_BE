@@ -42,33 +42,21 @@
         </div>
         <!-- Spinner End -->
 
-
         <!-- Sidebar Start -->
         @include('layouts.admin.Header.sideBar')
         <!-- Sidebar End -->
         
         <!-- Content Start -->
         <div class="content">
+            @if (session('success') && session('error'))
+                @include('layouts.admin.components.alert')
+            @endif   
             @include('layouts.admin.Header.nav')   
             
             @yield('content')
 
             <!-- Footer Start -->
-            <div class="container-fluid pt-4 px-4">
-                <div class="bg-light rounded-top p-4">
-                    <div class="row">
-                        <div class="col-12 col-sm-6 text-center text-sm-start">
-                            &copy; <a href="#">Lazi-Store</a>, Cửa hàng bán thiết bị công nghệ. 
-                        </div>
-                        <div class="col-12 col-sm-6 text-center text-sm-end">
-                            <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-                            Phát triển bởi <a href="vietbh.github.io/lazi-store">Lazi Team</a>
-                        </br>
-                        {{-- Distributed By <a class="border-bottom" href="https://themewagon.com" target="_blank">ThemeWagon</a> --}}
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @include('layouts.admin.components.Footer')
             <!-- Footer End -->
         </div>
         <!-- Content End -->
@@ -93,7 +81,15 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
-  
+    <script type="module">
+       setTimeout(() => {
+            let alerts = document.getElementsByClassName('alert');
+            for (let i = 0; i < alerts.length; i++) {
+                let bsAlert = new bootstrap.Alert(alerts[i]);
+                bsAlert.close();
+            }
+        }, 2000);
+    </script>
 </body>
 
 </html>

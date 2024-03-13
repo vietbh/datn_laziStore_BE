@@ -11,7 +11,6 @@ use App\Models\CategoriesProduct;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 
-use function PHPUnit\Framework\isNull;
 
 class ProductController extends Controller
 {
@@ -40,11 +39,9 @@ class ProductController extends Controller
     }
     public function create()
     {
-        //
         $categories = CategoriesProduct::where('show_hide',true)->get();
         $brands = Brands::where('show_hide',true)->get();
-        $productVariationsCreate = ProductVariation::where('product_id',null)->get();
-        $data = compact('categories','brands','productVariationsCreate');
+        $data = compact('categories','brands');
         return view('layouts.admin.Product.store',$data);
     }
 
@@ -62,8 +59,7 @@ class ProductController extends Controller
             'seo_keywords.unique' => 'Đã tồn tại từ khóa SEO này.',
             'categories_product_id.required' => 'Không được bỏ trống trường này.',
             'brand_id.required' => 'Không được bỏ trống trường này.',
-        ]
-        );
+        ]);
   
         $product->name = $request->name;
         $product->slug = Str::slug($request->name);
@@ -73,23 +69,9 @@ class ProductController extends Controller
         $product->description = $request->description;
         $product->show_hide = $request->show_hide;
         $product->save();
-
-        if($product->id){
-            $productVariations = ProductVariation::where('product_id',null)->get();
-            if($productVariations){
-                foreach ($productVariations as $productVariation) {
-                    $productVariation->product_id = $product->id;
-                    $productVariation->update();
-                }
-            }
-        }
-        $productVariationsCreate = ProductVariation::where('product_id',$product->id)->count();
-        if($productVariationsCreate > 0){
-            return redirect()->route('product.index')->with('success', 'Thêm sản phẩm thành công');
-        }
-        return redirect()->route('product.create')->with('error', 'Vui lòng chọn màu sắc sản phẩm');
+        return redirect()->route('varia.create',['id' => $product->id]);
     }
-    public function upload(Request $request){
+    public function uploadCk(Request $request){
         if($request->hasFile('upload')){
             $originName = $request->file('upload')->getClientOriginalName();
             $fileName = pathinfo($originName, PATHINFO_FILENAME);
@@ -125,8 +107,8 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
 
         $request->validate([
-            'name' => 'required|unique:'.Product::class,
-            'seo_keywords' => 'required|unique:'.Product::class,
+            'name' => 'required|unique:'.Product::class.',name,'.$id,
+            'seo_keywords' => 'required|unique:'.Product::class.',name,'.$id,
             'categories_product_id' => 'required',
             'brand_id' => 'required',
         ],[
@@ -136,8 +118,7 @@ class ProductController extends Controller
             'seo_keywords.unique' => 'Đã tồn tại từ khóa SEO này.',
             'categories_product_id.required' => 'Không được bỏ trống trường này.',
             'brand_id.required' => 'Không được bỏ trống trường này.',
-        ]
-    );
+        ]);
   
         $product->name = $request->name;
         $product->slug = Str::slug($request->name);
@@ -146,19 +127,11 @@ class ProductController extends Controller
         $product->brand_id = $request->brand_id;
         $product->description = $request->description;
         $product->show_hide = $request->show_hide;
-        $product->save();
+        $product->update();
         // 
-        if($product->id){
-            $productVariations = ProductVariation::where('product_id',null)->get();
-            if($productVariations){
-                foreach ($productVariations as $productVariation) {
-                    $productVariation->product_id = $product->id;
-                    $productVariation->update();
-                }
-            }
-        }
-
-        return redirect()->route('product.index')->with('success', 'Cập nhật sản phẩm thành công');
+        return redirect()->route('product.index')
+        ->with('success','Cập nhật sản phẩm thành công')
+        ;
     }
 
     /**
@@ -168,11 +141,19 @@ class ProductController extends Controller
     {
         //
         $product = Product::findOrFail($id);
-        $path = $product->image_path; // Đường dẫn tới file cần xóa trong thư mục 'public'
-        if(!Storage::exists('public/'. $path)){
-            return redirect()->route('product.index')->with('error','Xóa hình ảnh không thành công!');
-        };
-        $product->variations()->delete();
+        foreach ($product->variations() as $variation) {
+            $path = $variation->image_path; // Đường dẫn tới file cần xóa trong thư mục 'public'
+            if(!Storage::exists('public/'. $path)){
+                return redirect()->route('product.index')->with('error','Xóa hình ảnh không thành công!');
+            };
+            # code...
+        }
+        if($product->variations()){
+            $product->variations()->delete();
+        }
+        if($product->specifications()){
+            $product->specifications()->delete();
+        }
         $product->delete();
         return redirect()->route('product.index')->with('success','Xóa sản phẩm thành công!');
     }

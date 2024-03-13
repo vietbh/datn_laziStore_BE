@@ -42,7 +42,7 @@
                                         @isset($product)
                                             value="{{$product->name}}"
                                         @else
-                                        value="{{old('name')}}"        
+                                            value="{{old('name')}}"        
                                         @endisset
                                         placeholder="Nhập tên sản phẩm (vd:Iphone15,Samsung A23,...)"
                                         autocomplete="name"
@@ -130,8 +130,6 @@
                                         </select>    
                                     </div>
                                 </div>    
-                                @include('layouts.admin.components.colorModal')
-                                @include('layouts.admin.components.speciModal')    
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-xl-12">
                                         <label for="description" class="form-label">Mô tả sản phẩm</label>

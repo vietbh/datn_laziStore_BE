@@ -36,15 +36,17 @@
                                 @endisset
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-xl-6 mb-3">
-                                        <label for="name" class="form-label ">Tên sản phẩm <span class="text-danger text-small">(*)</span></label>
-                                        <input type="text" name="name" class="form-control @error('name') 
-                                        is-invalid
+                                        <label for="name" class="form-label">Tên sản phẩm <span class="text-danger text-small">(*)</span></label>
+                                        <input type="text" name="name" class="form-control
+                                        @error('name') 
+                                            is-invalid
                                         @enderror" id="name"
                                         @isset($product)
                                             value="{{$product->name}}"
                                         @else
                                         value="{{old('name')}}"        
                                         @endisset
+                                        autocomplete="name"
                                         placeholder="Nhập tên sản phẩm (vd:Iphone15,Samsung A23,...)"
                                         aria-describedby="name">
                                         @error('name')
@@ -57,8 +59,10 @@
                                         @isset($product)
                                             value="{{$product->seo_keywords}}"
                                         @else
-                                        value="{{old('seo_keywords')}}"        
+                                            value="{{old('seo_keywords')}}"        
                                         @endisset
+                                        autocomplete="seo_keywords"
+                                        placeholder="Từ khóa liên quan tới sản phẩm"
                                         id="seo_keywords">   
                                         @error('seo_keywords')
                                         <div id="seo_keywords" class="form-text text-danger">{{ $message }}</div>
@@ -109,7 +113,23 @@
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <div class="col-sm-12 col-xl-6 mb-3">
+                                    <div class="col-sm-12 col-xl-6 mb-3 px-3">
+                                        <a href="{{ route('varia.create', ['id'=>$product->id]) }}">
+                                            <button type="button" class="w-100 btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductVariationModal">
+                                                Màu sản phẩm
+                                            </button>
+                                        </a>
+                                    </div>
+                                    <div class="col-sm-12 col-xl-6 mb-3 px-3">
+                                        <a href="{{ route('varia.create', ['id'=>$product->id]) }}">
+                                            <button type="button" class="w-100 btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductSpecifiModal">
+                                                Thông số sản phẩm
+                                            </button>
+                                        </a>
+                                    </div>
+                                </div> 
+                                <div class="row mb-3">
+                                    <div class="col-sm-12 col-xl-12 mb-3">
                                         <label for="show_hide" class="form-label">Trạng thái (mặc định sẽ là Hiện)</label>
                                         <select class="form-select" name="show_hide" 
                                         autocomplete="show_hide"
@@ -124,8 +144,6 @@
                                         </select>    
                                     </div>
                                 </div>    
-                                @include('layouts.admin.components.colorModal')
-                                @include('layouts.admin.components.speciModal')    
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-xl-12">
                                         <label for="description" class="form-label">Mô tả sản phẩm</label>

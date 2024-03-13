@@ -22,11 +22,9 @@ class CategoryProController extends Controller
 {
     // Tìm kiếm danh mục theo slug và eager loading danh mục cha và con
     $category = CategoriesProduct::where([['id','!=',1],['show_hide',true],['slug', $slug]])->first();
-
     if (!$category) {
         return response()->json(['error' => 'Danh mục không tồn tại'], 404);
     }
-
     // Lấy danh sách danh mục cha và con
     // $categories = $this->getCategoryHierarchy($category);
 
@@ -60,7 +58,6 @@ private function getCategoryHierarchy($category)
             $categories = array_merge($categories, $childCategories);
         }
     }
-
     return $categories;
 }
 

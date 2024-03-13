@@ -16,37 +16,34 @@ class ProductController extends Controller
         $products = Product::all();
         $variations = [];
         foreach ($products as $product) {
-            foreach ($product->variations as $variation) {
+            foreach ($product->variations()->get() as $variation) {
                 array_push($variations, $variation);
             }
         }
-        $data = $products;
+        
+        $data = [
+            'products' => $products,
+            'variations' => $variations
+        ];
+        
         return response()->json($data);
     }
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         //
+        $products = Product::with('variations')->paginate(10);
+    
+        return response()->json($products);
     }
 
+    // public function loadMore(Request $request)
+    // {
+    //     $offset = $request->input('offset');
+    //     $products = Product::skip($offset)->take(10)->get();
+
+    //     return response()->json($products);
+    // }
     /**
      * Show the form for editing the specified resource.
      */

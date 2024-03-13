@@ -84,22 +84,24 @@ Route::middleware(['auth','role:0'])->group(function () {
     })->name('lazi.index');
     //Sản phẩm
     Route::get('/lazi-store-admin/san-pham',[ProductController::class, 'index'])->name('product.index');
-    Route::get('/lazi-store-admin/san-pham/them',[ProductController::class, 'create'])->name('product.create');
-    Route::post('/lazi-store-admin/san-pham/them',[ProductController::class, 'store'])->name('product.store');
-    Route::post('/lazi-store-admin/san-pham/hinh-anh-mo-ta',[ProductController::class, 'upload'])->name('ckeditor.product.upload');
-    Route::get('/lazi-store-admin/san-pham/edit/{id}',[ProductController::class, 'edit'])->name('product.edit');
-    Route::put('/lazi-store-admin/san-pham/edit/{id}',[ProductController::class, 'update'])->name('product.update');
-    Route::delete('/lazi-store-admin/san-pham/xoa/{id}',[ProductController::class, 'destroy'])->name('product.delete');
+    Route::get('/lazi-store-admin/them-san-pham',[ProductController::class, 'create'])->name('product.create');
+    Route::post('/lazi-store-admin/them-san-pham',[ProductController::class, 'store'])->name('product.store');
+    Route::post('/lazi-store-admin/san-pham/hinh-anh-mo-ta',[ProductController::class, 'uploadCk'])->name('ckeditor.product.upload');
+    Route::get('/lazi-store-admin/edit-san-pham/{id}',[ProductController::class, 'edit'])->name('product.edit');
+    Route::put('/lazi-store-admin/edit-san-pham/{id}',[ProductController::class, 'update'])->name('product.update');
+    Route::delete('/lazi-store-admin/xoa-san-pham/{id}',[ProductController::class, 'destroy'])->name('product.delete');
     // Varia
-    Route::post('/lazi-store-admin/them-variation',[ProductVariationController::class, 'store'])->name('varia.store');
-    Route::get('/lazi-store-admin/edit-variation/{id}',[ProductVariationController::class, 'edit'])->name('varia.edit');
-    Route::put('/lazi-store-admin/edit-variation/{id}',[ProductVariationController::class, 'update'])->name('varia.update');
-    Route::delete('/lazi-store-admin/delete-variation/{id}',[ProductVariationController::class, 'destroy'])->name('varia.delete');
+    Route::get('/lazi-store-admin/san-pham/them-variation/{id}',[ProductVariationController::class, 'create'])->name('varia.create');
+    Route::post('/lazi-store-admin/san-pham/them-variation',[ProductVariationController::class, 'store'])->name('varia.store');
+    Route::get('/lazi-store-admin/san-pham/edit-variation/{id}',[ProductVariationController::class, 'edit'])->name('varia.edit');
+    Route::put('/lazi-store-admin/san-pham/edit-variation/{id}',[ProductVariationController::class, 'update'])->name('varia.update');
+    Route::delete('/lazi-store-admin/san-pham/delete-variation/{id}',[ProductVariationController::class, 'destroy'])->name('varia.delete');
     // Speci
+    Route::get('/lazi-store-admin/san-pham/them-specification/{id}',[ProductSpecificationController::class, 'create'])->name('specifi.create');
     Route::post('/lazi-store-admin/san-pham/them-specification',[ProductSpecificationController::class, 'store'])->name('specifi.store');
-    Route::get('/lazi-store-admin/edit-specification/{id}',[ProductSpecificationController::class, 'edit'])->name('specifi.edit');
-    Route::put('/lazi-store-admin/edit-specification/{id}',[ProductSpecificationController::class, 'update'])->name('specifi.update');
-    Route::delete('/lazi-store-admin/delete-specification/{id}',[ProductSpecificationController::class, 'destroy'])->name('specifi.delete');
+    Route::get('/lazi-store-admin/san-pham/edit-specification/{id}',[ProductSpecificationController::class, 'edit'])->name('specifi.edit');
+    Route::put('/lazi-store-admin/san-pham/edit-specification/{id}',[ProductSpecificationController::class, 'update'])->name('specifi.update');
+    Route::delete('/lazi-store-admin/san-pham/delete-specification/{id}',[ProductSpecificationController::class, 'destroy'])->name('specifi.delete');
     // Thương hiệu
     Route::get('/lazi-store-admin/san-pham/thuong-hieu',[BrandController::class, 'index'])->name('brand.index');
     Route::post('/lazi-store-admin/thuong-hieu/them',[BrandController::class, 'store'])->name('brand.store');

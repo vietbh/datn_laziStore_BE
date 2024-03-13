@@ -1,34 +1,5 @@
 @extends('admin')
 @section('content')
-
-@if (session('success') || session('error'))
-    @include('layouts.admin.components.alert')
-@endif      
-{{-- @if ($errors->has('image_url')
-    || $errors->has('color_type')
-)
-    <script type="module"> 
-        const myModal1 = new bootstrap.Modal(document.getElementById('addProductSpecialModal'), {
-            keyboard: false
-        })
-        myModal1.toggle();
-        myModal1.show();
-    </script>    
-@endif --}}
-@if (count($productVariationsCreate) > 0
-    ||$errors->has('image_url')
-    || $errors->has('color_type')
-    || $errors->has('price')
-    || $errors->has('price_sale')
-    || $errors->has('quantity'))
-    <script type="module"> 
-        const myModal = new bootstrap.Modal(document.getElementById('addProductVariationModal'), {
-            keyboard: true
-        })
-        myModal.toggle();
-        myModal.show();
-    </script>   
-@endif
     <div class="container-fluid">
         <div class="modal-header">
             <h5 class="fw-bold">
@@ -55,7 +26,7 @@
                                         @isset($product)
                                             value="{{$product->name}}"
                                         @else
-                                        value="{{old('name')}}"        
+                                            value="{{old('name')}}"        
                                         @endisset
                                         placeholder="Nhập tên sản phẩm (vd:Iphone15,Samsung A23,...)"
                                         autocomplete="name"
@@ -144,18 +115,6 @@
                                     </div>
                                 </div>    
                                 <div class="row mb-3">
-                                    <div class="col-sm-12 col-xl-6 mb-3 px-3">
-                                        <button type="button" class="w-100 btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductVariationModal">
-                                            Thêm màu sản phẩm
-                                        </button>
-                                    </div>
-                                    <div class="col-sm-12 col-xl-6 mb-3 px-3">
-                                        <button type="button" class="w-100 btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductSpecifiModal">
-                                            Thêm thông số sản phẩm
-                                        </button>
-                                    </div>
-                                </div> 
-                                <div class="row mb-3">
                                     <div class="col-sm-12 col-xl-12">
                                         <label for="description" class="form-label">Mô tả sản phẩm</label>
                                         <textarea
@@ -181,19 +140,17 @@
                                     @isset($product)
                                         <a href="{{ route('product.index') }}" class="btn btn-danger">Đóng</a>
                                     @else
-                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
+                                        <a href="{{ route('product.index') }}" >
+                                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
+                                        </a>
                                     @endisset
                                 </div>
                             </form>
-                            {{-- Modal --}}
-                            @include('layouts.admin.components.variaModal')
-                            @include('layouts.admin.components.speciModal')    
-                            {{-- End Modal --}}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>    
+    @include('layouts.admin.Product.ckeditor')
 @endsection
-@include('layouts.admin.Product.ckeditor')
