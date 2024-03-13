@@ -13,7 +13,7 @@
     myModal.show();
     </script>
 @endif
-@isset($product)
+{{-- @isset($product)
     <script type="module"> 
         var myModal = new bootstrap.Modal(document.getElementById('addProductModal'), {
         keyboard: false
@@ -21,7 +21,7 @@
         myModal.toggle();
         myModal.show();
     </script>
-@endisset
+@endisset --}}
 
    <!-- Sale & Revenue Start -->
    <div class="container-fluid pt-4 px-4">

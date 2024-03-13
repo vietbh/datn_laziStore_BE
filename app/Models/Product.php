@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\productSpecificationController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,6 +18,10 @@ class Product extends Model
     public function variations(): HasMany
     {
         return $this->hasMany(ProductVariation::class);
+    }
+    public function specifications(): HasMany
+    {
+        return $this->hasMany(SpecificationsProduct::class);
     }
     public function category(): BelongsTo
     {

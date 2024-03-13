@@ -38,6 +38,7 @@ class BrandController extends Controller
         $slug = Str::slug($request->name); 
         $brands->name = $request->name;
         $brands->slug = $slug;
+        $brands->position = $request->index;
         $brands->country = $request->country;
         $brands->show_hide = $request->show_hide;
         $brands->save();
@@ -71,10 +72,12 @@ class BrandController extends Controller
         ],[
             'name.required'=>'Không được để trống trường này!',
             'country.required'=>'Không được để trống trường này!',
+            'index.numeric'=>'Vui lòng nhập số!',
         ]);
         $slug = Str::slug($request->name); 
         $brand->name = $request->name;
         $brand->slug = $slug;
+        $brand->position = $request->index;
         $brand->country = $request->country;
         $brand->show_hide = $request->show_hide;
         $brand->update();
@@ -89,8 +92,6 @@ class BrandController extends Controller
     {
         //
         $brand = Brands::findOrFail($id);
-        // dd($brand);
-        
         $brand->delete();
         $alert='Thương hiệu '.$brand->name.' đã được xóa thành công.';
         return redirect()->route('brand.index')->with('success',$alert);

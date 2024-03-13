@@ -1,171 +1,186 @@
-<div class="modal fade" id="addProductSpecialModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="true" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content mb-3">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    @isset($product)
-                        Sửa màu sản phẩm <strong>{{$product->name}}</strong>
-                    @else
-                        Thêm màu sắc
-                    @endisset
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-0">
-                <div class="container-fluid pt-4 px-4 mb-4" >
-                    <div class="row g-4">
-                        <div class="col-sm-12 col-xl-12">
-                            <div class="bg-light rounded h-100 p-4 text-start">
-                                @isset($product)
-                                    @foreach ($product->variations as $variation)
-                                        <div class="row mb-3">
-                                            <div class="col-sm-12 col-xl-3 mb-3">
-                                                <input type="text" name="colors" hidden>
-                                                <label for="color_type" class="form-label">Màu sắc <span class="text-danger text-small">(*)</span></label>
-                                                <input type="text" class="form-control" name="color_type"
-                                                value="{{$variation->color_type}}"
-                                                placeholder="Màu đen,màu vàng,..."
-                                                id="color_type">
-                                                @error('color_type')
-                                                <div class="form-text text-danger">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                            <div class="col-sm-12 col-xl-3 mb-3">
-                                                <label for="price" class="form-label ">Giá gốc(vnđ) <span class="text-danger text-small">(*)</span></label>
-                                                <input type="text" name="price" class="form-control 
-                                                @error('price') 
-                                                    is-invalid
-                                                @enderror" id="price" value="{{$variation->price / 1000}}"
-                                                autocomplete="price"
-                                                placeholder="Nhập giá tiền (vd:300=300.000đ)"
-                                                aria-describedby="price">
-                                                @error('price')
-                                                    <div class="form-text text-danger">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                            <div class="col-sm-12 col-xl-3 mb-3">
-                                                <label for="price_sale" class="form-label ">Giá khuyến mãi(vnđ) <span class="text-danger text-small">(*)</span></label>
-                                                <input type="text" name="price_sale" class="form-control 
-                                                @error('price_sale') 
-                                                    is-invalid
-                                                @enderror" id="price_sale"
-                                                value="{{$variation->price_sale / 1000}}" autocomplete="price_sale"
-                                                placeholder="Nhập giá tiền (vd:300=300.000đ)"
-                                                aria-describedby="price_sale">
-                                                @error('price_sale')
-                                                    <div class="form-text text-danger">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                            <div class="col-sm-12 col-xl-3 mb-3">
-                                                <label for="quantity" class="form-label ">Số lượng <span class="text-danger text-small">(*)</span></label>
-                                                <input type="text" name="quantity" class="form-control \
-                                                @error('quantity') 
-                                                    is-invalid
-                                                @enderror" id="quantity"
-                                                value="{{$variation->quantity}}"
-                                                autocomplete="quantity" placeholder="Nhập giá tiền (vd:300=300.000đ)"
-                                                aria-describedby="quantity">
-                                                @error('quantity')
-                                                    <div  class="form-text text-danger">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                            <div class="col-sm-12 col-xl-12 mb-3">
-                                                <label for="image_url" class="form-label ">Chọn hình ảnh <span class="text-danger text-small">(*)</span></label>
-                                                <div class="d-flex justify-content-around">
-                                                    <img src="{{$variation->image_url}}" class="rounded-3 me-2" width="100" height="100" aria-describedby="image_url">
-                                                    <input type="file" name="image_url" class="form-control 
-                                                    @error('image_url') 
-                                                        is-invalid
-                                                    @enderror" 
-                                                    id="image_url"
-                                                    value="{{$variation->image_url ?? old('image_url')}}"
-                                                    autocomplete="image_url"
-                                                    aria-describedby="image_url">
-                                                    @error('image_url')
-                                                        <div class="form-text text-danger">{{ $message }}</div>
-                                                    @enderror
-                                                    <button type="button" class="btn btn-secondary ms-1">Thêm nhiều hình ảnh</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
+@extends('admin')
+@section('content')
+    <div class="container-fluid mt-5 mb-5" style="height: 85vh">
+        <div class="card bg-light">
+            <div class="card-body p-1 m-3">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                  <li class="breadcrumb-item"><a href="{{ route('product.edit', ['id'=>$product->id]) }}">Sản phẩm {{$product->name}}</a></li>
+                                  <li class="breadcrumb-item active" aria-current="page">Thêm thông số sản phẩm</li>
+                                </ol>
+                            </nav>
+                            <h5 class="card-title my-3">
+                                @isset($productSpecification)
+                                    Sửa 
+                                @else
+                                    Thêm thông số {{$product->name}}
                                 @endisset
-                                    {{-- <h6 id="initial-color"></h6> --}}
-                                    <form action="{{ route('specifi.store') }}" method="post" enctype="multipart/form-data">
-                                        @csrf
+                            </h5>                 
+                        </div>
+                        <div class="col-sm-6 col-xl-4">
+                            <div class="bg-white rounded h-100 p-3 text-start">
+                                <form 
+                                    @isset($productSpecification)
+                                        action="{{ route('specifi.update',['id' => $productSpecification->id]) }}"
+                                    @else
+                                        action="{{ route('specifi.store') }}"
+                                    @endisset
+                                    method="post" enctype="multipart/form-data">
+                                    @csrf
+                                    @isset($productSpecification)
+                                        @method('put')
+                                    @else   
                                         @method('post')
-                                        <div class="row mb-3">
-                                            <div class="col-sm-12 col-xl-6 mb-3">
-                                                <label for="name" class="form-label">Màu sắc <span class="text-danger text-small">(*)</span></label>
-                                                <input type="text" class="form-control" 
-                                                name="name"
-                                                @isset($product)
-                                                    value="{{$product->name}}"
-                                                @endisset
-                                                value="Vàng"
-                                                autocomplete="name"
-                                                placeholder="Màu đen,màu vàng,..."
-                                                id="name">
-                                                @error('name')
-                                                    <div class="form-text text-danger">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                            <div class="col-sm-12 col-xl-6 mb-3">
-                                                <label for="price" class="form-label ">Giá gốc(vnđ) <span class="text-danger text-small">(*)</span></label>
-                                                <input type="text" name="price" class="form-control @error('price') 
+                                    @endisset
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12 col-xl-12 mb-3">
+                                            <input type="text" value="{{$product->id}}" name="product_id" hidden>
+                                            <label for="name" class="form-label">Tên thông số <span class="text-danger text-small">(*)</span></label>
+                                            <input type="text" class="form-control" 
+                                            name="name"
+                                            @isset($productSpecification)
+                                                value="{{$productSpecification->name}}"
+                                            @else
+                                                value="{{old('name')}}"
+                                            @endisset
+                                            autocomplete="name"
+                                            placeholder="Kích thước màn hình,bộ nhớ,..."
+                                            id="name">
+                                            @error('name')
+                                                <div class="form-text text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="col-sm-12 col-xl-12 mb-3">
+                                            <label for="value" class="form-label ">Giá trị thông số <span class="text-danger text-small">(*)</span></label>
+                                            <input type="text" name="value" class="form-control 
+                                            @error('value') 
                                                 is-invalid
-                                                @enderror"
-                                                id="price"
-                                                value="50000"
-    
-                                                @isset($product)
-                                                value="{{$product->price}}"
-                                                @endisset
-                                                placeholder="Nhập giá tiền (vd:300=300.000 vnđ)"
-                                                aria-describedby="price">
-                                                @error('price')
-                                                    <div class="form-text text-danger">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                            <div class="col-sm-12 col-xl-6 mb-3">
-                                                <label for="color_type" class="form-label">Màu sắc <span class="text-danger text-small">(*)</span></label>
-                                                <input type="text" class="form-control" 
-                                                name="color_type"
-                                                @isset($product)
-                                                value="{{$product->color_type}}"
-                                                @endisset
-                                                value="Vàng"
-                                                autocomplete="color_type"
-                                                placeholder="Màu đen,màu vàng,..."
-                                                id="color_type">
-                                                @error('color_type')
-                                                    <div class="form-text text-danger">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                            <div class="col-sm-12 col-xl-6 mb-3">
-                                                <label for="price" class="form-label ">Giá gốc(vnđ) <span class="text-danger text-small">(*)</span></label>
-                                                <input type="text" name="price" class="form-control @error('price') 
+                                            @enderror" id="value"
+                                            @isset($productSpecification)
+                                                value="{{$productSpecification->value}}"
+                                            @else
+                                                value="{{old('value')}}"
+                                            @endisset
+                                            autocomplete="value"
+                                            placeholder="Nhập tên thông số (vd:Công nghệ màn hình)"
+                                            aria-describedby="value">
+                                            @error('value')
+                                                <div class="form-text text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="col-sm-12 col-xl-12 mb-3">
+                                            <label for="position" class="form-label ">Thứ tự</label>
+                                            <input type="number" name="position" class="form-control
+                                            @error('position') 
                                                 is-invalid
-                                                @enderror"
-                                                id="price"
-                                                value="50000"
-    
-                                                @isset($product)
-                                                value="{{$product->price}}"
+                                            @enderror" id="position"
+                                            @isset($productSpecification)
+                                                value="{{$productSpecification->position}}"
+                                            @else
+                                                value="1"
+                                            @endisset
+                                            autocomplete="position"
+                                            placeholder="Nhập giá trị (VD:Dynamic AMOLED 2X)"
+                                            aria-describedby="position">
+                                            @error('position')
+                                                <div class="form-text text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="col-sm-12 col-xl-12 mb-3">
+                                            <label for="show_hide" class="form-label">Trạng thái (mặc định sẽ là Hiện)</label>
+                                            <select class="form-select" name="show_hide" 
+                                            @isset($productSpecification)
+                                                value="{{$productSpecification->show_hide}}"
+                                            @else
+                                                value="{{old('show_hide')}}"    
+                                            @endisset
+                                            autocomplete="show_hide"
+                                            id="show_hide">
+                                                <option value="1">Hiện</option>
+                                                <option value="0">Ẩn</option>
+                                            </select>    
+                                        </div>
+                                        <div class="col-sm-12 col-xl-12 mb-3">
+                                            <div class="d-flex justify-content-end">
+                                                @isset($productSpecification)
+                                                    <button type="submit" class="btn btn-primary me-2">Sửa</button>
+                                                    <a href="{{ route('specifi.create',['id' => $product->id]) }}">
+                                                        <button type="button" class="float-right btn btn-secondary me-2">Đóng</button>
+                                                    </a>                                            
+                                                @else
+                                                    @if($productSpecificationCount > 0)
+                                                        <a href="{{ route('varia.create',['id' => $product->id ]) }}">
+                                                            <button type="button" class="float-right btn btn-sm btn-secondary me-2">Màu sản phẩm</button>
+                                                        </a>                                            
+                                                        <a href="{{ route('product.index') }}">
+                                                            <button type="button" class="float-right btn btn-sm btn-secondary me-2">Đóng</button>
+                                                        </a>                                            
+                                                    @endif
+                                                    <button type="submit" class="btn @if($productSpecificationCount > 0) btn-sm @endif btn-primary me-2">Thêm</button>
                                                 @endisset
-                                                placeholder="Nhập giá tiền (vd:300=300.000 vnđ)"
-                                                aria-describedby="price">
-                                                @error('price')
-                                                    <div class="form-text text-danger">{{ $message }}</div>
-                                                @enderror
                                             </div>
                                         </div>
-                                        <div class="d-flex justify-content-end">
-                                            <button type="submit" class="btn btn-primary me-2">Thêm màu</button>
-                                            <button type="button" class="float-right btn btn-secondary me-2" data-bs-dismiss="modal">Đóng</button>
-                                        </div>
-                                    </form>
-                                    <div id="formColor"></div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-xl-8">
+                            <div class="bg-white rounded h-100 p-2 text-start">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Tên thông sô</th>
+                                                <th scope="col">Giá trị thông số</th>
+                                                <th scope="col">Vị trí</th>
+                                                <th scope="col">Ẩn Hiện</th>
+                                                <th scope="col" class="text-start" colspan="2">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @isset($productSpecifications)
+                                                @foreach ($productSpecifications as $productSpeci)
+                                                    <tr>
+                                                        <td ><p>{{$productSpeci->name}}</p></td>
+                                                        <td ><p>{{ $productSpeci->value }}</p></td>
+                                                        <td ><p>{{$productSpeci->position}}</p></td>
+                                                        <td ><p>{{$productSpeci->show_hide ? 'Ẩn' : 'Hiện'}}</p></td>
+                                                        <td>
+                                                            <div class="d-flex justify-content-evenly">
+                                                                <a class="@isset($productSpecification){{$productSpeci->id == $productSpecification->id ? 'd-none' : ''}} @endisset" href="{{ route('specifi.edit', ['id' => $productSpeci->id]) }}" title="Edit"  >
+                                                                        <button class="btn btn-sm btn-primary">
+                                                                            Edit
+                                                                        </button>
+                                                                    </a>
+                                                                <form action="{{ route('specifi.delete', ['id' => $productSpeci->id]) }}" method="POST">
+                                                                    @csrf
+                                                                    @method('delete')
+                                                                    <button class="btn btn-sm btn-danger" type="submit" title="Xóa">Xóa</button>
+                                                                </form>
+                                                            </div>
+                                                        </td>
+                                                @endforeach
+                                            @else
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Id</th>
+                                                        <th scope="col">Hình ảnh</th>
+                                                        <th scope="col">Màu sắc</th>
+                                                        <th scope="col">Giá</th>
+                                                        <th scope="col">Giá khuyến mãi</th>
+                                                        <th scope="col">Số lượng</th>
+                                                        <th scope="col"></th>
+                                                        <th scope="col" class="text-start" colspan="2">Action</th>
+                                                        <hr>
+                                                    </tr>
+                                                </thead>
+                                            @endisset
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -173,5 +188,4 @@
             </div>
         </div>
     </div>
-</div>
-
+@endsection
