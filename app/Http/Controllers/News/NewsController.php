@@ -9,7 +9,6 @@ use App\Models\CategoriesNews;
 use App\Http\Controllers\Controller;
 use App\Models\Tag;
 use App\Models\TagRelationNews;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class NewsController extends Controller
@@ -26,6 +25,20 @@ class NewsController extends Controller
         return view('layouts.admin.News.index',compact('news','tags','categories'));
     }
 
+    public function create(){
+        $news = News::all();
+        $tags = Tag::select('id', 'name')->get()->map(function ($tag) {
+            return [
+                'id' => $tag->id,
+                'text' => $tag->name,
+            ];
+        });
+        $tagJson = json_encode($tags);
+        $tagss = Tag::all();
+        $categories = CategoriesNews::all();
+        return view('layouts.admin.News.store',compact('news','tagJson','categories'));
+    }
+
     public function store(Request $request, News $news)
     {
         // dd($request->tag_id);
@@ -33,28 +46,33 @@ class NewsController extends Controller
             'title' => 'required|unique:'.News::class,
             'seo_keywords' => 'required|unique:news,seo_keywords',
             'author' => 'required',
+            'image_url' => 'required|mimes:jpg, png, jpeg, jfif, gif, svg|max:2048|dimensions:min_width=100,min_height=100,max_width=1080,max_height=1080',
             'categories_news_id' => 'required',
             'description' => 'required'
         ],[
             'title.required'=>'Vui lòng không bỏ trống trường này.',
             'title.unique'=>'Đã tồn tại tiêu đề này.',
+            'image_url.required'=>'Vui lòng không bỏ trống trường này.',
+            'image_url.image' => 'Chỉ cho phép file hình hoặc gif.',
+            'image_url.mimes' => 'Chỉ cho phép file có đuôi là jpg, png, jpeg, jfif.',
+            'image_url.max' => 'Chỉ cho phép kích thước tối đa 2048Kb.',
             'author.required'=>'Vui lòng không bỏ trống trường này.',
             'categories_news_id.required'=>'Vui lòng không bỏ trống trường này.',
             'description.required'=>'Vui lòng không bỏ trống trường này.',
         ]);
-    
         $file = $request->file('image_url'); // Lấy file từ request    
         if ($file) {
             // Tiếp tục xử lý hoặc trả về đường dẫn đã lưu
             $path = $file->store('images_news', 'public'); // Lưu file vào thư mục 'folder_name'
             $url = asset(Storage::url($path));
+            $news->image_path = $path;
+            $news->image_url = $url;
         }
         $news->title = $request->title;
         $news->seo_keywords = Str::slug($request->seo_keywords);
         $news->slug = Str::slug($request->title);
         $news->categories_news_id = $request->categories_news_id;
-        $news->image_path = $path;
-        $news->image_url = $url;
+        
         $news->description = $request->description;
         $news->author = $request->author;
         $news->date_create = now();
@@ -63,18 +81,17 @@ class NewsController extends Controller
         $news->user_id = auth()->user()->id;
         $news->save();
         if($news->id){
-            foreach ($request->tag_id as $tag ) {
-                # code...
-                $tagNews = new TagRelationNews;
-                // dd($tagNews);
-                $tagNews->news_id = $news->id;
-                $tagNews->tag_id = $tag;
+            foreach ($request->tag_id as $tag_id) {
+                $tag = new TagRelationNews();
+                $tag->news_id = $news->id;
+                $tag->tag_id = $tag_id;
+                $tag->save();
             }
         }
         return redirect()->route('news.index')->with('success', 'Thêm tin tức thành công');
     }
 
-    public function upload(Request $request){
+    public function uploadCk(Request $request){
         if($request->hasFile('upload')){
             $originName = $request->file('upload')->getClientOriginalName();
             $fileName = pathinfo($originName, PATHINFO_FILENAME);
@@ -90,19 +107,15 @@ class NewsController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
         //
+        $new = News::findOrFail($id);
+        $tagRelaNews = TagRelationNews::where('news_id',$id)->get(["id","tag_id","news_id"]);
+        $categories = CategoriesNews::all();
+        return view('layouts.admin.News.store',compact('new','tagRelaNews','categories'));
     }
 
     /**
@@ -113,41 +126,49 @@ class NewsController extends Controller
         //
         $news = News::findOrFail($id);
         $request->validate([
-            'title' => 'required|unique:'.News::class,
-            'seo_keywords' => 'required|unique:news,seo_keywords',
+            'title' => 'required|unique:'.News::class.',title,'.$id,
+            'seo_keywords' => 'required|unique:'.News::class.',seo_keywords,'.$id,
             'author' => 'required',
             'categories_news_id' => 'required',
             'description' => 'required'
         ],[
             'title.required'=>'Vui lòng không bỏ trống trường này.',
             'title.unique'=>'Đã tồn tại tiêu đề này.',
+            'seo_keywords.required'=>'Vui lòng không bỏ trống trường này.',
+            'seo_keywords.unique'=>'Đã tồn tại từ khóa SEO này.',
             'author.required'=>'Vui lòng không bỏ trống trường này.',
             'categories_news_id.required'=>'Vui lòng không bỏ trống trường này.',
             'description.required'=>'Vui lòng không bỏ trống trường này.',
         ]);
-    
+        
         $file = $request->file('image_url'); // Lấy file từ request    
         if ($file) {
             // Tiếp tục xử lý hoặc trả về đường dẫn đã lưu
             $path = $file->store('images_news', 'public'); // Lưu file vào thư mục 'folder_name'
             $url = asset(Storage::url($path));
+            $news->image_path = $path;
+            $news->image_url = $url;
         }
         $news->title = $request->title;
         $news->seo_keywords = Str::slug($request->seo_keywords);
         $news->slug = Str::slug($request->title);
         $news->categories_news_id = $request->categories_news_id;
         // $news->tag_id = $request->tag_id;
-        $news->image_path = $path;
-        $news->image_url = $url;
+        
         $news->description = $request->description;
         $news->author = $request->author;
-        $news->datetime_create = now();
         $news->show_hide = $request->show_hide;
         $news->user_id = auth()->user()->id;
-        $news->save();
-        return redirect()->route('news.index')->with('success', 'Thêm tin tức thành công');
+        $news->update();
+        return redirect()->route('news.index')->with('success', 'Cập nhật tin tức thành công');
     }
 
+    public function deleteTagRelaNews(string $id,string $news){
+        $news = News::find($news);
+        $tagRelaNews = TagRelationNews::findOrFail($id);
+        $tagRelaNews->delete();
+        return redirect()->route('news.edit',['id'=>$news->id])->with('success','Bỏ tag thành công!');
+    }
     /**
      * Remove the specified resource from storage.
      */
@@ -161,6 +182,6 @@ class NewsController extends Controller
         };
         Storage::delete('public/'. $path); // Xóa file
         $new->delete();
-        return redirect()->route('news.index')->with('success','Xóa sản phẩm thành công!');
+        return redirect()->route('news.index')->with('success','Xóa tin tức thành công!');
     }
 }

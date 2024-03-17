@@ -74,23 +74,17 @@ $modal = `  var myModal = new bootstrap.Modal(document.getElementById('addNewsMo
        <div class="bg-light text-center rounded p-4">
            <div class="d-flex align-items-center justify-content-between mb-4">
                <h6 class="mb-0">Tất cả tin tức</h6>
-               <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addNewsModal">
-                    <i class="fas fa-plus me-1"></i> Thêm tin tức
-                </button>
-            <!-- Modal -->
-            @include('layouts.admin.components.newsModal')
-            <!--End Modal -->
+               <a href="{{ route('news.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i> Thêm tin tức
+                </a>
            </div>
-           <div class="table-responsive" style="height: 100vh">
+           <div class="table-responsive" style="height: 90vh">
                <table class="table text-start align-middle table-bordered table-hover mb-0" >
                    <thead>
                        <tr class="text-dark">
                            <th scope="col">Tên tin tức</th>
                            <th scope="col">Danh mục</th>
-                           <th scope="col">Hình ảnh</th>
                            <th scope="col">Tác giả</th>
-                           {{-- <th scope="col">Slug</th> --}}
                            <th scope="col">Trạng thái</th>
                            <th scope="col" colspan="2">Action</th>
                        </tr>
@@ -100,7 +94,6 @@ $modal = `  var myModal = new bootstrap.Modal(document.getElementById('addNewsMo
                             <tr title="{{$new->title}}">
                                 <td>{{$new->title}}</td>
                                 <td>{{$new->category->name}}</td>
-                                <td><img src="{{ $new->image_url }}" loading="lazy" class="rounded" width="100" height="100" alt="{{ $new->image_url }}"/></td>
                                 <td>{{$new->author}}</td>
                                 <td>{{$new->show_hide ? 'Hiện' : 'Ẩn'}}</td>
                                 <td>

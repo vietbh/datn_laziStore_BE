@@ -17,8 +17,8 @@ return new class extends Migration
             $table->decimal('discount_price',10,2);
             $table->integer('discount_total');
             $table->integer('used_discount')->default(0);
-            $table->dateTime('start_date');
-            $table->dateTime('end_date');
+            $table->datetime('start_date');
+            $table->datetime('end_date');
             $table->boolean('show_hide')->default(true);
             $table->enum('status',['active','inactive'])->default('inactive');
             $table->timestamps();

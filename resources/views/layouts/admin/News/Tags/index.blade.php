@@ -1,17 +1,14 @@
 @extends('admin')
 @section('content')
-    @if (session('success')||session('error'))
-        @include('layouts.admin.components.alert')
-    @endif
-    @if($errors->any())
-        <script type="module">
-            var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
-                keyboard: false
-            })
-            myModal.toggle();
-            myModal.show();
-        </script>
-    @endif
+@if($errors->any())
+    <script type="module">
+        var myModal = new bootstrap.Modal(document.getElementById('addTagsModal'), {
+            keyboard: false
+        })
+        myModal.toggle();
+        myModal.show();
+    </script>
+@endif
     @php
         $modal = [
             'id'=>'addTagsModal',
@@ -114,26 +111,22 @@
                 @include('layouts.admin.components.comfirmModal')
                 <!--End Modal -->
             </div>
-            <div class="table-responsive" style="height: 100vh">
+            <div class="table-responsive" style="height: 90vh">
                 <table class="table text-start align-middle table-bordered table-hover mb-0">
                     <thead>
                         <tr class="text-dark">
-                            <th scope="col">Ngày tạo</th>
                             <th scope="col">Tên Tag</th>
-                            <th scope="col">Slug</th>
                             <th scope="col">Thứ tự</th>
                             <th scope="col">Trạng thái</th>
-                            <th scope="col" colspan="2">Action</th>
+                            <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @isset($tags)
                             @foreach ($tags as $tag)
                                 <tr title="{{$tag->name}}">
-                                    <td>{{$tag->created_at}}</td>
                                     <td>{{$tag->name}}</td>
-                                    <td>{{$tag->slug}}</td>
-                                    <td>{{$tag->index}}</td>
+                                    <td>{{$tag->position}}</td>
                                     <td>{{$tag->show_hide ? 'Hiện' : 'Ẩn'}}</td>
                                     <td>
                                         <div class="d-flex justify-content-evenly">

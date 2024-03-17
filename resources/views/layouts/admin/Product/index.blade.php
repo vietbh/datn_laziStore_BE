@@ -1,28 +1,5 @@
 @extends('admin')
 @section('content')
-
-@if (session('success') || session('error'))
-    @include('layouts.admin.components.alert')
-@endif
-@if($errors->any())
-    <script type="module"> 
-    var myModal = new bootstrap.Modal(document.getElementById('addProductModal'), {
-    keyboard: false
-    })
-    myModal.toggle();
-    myModal.show();
-    </script>
-@endif
-{{-- @isset($product)
-    <script type="module"> 
-        var myModal = new bootstrap.Modal(document.getElementById('addProductModal'), {
-        keyboard: false
-        })
-        myModal.toggle();
-        myModal.show();
-    </script>
-@endisset --}}
-
    <!-- Sale & Revenue Start -->
    <div class="container-fluid pt-4 px-4">
        <div class="row g-4">
@@ -71,30 +48,24 @@
     <div class="bg-light text-center rounded p-4">
         <div class="d-flex align-items-center justify-content-between mb-4">
             <h6 class="mb-0">Tất cả sản phẩm</h6>
-            <!-- Button trigger modal -->
-             {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
-                 Thêm sản phẩm
-            </button> --}}
             <a href="{{ route('product.create') }}" class="btn btn-primary">
                 Thêm sản phẩm
             </a>
-         <!-- Modal -->
-         {{-- @include('layouts.admin.components.proModal') --}}
-         <!--End Modal -->
         </div>
-        <div class="table-responsive" style="height: 100vh">
+        <div class="table-responsive" style="height: 90vh">
             <table class="table text-start align-middle table-bordered table-hover mb-0" >
                 <thead>
                     <tr class="text-dark">
                         <th scope="col">Tên sản phẩm</th>
                         <th scope="col">Danh mục</th>
                         <th scope="col" class="text-center">
-                            <div class="row">
+                            Số lượng màu
+                            {{-- <div class="row">
                                 <div class="col-sm-12 col-lg-3 p-0">Hình ảnh</div>
                                 <div class="col-sm-12 col-lg-3 p-0">Màu sắc</div>
                                 <div class="col-sm-12 col-lg-3 p-0">Giá bán</div>
                                 <div class="col-sm-12 col-lg-3 p-0">Số lượng</div>
-                            </div>
+                            </div> --}}
                         </th>
                         <th scope="col">Trạng thái</th>
                         <th scope="col">Action</th>
@@ -106,7 +77,8 @@
                          <td>{{$product->name}}</td>
                          <td>{{$product->category->name}}</td>
                         <td>
-                            @foreach ($product->variations as $variation)
+                            {{count($product->variations)}}
+                            {{-- @foreach ($product->variations as $variation)
                                 <div class="row p-2 text-center">
                                     <div class="col-sm-12 col-lg-3">
                                         <img src="{{ $variation->image_url }}" loading="lazy" class="rounded" width="100" height="100" alt="{{ $product->image_url }}"/>
@@ -121,7 +93,7 @@
                                         <p>{{number_format($variation->quantity)}} <span style="font-size: 14px">chiếc</span></p>
                                     </div>
                                 </div>
-                            @endforeach 
+                            @endforeach  --}}
                         </td>
                          <td>{{$product->show_hide ? 'Hiện':'Ẩn'}}</td>
                          <td>
@@ -139,7 +111,7 @@
                 </tbody>
             </table>
         </div>
-
+        {{ $products->links('pagination::bootstrap-5') }}
     </div>
     </div>
 <!-- Table Cate End -->

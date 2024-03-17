@@ -13,7 +13,7 @@
     <link rel="preconnect" href="{{ url('https://fonts.gstatic.com') }} " crossorigin>
     
     <!-- Icon Font Stylesheet -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Libraries Stylesheet -->
@@ -63,7 +63,8 @@
         <!-- Back to Top -->
         <button id="scrollToTop" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></button>
     </div>
-    
+</body>
+    @yield('modal')
     <!-- JavaScript Libraries -->
     <script src="{{ url('https://code.jquery.com/jquery-3.4.1.min.js') }} "></script>
     <script src="{{ asset('lib/chart/chart.min.js') }}"></script>
@@ -90,6 +91,5 @@
             }
         }, 2000);
     </script>
-</body>
-
+    @yield('js')
 </html>

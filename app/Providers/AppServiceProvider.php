@@ -21,8 +21,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Blade::withoutDoubleEncoding();
-        Blade::directive('datetime', function (string $expression) {
-            return "<?php echo ($expression)->format('m/d/Y H:i'); ?>";
+        Blade::directive('datetime', function ($expression) {
+            return "<?php echo ($expression)->format('YYYY-MM-DD');?>";
         });
     }
 }

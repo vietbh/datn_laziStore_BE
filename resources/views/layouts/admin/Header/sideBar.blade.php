@@ -23,11 +23,11 @@
             <a href="{{ route('delivery.index') }}" class="nav-item nav-link {{request()->routeIs('delivery.index') == 1 ? 'active':''}}"><i class="fa fa-truck me-2"></i>Vận chuyển</a>
             <a href="{{ route('comment.product.index') }}" class="nav-item nav-link text-nowrap {{request()->routeIs('comment.product.index') == 1 ? 'active':''}}"><i class="fa fa-comments me-2"></i>Bình luận sản phẩm</a>
             <a href="{{ route('comment.news.index') }}" class="nav-item nav-link {{request()->routeIs('comment.news.index') == 1 ? 'active':''}}"><i class="fa fa-comments me-2"></i>Bình luận tin tức</a>
-            <a href="{{ route('brand.index') }}" class="nav-item nav-link {{request()->routeIs('brand.index') == 1 ? 'active':''}}"><i class="fa fa-laptop me-2"></i>Thương hiệu</a>
-            <a href="{{ route('product.cat.index') }}" class="nav-item nav-link text-nowrap {{request()->routeIs('product.cat.index') == 1 ? 'active':''}}"><i class="fa fa-laptop me-2"></i>Danh mục sản phẩm</a>
+            <a href="{{ route('brand.index') }}" class="nav-item nav-link {{request()->routeIs('brand.index') == 1 ? 'active':''}}">Thương hiệu</a>
+            <a href="{{ route('product.cat.index') }}" class="nav-item nav-link text-nowrap {{request()->routeIs('product.cat.index') == 1 ? 'active':''}}">Danh mục sản phẩm</a>
             <a href="{{ route('product.index') }}" class="nav-item nav-link {{request()->routeIs('product.index') == 1 ? 'active':''}}"><i class="fa fa-laptop me-2"></i>Sản phẩm</a>
-            <a href="{{ route('news.cat.index') }}" class="nav-item nav-link text-nowrap {{request()->routeIs('news.cat.index') == 1 ? 'active':''}}"><i class="fa fa-newspaper me-2"></i>Danh mục tin tức</a>
-            <a href="{{ route('news.tag.index') }}" class="nav-item nav-link {{request()->routeIs('news.tag.index') == 1 ? 'active':''}}"><i class="fa fa-newspaper me-2"></i>Tag</a>
+            <a href="{{ route('news.cat.index') }}" class="nav-item nav-link text-nowrap {{request()->routeIs('news.cat.index') == 1 ? 'active':''}}">Danh mục tin tức</a>
+            <a href="{{ route('news.tag.index') }}" class="nav-item nav-link {{request()->routeIs('news.tag.index') == 1 ? 'active':''}}">Tag</a>
             <a href="{{ route('news.index') }}" class="nav-item nav-link {{request()->routeIs('news.index') == 1 ? 'active':''}}"><i class="fa fa-newspaper me-2"></i>Tin tức</a>
             <a href="{{ route('contact.index') }}" class="nav-item nav-link {{request()->routeIs('contact.index') == 1 ? 'active':''}}"><i class="far fa-question-circle me-2"></i>Tư vấn</a>
             <a href="{{ route('policy.index') }}" class="nav-item nav-link {{request()->routeIs('policy.index') == 1 ? 'active':''}}"><i class="fas fa-certificate me-2"></i></i>Chính sách</a>

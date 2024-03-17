@@ -1,8 +1,5 @@
 @extends('admin')
 @section('content')
-    @if (session('success')||session('error'))
-        @include('layouts.admin.components.alert')
-    @endif
     @if($errors->any())
         <script type="module"> 
             var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
@@ -73,9 +70,6 @@
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoriesModal">
                     Thêm danh mục
                 </button>
-            <!-- Modal -->
-            @include('layouts.admin.components.catProModal')
-            <!--End Modal -->
            </div>
            <div class="table-responsive" style="height: 100vh">
                <table class="table text-start align-middle table-bordered table-hover mb-0" >
@@ -123,4 +117,9 @@
    </div>
    <!-- Table Cate End -->
 
+@endsection
+@section('modal')
+    <!-- Modal -->
+    @include('layouts.admin.components.catProModal')
+    <!--End Modal -->
 @endsection

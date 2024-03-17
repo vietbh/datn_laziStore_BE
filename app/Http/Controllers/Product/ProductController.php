@@ -21,20 +21,11 @@ class ProductController extends Controller
     public function index()
     {
         //
-        $products = Product::all();
+        $products = Product::paginate(10);
         $categories = CategoriesProduct::all();
         $brands = Brands::all();
-        $data = compact('products','categories','brands');
-        $productVariationsCreate = ProductVariation::where('product_id',null)->get();
-        foreach ($productVariationsCreate as $productVariation) {
-            $path = $productVariation->image_path; // Đường dẫn tới file cần xóa trong thư mục 'public'
-            if($path){
-                if(!Storage::exists('public/'. $path)){
-                    return redirect()->route('product.index')->with('error','Xóa hình ảnh không thành công!');
-                };
-                $productVariation->delete();
-            }
-        }
+        $type = array('hot' => 'type_hot','new'=> 'type_new');
+        $data = compact('products','categories','brands','type');
         return view('layouts.admin.Product.index',$data);
     }
     public function create()

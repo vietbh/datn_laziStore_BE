@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Tag extends Model
 {
     use HasFactory;
+    
+    protected $primaryKey = 'id';
+    protected $fillable = ['name','position','show_hide'];
 }

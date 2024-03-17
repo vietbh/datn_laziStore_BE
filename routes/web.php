@@ -14,8 +14,8 @@ use App\Http\Controllers\Product\CategoriesProductController;
 use App\Http\Controllers\Product\BrandController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\News\CategoriesNewsController;
-use App\Http\Controllers\News\TagNewsController;
 use App\Http\Controllers\News\NewsController;
+use App\Http\Controllers\News\TagController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\ProductHotController;
@@ -24,7 +24,6 @@ use App\Http\Controllers\ProductVariationController;
 use App\Http\Controllers\RoleAdminController;
 use App\Http\Controllers\SlideAdsController;
 use App\Http\Controllers\UserGuestController;
-use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Support\Facades\Route;
 
 // Tin tuc
@@ -58,10 +57,16 @@ Route::middleware(['auth','role:0'])->group(function () {
     Route::get('/lazi-store-admin/thong-ke',[ChartController::class, 'index'])->name('chart.index');
     // Khách hàng
     Route::get('/lazi-store-admin/khach-hang',[UserGuestController::class, 'index'])->name('guest.index');
+    Route::get('/lazi-store-admin/khach-hang-detail/{id}',[UserGuestController::class, 'show'])->name('guest.show');
     // Đơn hàng
     Route::get('/lazi-store-admin/don-hang',[PaymentController::class, 'index'])->name('payment.index');
+    Route::get('/lazi-store-admin/don-hang-detail/{id}',[PaymentController::class, 'show'])->name('payment.show');
     // Mã giảm giá
     Route::get('/lazi-store-admin/ma-giam-gia',[DiscountController::class, 'index'])->name('discount.index');
+    Route::post('/lazi-store-admin/ma-giam-gia-them',[DiscountController::class, 'store'])->name('discount.store');
+    Route::get('/lazi-store-admin/ma-giam-gia-edit/{id}',[DiscountController::class, 'edit'])->name('discount.edit');
+    Route::put('/lazi-store-admin/ma-giam-gia-edit/{id}',[DiscountController::class, 'update'])->name('discount.update');
+    Route::delete('/lazi-store-admin/ma-giam-gia-xoa/{id}',[DiscountController::class, 'destroy'])->name('discount.delete');
     // Sản phẩm hot
     Route::get('/lazi-store-admin/san-pham-hot',[ProductHotController::class, 'index'])->name('hot.index');
     // Vận chuyển
@@ -74,6 +79,10 @@ Route::middleware(['auth','role:0'])->group(function () {
     Route::get('/lazi-store-admin/tu-van',[ContactController::class, 'index'])->name('contact.index');
     // Chính sách
     Route::get('/lazi-store-admin/chinh-sach',[PolicyController::class, 'index'])->name('policy.index');
+    Route::post('/lazi-store-admin/chinh-sach-them',[PolicyController::class, 'store'])->name('policy.store');
+    Route::get('/lazi-store-admin/chinh-sach-edit/{id}',[PolicyController::class, 'edit'])->name('policy.edit');
+    Route::put('/lazi-store-admin/chinh-sach-edit/{id}',[PolicyController::class, 'update'])->name('policy.update');
+    Route::delete('/lazi-store-admin/chinh-sach-xoa/{id}',[PolicyController::class, 'destroy'])->name('policy.delete');
     // Slide quảng cáo
     Route::get('/lazi-store-admin/slide-quang-cao',[SlideAdsController::class, 'index'])->name('slide.index');
     // Vai trò quản trị
@@ -116,18 +125,20 @@ Route::middleware(['auth','role:0'])->group(function () {
     Route::delete('/lazi-store-admin/danh-muc-san-pham/xoa/{id}',[CategoriesProductController::class, 'destroy'])->name('product.cat.delete');
     //Iin tức
     Route::get('/lazi-store-admin/tin-tuc',[NewsController::class, 'index'])->name('news.index');
-    Route::post('/lazi-store-admin/tin-tuc/them',[NewsController::class, 'store'])->name('news.store');
-    Route::post('/lazi-store-admin/tin-tuc/hinh-anh-mo-ta',[NewsController::class, 'upload'])->name('ckeditor.news.upload');
-    Route::get('/lazi-store-admin/tin-tuc/edit/{id}',[NewsController::class, 'edit'])->name('news.edit');
-    Route::put('/lazi-store-admin/tin-tuc/edit/{id}',[NewsController::class, 'update'])->name('news.update');
-    Route::delete('/lazi-store-admin/tin-tuc/xoa/{id}',[NewsController::class, 'destroy'])->name('news.delete');
+    Route::get('/lazi-store-admin/tin-tuc-them',[NewsController::class, 'create'])->name('news.create');
+    Route::post('/lazi-store-admin/tin-tuc-them',[NewsController::class, 'store'])->name('news.store');
+    Route::post('/lazi-store-admin/tin-tuc/hinh-anh-mo-ta',[NewsController::class, 'uploadCk'])->name('ckeditor.news.upload');
+    Route::get('/lazi-store-admin/tin-tuc-edit/{id}',[NewsController::class, 'edit'])->name('news.edit');
+    Route::put('/lazi-store-admin/tin-tuc-edit/{id}',[NewsController::class, 'update'])->name('news.update');
+    Route::delete('/lazi-store-admin/tag-tin-tuc-xoa/{id}/{news}',[NewsController::class, 'deleteTagRelaNews'])->name('news.remove');
+    Route::delete('/lazi-store-admin/tin-tuc-xoa/{id}',[NewsController::class, 'destroy'])->name('news.delete');
     //Tag tin tức
-    Route::get('/lazi-store-admin/tag-tin-tuc',[TagNewsController::class, 'index'])->name('news.tag.index');
-    Route::post('/lazi-store-admin/tag-tin-tuc/them',[TagNewsController::class, 'store'])->name('news.tag.store');
-    Route::get('/lazi-store-admin/tag-tin-tuc/edit/{id}',[TagNewsController::class, 'edit'])->name('news.tag.edit');
-    Route::put('/lazi-store-admin/tag-tin-tuc/edit/{id}',[TagNewsController::class, 'update'])->name('news.tag.update');
-    Route::get('/lazi-store-admin/tag-tin-tuc/xoa/{id}',[TagNewsController::class, 'show'])->name('news.tag.show');
-    Route::delete('/lazi-store-admin/tag-tin-tuc/xoa/{id}',[TagNewsController::class, 'destroy'])->name('news.tag.delete');
+    Route::get('/lazi-store-admin/tag-tin-tuc',[TagController::class, 'index'])->name('news.tag.index');
+    Route::post('/lazi-store-admin/tag-tin-tuc-them',[TagController::class, 'store'])->name('news.tag.store');
+    Route::get('/lazi-store-admin/tag-tin-tuc-edit/{id}',[TagController::class, 'edit'])->name('news.tag.edit');
+    Route::put('/lazi-store-admin/tag-tin-tuc-edit/{id}',[TagController::class, 'update'])->name('news.tag.update');
+    Route::get('/lazi-store-admin/tag-tin-tuc-xoa/{id}',[TagController::class, 'show'])->name('news.tag.show');
+    Route::delete('/lazi-store-admin/tag-tin-tuc-xoa/{id}',[TagController::class, 'destroy'])->name('news.tag.delete');
     //Danh mục tin tức
     Route::get('/lazi-store-admin/danh-muc-tin-tuc',[CategoriesNewsController::class, 'index'])->name('news.cat.index');
     Route::post('/lazi-store-admin/danh-muc-tin-tuc/them',[CategoriesNewsController::class, 'store'])->name('news.cat.store');

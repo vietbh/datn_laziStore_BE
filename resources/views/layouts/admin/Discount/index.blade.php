@@ -1,27 +1,23 @@
 @extends('admin')
 @section('content')
-    @if (session('success'))
-        @include('layouts.admin.components.alert')
-    @endif
-    @error('title')
+@if($errors->any())
     <script type="module"> 
-            var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
-            keyboard: false
-            })
-            myModal.toggle();
-            myModal.show();
+        let myModal = new bootstrap.Modal(document.getElementById('addDiscModal'), {
+        keyboard: false
+        })
+        myModal.toggle();
+        myModal.show();
     </script>
-    @enderror
-    
-    @if (isset($category))
+@endif
+@isset($discount)
     <script type="module"> 
-            var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
-            keyboard: false
-            })
-            myModal.toggle();
-            myModal.show();
+        let myModal = new bootstrap.Modal(document.getElementById('addDiscModal'), {
+        keyboard: false
+        })
+        myModal.toggle();
+        myModal.show();
     </script>
-    @endif
+@endisset
    <!-- Sale & Revenue Start -->
    <div class="container-fluid pt-4 px-4">
        <div class="row g-4">
@@ -71,47 +67,54 @@
            <div class="d-flex align-items-center justify-content-between mb-4">
                <h4 class="mb-0">Danh sách mã giảm giá</h4>
                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoriesModal">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDiscModal">
                     Thêm mã giảm giá
                 </button>
-            <!-- Modal -->
-            {{-- @include('layouts.admin.components.catProModal') --}}
-            <!--End Modal -->
            </div>
-           <div class="table-responsive" style="height: 100vh">
+           <div class="table-responsive" style="height: 90vh">
                <table class="table text-start align-middle table-bordered table-hover mb-0" >
                    <thead>
                        <tr class="text-dark">
-                           <th scope="col"><input class="form-check-input" type="checkbox"></th>
-                           <th scope="col">Ngày tạo</th>
-                           <th scope="col">Tên danh mục</th>
-                           <th scope="col">Slug</th>
-                           <th scope="col">Thứ tự</th>
+                           <th scope="col">Mã giảm giá</th>
+                           <th scope="col">Số lượng</th>
+                           <th scope="col">Status</th>
+                           <th scope="col">Thời gian</th>
                            <th scope="col">Trạng thái</th>
                            <th scope="col" colspan="2">Action</th>
                        </tr>
                    </thead>
                    <tbody>
-                    {{-- @foreach ($categories as $category)
-                        <tr>
-                            <td><input class="form-check-input" type="checkbox"></td>
-                            <td>{{$category->created_at}}</td>
-                            <td>{{$category->title}}</td>
-                            <td>{{$category->slug}}</td>
-                            <td>{{$category->index}}</td>
-                            <td>{{$category->show_hide=='show'?'Hiện':'Ẩn'}}</td>
-                            <td>
-                            <div class="d-flex justify-content-evenly">
-                                <a class="btn btn-sm btn-primary" href="{{ route('product.cat.edit', ['id' => $category->id]) }}">Edit</a>
-                                <form action="{{ route('product.cat.delete', ['id' => $category->id]) }}" method="POST">
-                                    @csrf
-                                    @method('delete')
-                                    <button class="btn btn-sm btn-danger" type="submit">Xóa</button>
-                                </form>
-                            </div>
-                            </td>
-                        </tr>
-                    @endforeach                       --}}
+                    @isset($discounts)
+                        @foreach ($discounts as $dis)
+                            <tr>
+                                <td>{{$dis->discount_code}}</td>
+                                <td>{{$dis->discount_total}}</td>
+                                <td class="text-uppercase">{{$dis->status}}</td>
+                                <td>
+                                    @php
+                                        $startDateTime = Carbon\Carbon::parse($dis->start_date);
+                                        $endDateTime = Carbon\Carbon::parse($dis->end_date);
+                                        $currentDate = Carbon\Carbon::now();
+                                        $remainingTime = $currentDate->diff($endDateTime);
+                                    @endphp
+                                    <div class="d-flex p-1">
+                                        <p class=" fw-bold">Còn lại {{ $remainingTime->days.' ngày'}} {{$remainingTime->h == 0 ? '' : '- '.$remainingTime->h.' giờ'}} </p>
+                                    </div>
+                                </td>
+                                <td>{{$dis->show_hide ? 'Hiện' : 'Ẩn'}}</td>
+                                <td>
+                                <div class="d-flex justify-content-evenly">
+                                    <a class="btn btn-sm btn-primary" href="{{ route('discount.edit', ['id' => $dis->id]) }}">Edit</a>
+                                    <form action="{{ route('discount.delete', ['id' => $dis->id]) }}" method="POST">
+                                        @csrf
+                                        @method('delete')
+                                        <button class="btn btn-sm btn-danger" type="submit">Xóa</button>
+                                    </form>
+                                </div>
+                                </td>
+                            </tr>
+                        @endforeach                      
+                    @endisset
                    </tbody>
                </table>
            </div>
@@ -119,5 +122,9 @@
        </div>
    </div>
    <!-- Table Cate End -->
-
+@endsection
+@section('modal')
+    <!-- Modal -->
+        @include('layouts.admin.components.discountModal')
+    <!--End Modal -->
 @endsection
