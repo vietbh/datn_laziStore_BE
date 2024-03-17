@@ -71,6 +71,7 @@ Route::middleware(['auth','role:0'])->group(function () {
     Route::get('/lazi-store-admin/san-pham-hot',[ProductHotController::class, 'index'])->name('hot.index');
     // Vận chuyển
     Route::get('/lazi-store-admin/van-chuyen',[DeliveryController::class, 'index'])->name('delivery.index');
+    
     // Bình luận sản phẩm
     Route::get('/lazi-store-admin/binh-luan-san-pham',[CommentProductController::class, 'index'])->name('comment.product.index');
     // Bình luận tin tức
@@ -85,6 +86,10 @@ Route::middleware(['auth','role:0'])->group(function () {
     Route::delete('/lazi-store-admin/chinh-sach-xoa/{id}',[PolicyController::class, 'destroy'])->name('policy.delete');
     // Slide quảng cáo
     Route::get('/lazi-store-admin/slide-quang-cao',[SlideAdsController::class, 'index'])->name('slide.index');
+    Route::post('/lazi-store-admin/slide-quang-cao-them',[SlideAdsController::class, 'store'])->name('slide.store');
+    Route::get('/lazi-store-admin/slide-quang-cao-edit/{id}',[SlideAdsController::class, 'edit'])->name('slide.edit');
+    Route::put('/lazi-store-admin/slide-quang-cao-edit/{id}',[SlideAdsController::class, 'update'])->name('slide.update');
+    Route::delete('/lazi-store-admin/slide-quang-cao-xoa/{id}',[SlideAdsController::class, 'destroy'])->name('slide.delete');
     // Vai trò quản trị
     Route::get('/lazi-store-admin/vai-tro-quan-tri',[RoleAdminController::class, 'index'])->name('role.index');
     // Tới cửa hàng

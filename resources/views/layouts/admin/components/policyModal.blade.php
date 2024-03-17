@@ -63,7 +63,7 @@
                                     @enderror
                                 </div>
                                 <div class="mb-3">
-                                    <label for="position" class="form-label">Thứ tự của danh mục (Mặc định là 1)</label>
+                                    <label for="position" class="form-label">Thứ tự(Mặc định là 1)</label>
                                     <input type="number" name="position" class="form-control @error('position')invalid @enderror" 
                                     @isset($policy)
                                         value="{{$policy->position}}"

@@ -1,17 +1,17 @@
 
-<div class="modal fade" id="addCategoriesModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="addBrandsModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">
-                @isset($category)
-                    Sửa danh mục sản phẩm {{$category->name}}
+                @isset($brand)
+                    Sửa danh mục sản phẩm {{$brand->name}}
                 @else
                     Thêm danh mục sản phẩm
                 @endisset
             </h5>
-            @isset($category)
-                <a href="{{ route('product.cat.index') }}" class="btn-close" aria-label="Close">
+            @isset($brand)
+                <a href="{{ route('brand.index') }}" class="btn-close" aria-label="Close">
                 </a>
             @else
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -23,14 +23,14 @@
                     <div class="col-sm-12 col-xl-12">
                         <div class="bg-light rounded h-100 p-4 text-start">
                             <form 
-                            @isset($category)
-                                action="{{ route('product.cat.update',['id'=>$category->id]) }}"
+                            @isset($brand)
+                                action="{{ route('brand.update',['id'=>$brand->id]) }}"
                             @else
-                                action="{{ route('product.cat.store') }}"
+                                action="{{ route('brand.store') }}"
                             @endisset
                             method="POST">
                                 @csrf
-                                @isset($category)
+                                @isset($brand)
                                     @method('put')
                                 @else
                                     @method('post')
@@ -43,8 +43,8 @@
                                     is-invalid
                                     @enderror" 
                                     id="name"
-                                    @isset($category)
-                                        value="{{$category->name}}"
+                                    @isset($brand)
+                                        value="{{$brand->name}}"
                                     @endisset
                                     placeholder="Nhập tên của danh mục (vd:Đồng hồ,Laptop,...)"
                                     autocomplete="name"
@@ -54,10 +54,25 @@
                                     @enderror
                                 </div>
                                 <div class="mb-3">
-                                    <label for="position" class="form-label">Thứ tự của danh mục (Mặc định là 1)</label>
+                                    <label for="country" class="form-label">Quốc gia(*)</label>
+                                    <input type="text" name="country" class="form-control" 
+                                    @isset($brand)
+                                        value="{{$brand->country}}"
+                                    @else
+                                        value="{{old('country')}}"
+                                    @endisset
+                                    placeholder="Nhập thứ tự hiện của danh mục"
+                                    autocomplete="country"
+                                    id="country">   
+                                    @error('country')
+                                    <div class="form-text text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label for="position" class="form-label">Thứ tự (Mặc định là 1)</label>
                                     <input type="number" name="position" class="form-control" 
-                                    @isset($category)
-                                        value="{{$category->position}}"
+                                    @isset($brand)
+                                        value="{{$brand->position}}"
                                     @else
                                         value="{{old('position')}}"
                                     @endisset
@@ -69,27 +84,10 @@
                                     @enderror
                                 </div>
                                 <div class="mb-3">
-                                    <label for="parent_id" class="form-label">Danh mục cha</label>
-                                    <select class="form-select" 
-                                    name="parent_id" 
-                                    @isset($category)
-                                        value="{{$category->parent_category_id}}"
-                                    @endisset
-                                    autocomplete="parent_id"
-                                    id="parent_id">
-                                        <option value='' disabled selected>Chọn danh mục cha</option>
-                                        @isset($categories_parent)
-                                            @foreach ($categories_parent as $category_parent)
-                                                <option value="{{$category_parent->id}}">{{$category_parent->name}}</option>
-                                            @endforeach
-                                        @endisset
-                                    </select>
-                                </div>
-                                <div class="mb-3">
                                     <label for="show_hide" class="form-label">Trạng thái (mặc định sẽ là Hiện)</label>
                                     <select class="form-select" name="show_hide" 
-                                    @isset($category)
-                                        value="{{$category->show_hide}}"
+                                    @isset($brand)
+                                        value="{{$brand->show_hide}}"
                                     @endisset
                                     id="show_hide">
                                         <option value="1">Hiện</option>
@@ -98,14 +96,14 @@
                                 </div>
                                 <div class="mb-3 float-end">
                                     <button type="submit" class="btn btn-primary">
-                                        @isset($category)
+                                        @isset($brand)
                                             Sửa
                                         @else
                                             Thêm mới
                                         @endisset
                                     </button>
-                                    @isset($category)
-                                        <a href="{{ route('product.cat.index') }}" class="btn btn-danger">
+                                    @isset($brand)
+                                        <a href="{{ route('brand.index') }}" class="btn btn-danger">
                                             Đóng
                                         </a>
                                     @else

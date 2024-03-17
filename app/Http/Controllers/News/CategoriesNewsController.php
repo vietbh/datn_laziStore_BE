@@ -27,20 +27,20 @@ class CategoriesNewsController extends Controller
     {
         //
         $request->validate([
-            'name' => 'required|unique:categories_news,name',
-            'index' =>'required|numeric|min:1|max:999',
+            'name' => 'required|unique:'.CategoriesNews::class,
+            'position' =>'required|numeric|min:1|max:999',
         ],[
             'name.required'=>'Không được để trống trường này!',
             'name.unique'=>'Đã tồn tại danh mục này rồi!',
-            'index.required'=>'Không được để trống trường này!',
-            'index.numeric'=>'Vui lòng nhập số!',
-            'index.min'=>'Vui lòng nhập số lớn hơn hoặc bằng 1 !',
-            'index.max'=>'Vui lòng nhập số nhỏ hơn 999 !',
+            'position.required'=>'Không được để trống trường này!',
+            'position.numeric'=>'Vui lòng nhập số!',
+            'position.min'=>'Vui lòng nhập số lớn hơn hoặc bằng 1 !',
+            'position.max'=>'Vui lòng nhập số nhỏ hơn 999 !',
         ]);
         $slug = Str::slug($request->name); 
         $categoriesNews->name = $request->name;
         $categoriesNews->slug = $slug;
-        $categoriesNews->index = $request->index;
+        $categoriesNews->position = $request->position;
         $categoriesNews->parent_category_id = $request->parent_id;
         $categoriesNews->show_hide = $request->show_hide;
         $categoriesNews->save();
@@ -82,21 +82,21 @@ class CategoriesNewsController extends Controller
         //
         $category = CategoriesNews::findOrFail($id);
         $request->validate([
-            'name' => 'required|unique:categories_news,name,'.$id,
-            'index' => 'required|min:1|max:999',
+            'name' => 'required|unique:'.CategoriesNews::class.',name,'.$id,
+            'position' => 'required|min:1|max:99999',
         ],[
             'name.required'=>'Không được để trống trường này!',
             'name.unique'=>'Đã tồn tại danh mục này rồi!',
-            'index.required'=>'Không được để trống trường này!',
-            'index.numeric'=>'Vui lòng nhập số!',
-            'index.min'=>'Vui lòng nhập số lớn hơn hoặc bằng 1 !',
-            'index.max'=>'Vui lòng nhập số nhỏ hơn 999 !',
+            'position.required'=>'Không được để trống trường này!',
+            'position.numeric'=>'Vui lòng nhập số!',
+            'position.min'=>'Vui lòng nhập số lớn hơn hoặc bằng 1 !',
+            'position.max'=>'Vui lòng nhập số nhỏ hơn 99999 !',
 
         ]);
         $slug = Str::slug($request->name); 
         $category->name = $request->name;
         $category->slug = $slug;
-        $category->index = $request->index;
+        $category->position = $request->position;
         $category->parent_category_id = $request->parent_id;
         $category->show_hide = $request->show_hide;
         $category->update();

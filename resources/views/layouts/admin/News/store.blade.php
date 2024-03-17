@@ -105,7 +105,7 @@
                                                         </tr>
                                                       </thead>
                                                       <tbody>
-                                                        @foreach ($tagRelaNews as $tagRelaNew)
+                                                        @foreach ($new->tags as $tagRelaNew)
                                                             <tr>
                                                                 <td>{{$tagRelaNew->tag->name}}</td>
                                                                 <td>
@@ -120,21 +120,23 @@
                                                 </table>
                                             </div>
                                         </div>
-                                    @else
-                                        <div class="col-sm-12 col-xl-12 mb-3">
-                                            <label for="tag_id" class="form-label ">Tag <span class="text-danger text-small">(*)</span></label>
-                                            <!-- Multiple Select -->
-                                            <select class="js-example-basic-multiple" name="tag_id[]" multiple="multiple">
-                                            </select>
-                                            @error('tag_id')
-                                                <div class="form-text text-danger">{{ $message }}</div>
-                                            @enderror 
-                                            @include('layouts.admin.News.multiSelect')
-                                        </div>
+                                    
                                     @endisset
+                                    <div class="col-sm-12 col-xl-12 mb-3">
+                                        <label for="tag_id" class="form-label ">Tag <span class="text-danger text-small">(*)</span></label>
+                                        <!-- Multiple Select -->
+                                        <select class="js-example-basic-multiple" name="tag_id[]" multiple="multiple">
+                                        </select>
+                                        @error('tag_id')
+                                            <div class="form-text text-danger">{{ $message }}</div>
+                                        @enderror 
+                                    </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <div class="col-sm-12 col-xl-6 mb-3">
+                                    <div class="col-sm-12 col-xl-12 mb-3">
+                                        @isset($new)
+                                            <div class="mb-3"><img class="img_fluid" width='250' src="{{$new->image_url}}" alt=""></div>
+                                        @endisset
                                         <label for="image_url" class="form-label ">Chọn hình ảnh <span class="text-danger text-small">(*)</span></label>
                                         <div class="d-flex justify-content-around">
                                             <input type="file" name="image_url"
@@ -153,7 +155,7 @@
                                             <button type="button" class="btn btn-secondary ms-1">Thêm</button>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-xl-6 mb-3">
+                                    <div class="col-sm-12 col-xl-12 mb-3">
                                         <label for="show_hide" class="form-label">Trạng thái (mặc định sẽ là Hiện)</label>
                                         <select class="form-select" name="show_hide" 
                                         @isset($new)
@@ -197,5 +199,6 @@
 </div>
 @endsection
 @section('js')
+@include('layouts.admin.News.multiSelect')
 @include('layouts.admin.News.ckeditor')
 @endsection

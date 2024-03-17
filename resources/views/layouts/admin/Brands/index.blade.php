@@ -1,36 +1,14 @@
 @extends('admin')
 @section('content')
-    
-        
-    @if (session('success'))
-        @include('layouts.admin.components.alert')
-        <script type="module">
-            setTimeout(() => {
-                var myAlert = document.getElementById('alertSuccess')
-                var bsAlert = new bootstrap.Alert(myAlert)
-                bsAlert.close()
-            }, 3000);
-        </script>
+    @if($errors->any())
+        <script type="module"> 
+            var myModal = new bootstrap.Modal(document.getElementById('addBrandsModal'), {
+            keyboard: false
+            })
+            myModal.toggle();
+            myModal.show();
+        </script> 
     @endif
-    
-    @error('name')
-    <script type="module"> 
-        var myModal = new bootstrap.Modal(document.getElementById('addBrandsModal'), {
-        keyboard: false
-        })
-        myModal.toggle();
-        myModal.show();
-    </script> 
-    @enderror
-    @error('country')
-    <script type="module"> 
-        var myModal = new bootstrap.Modal(document.getElementById('addBrandsModal'), {
-        keyboard: false
-        })
-        myModal.toggle();
-        myModal.show();
-    </script>
-    @enderror
     
     @isset($brand)
     <script type="module"> 
@@ -40,7 +18,7 @@
             myModal.toggle();
             myModal.show();
     </script>
-    @endif
+    @endisset
    <!-- Sale & Revenue Start -->
    <div class="container-fluid pt-4 px-4">
        <div class="row g-4">
@@ -91,17 +69,13 @@
                <h6 class="mb-0">Tất cả thương hiệu</h6>
                <!-- Button trigger modal -->
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBrandsModal">
-                    Thêm 
+                    Thêm thương hiệu
                 </button>
-            <!-- Modal -->
-            @include('layouts.admin.components.brandModal')
-            <!--End Modal -->
            </div>
-           <div class="table-responsive" style="height: 100vh">
+           <div class="table-responsive" style="height: 65vh">
                <table class="table text-start align-middle table-bordered table-hover mb-0" >
                    <thead>
                        <tr class="text-dark">
-                           <th scope="col"><input class="form-check-input" type="checkbox"></th>
                            <th scope="col">Ngày tạo</th>
                            <th scope="col">Tên thương hiệu</th>
                            <th scope="col">Quốc gia</th>
@@ -110,17 +84,16 @@
                        </tr>
                    </thead>
                    <tbody>
-                    @foreach ($brands as $brand)
+                    @foreach ($brands as $bra)
                         <tr>
-                            <td><input class="form-check-input" type="checkbox"></td>
-                            <td>{{$brand->created_at}}</td>
-                            <td>{{$brand->name}}</td>
-                            <td>{{$brand->country}}</td>
-                            <td>{{$brand->show_hide ? 'Hiện':'Ẩn'}}</td>
+                            <td>{{$bra->name}}</td>
+                            <td>{{$bra->country}}</td>
+                            <td>{{$bra->position}}</td>
+                            <td>{{$bra->show_hide ? 'Hiện':'Ẩn'}}</td>
                             <td>
                             <div class="d-flex justify-content-evenly">
-                                <a class="btn btn-sm btn-primary" href="{{ route('brand.edit', ['id' => $brand->id]) }}">Edit</a>
-                                <form action="{{ route('brand.delete', ['id' => $brand->id]) }}" method="POST">
+                                <a class="btn btn-sm btn-primary" href="{{ route('brand.edit', ['id' => $bra->id]) }}">Edit</a>
+                                <form action="{{ route('brand.delete', ['id' => $bra->id]) }}" method="POST">
                                     @csrf
                                     @method('delete')
                                     <button class="btn btn-sm btn-danger" type="submit">Xóa</button>
@@ -131,19 +104,16 @@
                     @endforeach                      
                    </tbody>
                </table>
-           </div>
-           
+            </div>
+            <div class="">
+                {{ $brands->links('pagination::bootstrap-5') }}
+            </div>
        </div>
-       {{-- <div class="btn-toolbar float-end" role="toolbar">
-       <div class="btn-group me-2" role="group" aria-label="Second group">
-           <button type="button" class="btn btn-secondary"><<</button>
-           <button type="button" class="btn btn-secondary">5</button>
-           <button type="button" class="btn btn-secondary">6</button>
-           <button type="button" class="btn btn-secondary">7</button>
-           <button type="button" class="btn btn-secondary">>></button>
-       </div>
-       </div> --}}
    </div>
    <!-- Recent Sales End -->
-
+@endsection
+@section('modal')
+    <!-- Modal -->
+    @include('layouts.admin.components.brandModal')
+    <!--End Modal -->
 @endsection

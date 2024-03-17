@@ -15,7 +15,7 @@ class BrandController extends Controller
     public function index()
     {
         //
-        $brands = Brands::all();
+        $brands = Brands::orderBy('position','asc')->orderByDesc('created_at')->paginate(8);
         $data = compact('brands');
         return view('layouts.admin.Brands.index',$data);
     }
@@ -27,18 +27,22 @@ class BrandController extends Controller
     public function store(Request $request,Brands $brands)
     {
         $request->validate([
-            'name' => 'required|unique:brands,name|max:255',
+            'name' => 'required|unique:'.Brands::class,
             'country' => 'required',
-            
+            'position' => 'required|min:1|max:99999|numeric',
         ],[
-            'name.required'=>'Không được để trống trường này!',
+            'name.required'=>'Vui lòng không để trống trường này',
             'name.unique'=>'Đã tồn tại danh mục này rồi!',
-            'country.required'=>'Không được để trống trường này!',
+            'country.required'=>'Vui lòng không để trống trường này',
+            'position.required'=>'Vui lòng không để trống trường này',
+            'position.min'=>'Vui lòng nhập số lớn hơn hoặc bằng 1',
+            'position.max'=>'Vui lòng nhập số tối đa là 99999',
+            'position.numeric'=>'Vui lòng nhập số',
         ]);
         $slug = Str::slug($request->name); 
         $brands->name = $request->name;
         $brands->slug = $slug;
-        $brands->position = $request->index;
+        $brands->position = $request->position;
         $brands->country = $request->country;
         $brands->show_hide = $request->show_hide;
         $brands->save();
@@ -53,8 +57,8 @@ class BrandController extends Controller
     public function edit(string $id)
     {
         //
-        $brands = Brands::all();
         $brand = Brands::findOrFail($id);
+        $brands = Brands::orderBy('position','asc')->orderByDesc('created_at')->paginate(8);
         $data = compact('brands','brand');
         return view('layouts.admin.Brands.index',$data);
     }
@@ -67,18 +71,23 @@ class BrandController extends Controller
         //
         $brand = Brands::findOrFail($id);
         $request->validate([
-            'name' => "required|max:255|unique:brands,name,".$id,
-            'country' => 'required|min:1'
+            'name' => 'required|unique:'.Brands::class.',name,'.$id,
+            'country' => 'required',
+            'position' => 'required|min:1|max:99999|numeric',
         ],[
-            'name.required'=>'Không được để trống trường này!',
-            'country.required'=>'Không được để trống trường này!',
-            'index.numeric'=>'Vui lòng nhập số!',
+            'name.required'=>'Vui lòng không để trống trường này',
+            'name.unique'=>'Đã tồn tại danh mục này rồi!',
+            'country.required'=>'Vui lòng không để trống trường này',
+            'position.required'=>'Vui lòng không để trống trường này',
+            'position.min'=>'Vui lòng nhập số lớn hơn hoặc bằng 1',
+            'position.max'=>'Vui lòng nhập số tối đa là 99999',
+            'position.numeric'=>'Vui lòng nhập số',
         ]);
         $slug = Str::slug($request->name); 
         $brand->name = $request->name;
         $brand->slug = $slug;
-        $brand->position = $request->index;
         $brand->country = $request->country;
+        $brand->position = $request->position;
         $brand->show_hide = $request->show_hide;
         $brand->update();
         return redirect()->route('brand.index')->with('success','Cập nhật thành công');

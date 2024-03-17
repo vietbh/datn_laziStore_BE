@@ -16,7 +16,7 @@ class CategoriesProductController extends Controller
     public function index()
     {
         //
-        $categories = CategoriesProduct::all();
+        $categories = CategoriesProduct::orderBy('position','asc')->orderByDesc('created_at')->paginate(8);
         $categories_parent = CategoriesProduct::where([
             ['id','!=',1],
         ])->get();
@@ -31,16 +31,16 @@ class CategoriesProductController extends Controller
     {
         // Kiểm tra và xác thực dữ liệu đầu vào
         $request->validate([
-            'name' => 'required|unique:categories_products',
-            'index' => 'nullable|integer|min:1|max:99999',
+            'name' => 'required|unique:'.CategoriesProduct::class,
+            'position' => 'required|min:1|max:99999|numeric',
             'parent_id' => 'nullable|exists:categories_products,id',
             'show_hide' => 'required|boolean',
         ], [
-            'name.required' => 'Không được để trống trường này!',
-            'name.unique' => 'Đã tồn tại danh mục này rồi!',
-            'index.min' => 'Vui lòng nhập số lớn hơn hoặc bằng 1!',
+            'name.required' => 'Vui lòng không bỏ trống trường này.',
+            'name.unique' => 'Đã tồn tại danh mục này.',
+            'position.min' => 'Vui lòng nhập số lớn hơn hoặc bằng 1!',
             'parent_id.exists' => 'Danh mục cha không hợp lệ!',
-            'show_hide.required' => 'Trường này là bắt buộc!',
+            'show_hide.required' => 'Vui lòng không bỏ trống trường này.',
             'show_hide.boolean' => 'Giá trị không hợp lệ cho trường này!',
         ]);
     
@@ -50,7 +50,7 @@ class CategoriesProductController extends Controller
         // Gán giá trị vào các thuộc tính của đối tượng CategoriesProduct
         $categoriesProduct->name = $request->name;
         $categoriesProduct->slug = $slug;
-        $categoriesProduct->position = $request->index;
+        $categoriesProduct->position = $request->position;
         $categoriesProduct->parent_category_id = $request->parent_id;
         $categoriesProduct->show_hide = $request->show_hide;
     
@@ -67,7 +67,7 @@ class CategoriesProductController extends Controller
     {
         //
         $category = CategoriesProduct::findOrFail($id);
-        $categories = CategoriesProduct::all();
+        $categories = CategoriesProduct::orderBy('position','asc')->orderByDesc('created_at')->paginate(8);
         $categories_parent = CategoriesProduct::where([
             ['id','!=',1],
             ['id','!=',$id],
@@ -84,17 +84,20 @@ class CategoriesProductController extends Controller
         //
         $category = CategoriesProduct::findOrFail($id);
         $request->validate([
-            'name' => 'required|max:255|unique:categories_products,name,'.$id,
-            'index' => 'required|min:1',
+            'name' => 'required|max:255|unique:'.CategoriesProduct::class.',name,'.$id,
+            'position' => 'required|min:1|max:99999|numeric',
         ],[
-            'name.required'=>'Không được để trống trường này!',
+            'name.required'=>'Vui lòng không để trống trường này.',
             'name.unique'=>'Đã tồn tại danh mục này rồi!',
-            'index.required'=>'Không được để trống trường này!',
+            'position.required'=>'Vui lòng không để trống trường này.',
+            'position.min'=>'Vui lòng nhập lớn hơn hoặc bằng 1.',
+            'position.max'=>'Vui lòng nhập nhỏ hơn 99999.',
+            'position.numeric'=>'Vui lòng nhập số.',
         ]);
         $slug = Str::slug($request->name); 
         $category->name = $request->name;
         $category->slug = $slug;
-        $category->index = $request->index;
+        $category->position = $request->position;
         $category->parent_category_id = $request->parent_id;
         $category->show_hide = $request->show_hide;
         $category->update();

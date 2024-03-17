@@ -71,35 +71,29 @@
                     Thêm danh mục
                 </button>
            </div>
-           <div class="table-responsive" style="height: 100vh">
+           <div class="table-responsive" style="height: 65vh">
                <table class="table text-start align-middle table-bordered table-hover mb-0" >
                    <thead>
                        <tr class="text-dark">
-                           <th scope="col"><input class="form-check-input" type="checkbox"></th>
-                           <th scope="col">Ngày tạo</th>
                            <th scope="col">Tên danh mục</th>
                            <th scope="col">Tên danh mục cha</th>
-                           <th scope="col">Slug</th>
                            <th scope="col">Thứ tự</th>
                            <th scope="col">Trạng thái</th>
                            <th scope="col" colspan="2">Action</th>
                        </tr>
                    </thead>
                    <tbody>
-                    @foreach ($categories as $category)
+                    @foreach ($categories as $cat)
                         <tr>
-                            <td><input class="form-check-input" type="checkbox"></td>
-                            <td>{{$category->created_at}}</td>
-                            <td>{{$category->name}}</td>
-                            <td>{{$category->parent ? $category->parent->name : 'Trống'}}</td>
-                            <td>{{$category->slug}}</td>
-                            <td>{{$category->index}}</td>
-                            <td>{{$category->show_hide=='show'?'Hiện':'Ẩn'}}</td>
+                            <td>{{$cat->name}}</td>
+                            <td>{{$cat->parent ? $cat->parent->name : 'Trống'}}</td>
+                            <td>{{$cat->position}}</td>
+                            <td>{{$cat->show_hide ? 'Hiện' : 'Ẩn'}}</td>
                             <td>
                             <div class="d-flex justify-content-evenly">
-                                @if ($category->id !== 1)
-                                    <a class="btn btn-sm btn-primary" href="{{ route('product.cat.edit', ['id' => $category->id]) }}">Edit</a>
-                                    <form action="{{ route('product.cat.delete', ['id' => $category->id]) }}" method="POST">
+                                @if ($cat->id !== 1)
+                                    <a class="btn btn-sm btn-primary" href="{{ route('product.cat.edit', ['id' => $cat->id]) }}">Edit</a>
+                                    <form action="{{ route('product.cat.delete', ['id' => $cat->id]) }}" method="POST">
                                         @csrf
                                         @method('delete')
                                         <button class="btn btn-sm btn-danger" type="submit">Xóa</button>
@@ -112,8 +106,10 @@
                    </tbody>
                </table>
            </div>
-           
-       </div>
+           <div class="mb-2">
+            {{ $categories->links('pagination::bootstrap-5') }}
+            </div>
+        </div>
    </div>
    <!-- Table Cate End -->
 

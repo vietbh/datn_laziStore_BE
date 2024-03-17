@@ -37,7 +37,7 @@
                                     @foreach ($modal['selections'] as $label =>$v)
                                          @foreach ($v as $name => $place)
                                             <div class="mb-3">
-                                                <label for="name" class="form-label ">{{$label}} <span class="text-danger text-small">*</span></label>
+                                                <label for="{{$name}}" class="form-label ">{{$label}} <span class="text-danger text-small">*</span></label>
                                                 <input type="text" name="{{$name}}" class="form-control 
                                                 @error($name) 
                                                     is-invalid

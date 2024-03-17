@@ -1,31 +1,5 @@
 @extends('admin')
 @section('content')
-@php
-$modal = `  var myModal = new bootstrap.Modal(document.getElementById('addNewsModal'), {
-            keyboard: false
-            })
-            myModal.toggle();
-            myModal.show();`;
-@endphp
-    @if (session('success'))
-        @include('layouts.admin.components.alert')
-    @endif
-    @error('title')
-    <script type="module"> 
-    {{$modal}}
-    </script>
-    @enderror
-    
-    @if (isset($news))
-    <script type="module">
-    {{$modal}} 
-            // var myModal = new bootstrap.Modal(document.getElementById('addNewsModal'), {
-            // keyboard: false
-            // })
-            // myModal.toggle();
-            // myModal.show();
-    </script>
-    @endif
    <!-- Sale & Revenue Start -->
    <div class="container-fluid pt-4 px-4">
        <div class="row g-4">
@@ -73,33 +47,33 @@ $modal = `  var myModal = new bootstrap.Modal(document.getElementById('addNewsMo
    <div class="container-fluid pt-4 px-4">
        <div class="bg-light text-center rounded p-4">
            <div class="d-flex align-items-center justify-content-between mb-4">
-               <h6 class="mb-0">Tất cả tin tức</h6>
-               <a href="{{ route('news.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus me-1"></i> Thêm tin tức
-                </a>
+               <h5 class="mb-0">Tất cả tin tức</h5>
+               <a href="{{ route('news.create') }}" class="btn btn-primary"><i class="fas fa-plus me-1"></i> Thêm tin tức</a>
            </div>
-           <div class="table-responsive" style="height: 90vh">
+           <div class="table-responsive" style="height: 80vh">
                <table class="table text-start align-middle table-bordered table-hover mb-0" >
                    <thead>
                        <tr class="text-dark">
                            <th scope="col">Tên tin tức</th>
                            <th scope="col">Danh mục</th>
                            <th scope="col">Tác giả</th>
+                           <th scope="col">Số lượng tag</th>
                            <th scope="col">Trạng thái</th>
                            <th scope="col" colspan="2">Action</th>
                        </tr>
                    </thead>
                    <tbody>
-                        @foreach ($news as $new)
-                            <tr title="{{$new->title}}">
-                                <td>{{$new->title}}</td>
-                                <td>{{$new->category->name}}</td>
-                                <td>{{$new->author}}</td>
-                                <td>{{$new->show_hide ? 'Hiện' : 'Ẩn'}}</td>
+                        @foreach ($news as $n)
+                            <tr title="{{$n->title}}">
+                                <td>{{$n->title}}</td>
+                                <td>{{$n->category->name}}</td>
+                                <td>{{$n->author}}</td>
+                                <td><button class='btn btn-primary'>{{count($n->tags)}}</button></td>
+                                <td>{{$n->show_hide ? 'Hiện' : 'Ẩn'}}</td>
                                 <td>
                                 <div class="d-flex justify-content-evenly">
-                                    <a class="btn btn-sm btn-primary" href="{{ route('news.edit', ['id' => $new->id]) }}">Edit</a>
-                                    <form action="{{ route('news.delete', ['id' => $new->id]) }}" method="POST">
+                                    <a class="btn btn-sm btn-primary" href="{{ route('news.edit', ['id' => $n->id]) }}">Detail</a>
+                                    <form action="{{ route('news.delete', ['id' => $n->id]) }}" method="POST">
                                         @csrf
                                         @method('delete')
                                         <button class="btn btn-sm btn-danger" type="submit">Xóa</button>
@@ -111,8 +85,10 @@ $modal = `  var myModal = new bootstrap.Modal(document.getElementById('addNewsMo
                    </tbody>
                </table>
            </div>
+           <div class="mb-2">
+               {{ $news->links('pagination::bootstrap-5') }}
+           </div>
        </div>
    </div>
    <!-- Table Cate End -->
-
-@endsection
+@endsection 

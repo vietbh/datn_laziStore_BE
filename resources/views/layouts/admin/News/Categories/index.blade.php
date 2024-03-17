@@ -1,8 +1,5 @@
 @extends('admin')
 @section('content')
-    @if (session('success'))
-        @include('layouts.admin.components.alert')
-    @endif
     @if($errors->any())
         <script type="module"> 
             var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
@@ -26,7 +23,7 @@
             ],
             'selections'=>[
                 'Tên danh mục'=>['name'=>'Nhập tên của danh mục (vd:Sức khỏe,Công nghệ,...)'],
-                'Thứ tự'=>['index'=>'Nhập thứ tự hiện của danh mục (vd:1,2,3,...)'],
+                'Thứ tự'=>['position'=>'Nhập thứ tự hiện của danh mục (vd:1,2,3,...)'],
             ],
             'inputSelect' =>[
                 'Danh mục cha'=>['parent_id'=>'Chọn danh mục cha(Nếu có)']
@@ -112,11 +109,6 @@
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoriesModal">
                     <i class="fas fa-plus me-1"></i> Thêm danh mục
                 </button>
-            <!-- Modal -->
-            @include('layouts.admin.components.modalAdd')
-            {{-- Modal Comfirm --}}
-            @include('layouts.admin.components.comfirmModal')
-            <!--End Modal -->
            </div>
            <div class="table-responsive" style="height: 100vh">
                <table class="table text-start align-middle table-bordered table-hover mb-0" >
@@ -125,26 +117,24 @@
                            <th scope="col">Ngày tạo</th>
                            <th scope="col">Tên danh mục tin</th>
                            <th scope="col">Danh mục cha</th>
-                           <th scope="col">Slug</th>
                            <th scope="col">Thứ tự</th>
                            <th scope="col">Trạng thái</th>
                            <th scope="col" colspan="2">Action</th>
                        </tr>
                    </thead>
                    <tbody>
-                    @foreach ($categories as $category)
-                        <tr title="{{$category->name}}">
-                            <td>{{$category->created_at}}</td>
-                            <td>{{$category->name}}</td>
-                            <td>{{$category->parent ? $category->parent->name : 'Trống'}}</td>
-                            <td>{{$category->slug}}</td>
-                            <td>{{$category->index}}</td>
-                            <td>{{$category->show_hide ? 'Hiện' : 'Ẩn'}}</td>
+                    @foreach ($categories as $cat)
+                        <tr title="{{$cat->name}}">
+                            <td>{{$cat->created_at}}</td>
+                            <td>{{$cat->name}}</td>
+                            <td>{{$cat->parent ? $cat->parent->name : 'Trống'}}</td>
+                            <td>{{$cat->position}}</td>
+                            <td>{{$cat->show_hide ? 'Hiện' : 'Ẩn'}}</td>
                             <td>
                                 <div class="d-flex justify-content-evenly">
-                                    @if ($category->id != 1)
-                                        <a class="btn btn-sm btn-primary" href="{{ route('news.cat.edit', ['id' => $category->id]) }}">Edit</a>
-                                        <a class="btn btn-sm btn-danger"  href="{{ route('news.cat.show', ['id' => $category->id]) }}">Xóa</a>
+                                    @if ($cat->id != 1)
+                                        <a class="btn btn-sm btn-primary" href="{{ route('news.cat.edit', ['id' => $cat->id]) }}">Edit</a>
+                                        <a class="btn btn-sm btn-danger"  href="{{ route('news.cat.show', ['id' => $cat->id]) }}">Xóa</a>
                                     @endif
                                 </div>
                             </td>
@@ -157,4 +147,11 @@
    </div>
    <!-- Table Cate End -->
 
+@endsection
+@section('modal')
+    <!-- Modal -->
+    @include('layouts.admin.components.modalAdd')
+    {{-- Modal Comfirm --}}
+    @include('layouts.admin.components.comfirmModal')
+    <!--End Modal -->
 @endsection

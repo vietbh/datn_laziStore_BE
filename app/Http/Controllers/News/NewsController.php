@@ -19,7 +19,7 @@ class NewsController extends Controller
     public function index()
     {
         //
-        $news = News::all();
+        $news = News::orderByDesc('created_at')->paginate(10);
         $tags = Tag::all();
         $categories = CategoriesNews::all();
         return view('layouts.admin.News.index',compact('news','tags','categories'));
@@ -113,9 +113,15 @@ class NewsController extends Controller
     {
         //
         $new = News::findOrFail($id);
-        $tagRelaNews = TagRelationNews::where('news_id',$id)->get(["id","tag_id","news_id"]);
         $categories = CategoriesNews::all();
-        return view('layouts.admin.News.store',compact('new','tagRelaNews','categories'));
+        $tags = Tag::select('id', 'name')->get()->map(function ($tag) {
+            return [
+                'id' => $tag->id,
+                'text' => $tag->name,
+            ];
+        });
+        $tagJson = json_encode($tags);
+        return view('layouts.admin.News.store',compact('new','tagJson','categories'));
     }
 
     /**
@@ -130,6 +136,7 @@ class NewsController extends Controller
             'seo_keywords' => 'required|unique:'.News::class.',seo_keywords,'.$id,
             'author' => 'required',
             'categories_news_id' => 'required',
+            'image_url' => 'required|mimes:jpg, png, jpeg, jfif, gif, svg|max:2048|dimensions:min_width=100,min_height=100,max_width=1080,max_height=1080',
             'description' => 'required'
         ],[
             'title.required'=>'Vui lòng không bỏ trống trường này.',
@@ -137,6 +144,10 @@ class NewsController extends Controller
             'seo_keywords.required'=>'Vui lòng không bỏ trống trường này.',
             'seo_keywords.unique'=>'Đã tồn tại từ khóa SEO này.',
             'author.required'=>'Vui lòng không bỏ trống trường này.',
+            'image_url.required'=>'Vui lòng không bỏ trống trường này.',
+            'image_url.image' => 'Chỉ cho phép file hình hoặc gif.',
+            'image_url.mimes' => 'Chỉ cho phép file có đuôi là jpg, png, jpeg, jfif.',
+            'image_url.max' => 'Chỉ cho phép kích thước tối đa 2048Kb.',
             'categories_news_id.required'=>'Vui lòng không bỏ trống trường này.',
             'description.required'=>'Vui lòng không bỏ trống trường này.',
         ]);

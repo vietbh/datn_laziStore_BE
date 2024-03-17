@@ -77,7 +77,7 @@ class TagController extends Controller
         $tag = Tag::findOrFail($id);
         $request->validate([
             'name' => 'required|unique:'.Tag::class.',name,'.$id,
-            'index' => 'required|min:1|max:999',
+            'index' => 'required|min:1|max:999|numeric',
         ],[
             'name.required'=>'Không được để trống trường này!',
             'name.unique'=>'Đã tồn tại danh mục này rồi!',
@@ -90,7 +90,7 @@ class TagController extends Controller
         $slug = Str::slug($request->name); 
         $tag->name = $request->name;
         $tag->slug = $slug;
-        $tag->index = $request->index;
+        $tag->position = $request->index;
         // $tag->parent_category_id = $request->parent_id;
         $tag->show_hide = $request->show_hide;
         $tag->update();
