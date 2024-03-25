@@ -11,7 +11,7 @@
                     <div class="col-lg-12">
                         <div class="py-3"></div>
                         <div class="trending-tittle">
-                            <strong>Trending now</strong>
+                            <strong>Tin mới nhất</strong>
                          
                             <div class="trending-animated">
                                 <ul id="js-news" class="js-hidden">

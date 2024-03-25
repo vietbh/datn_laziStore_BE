@@ -98,7 +98,7 @@
                          <td>{{$product->show_hide ? 'Hiện':'Ẩn'}}</td>
                          <td>
                          <div class="d-flex justify-content-around">
-                             <a class="btn btn-sm btn-primary " href="{{ route('product.edit', ['id' => $product->id]) }}" title="Detail">Detail</a>
+                             <a class="btn btn-sm btn-primary " href="{{ route('product.edit', ['id' => $product->id]) }}" title="Detail">Sửa</a>
                              <form action="{{ route('product.delete', ['id' => $product->id]) }}" method="POST">
                                  @csrf
                                  @method('delete')

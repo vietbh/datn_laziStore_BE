@@ -14,7 +14,7 @@ class TagController extends Controller
      */
     public function index()
     {
-        $tags = Tag::paginate(5);
+        $tags = Tag::paginate(10);
         return view('layouts.admin.News.Tags.index',compact('tags'));
     }
 
