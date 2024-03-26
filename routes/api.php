@@ -29,6 +29,9 @@ Route::get('/danh-muc-tin-tuc',[CategoryProController::class,'index']);
 //Auth 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/dang-ky', [AuthController::class, 'store']);
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+Route::post('/verify-code', [AuthController::class, 'changePasswordForgot']);
+Route::post('/change-password', [AuthController::class, 'changePassword']);
 // Route::get('forgot-password', [PasswordResetLinkController::class, 'create']);
 // Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
 // ->name('password.email');

@@ -23,7 +23,8 @@ use App\Http\Controllers\ProductVariationController;
 use App\Http\Controllers\RoleAdminController;
 use App\Http\Controllers\SlideAdsController;
 use App\Http\Controllers\UserGuestController;
-use Illuminate\Auth\Access\HandlesAuthorization;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
