@@ -26,9 +26,17 @@ use Illuminate\Support\Facades\Route;
 // Route::middleware('auth:sanctum')->group(function(){
 // });
 Route::get('/san-pham',[ProductController::class,'index']);
+Route::get('/san-pham/{slug}',[ProductController::class,'show']);
+Route::get('/san-pham-moi',[ProductController::class,'new']);
+Route::get('/san-pham-hot',[ProductController::class,'hot']);
+Route::get('/san-pham-tablet',[ProductController::class,'tablet']);
+Route::get('/san-pham-laptop',[ProductController::class,'laptop']);
+Route::get('/san-pham-pc',[ProductController::class,'pc']);
+Route::get('/san-pham-dong-ho',[ProductController::class,'watch']);
+Route::get('/san-pham-audio',[ProductController::class,'audio']);
+// Danh muc
 Route::get('/danh-muc-san-pham',[CategoryProController::class,'index']);
 Route::get('/danh-muc-san-pham/{slug}',[CategoryProController::class,'show']);
-Route::get('/danh-muc-tin-tuc',[CategoryProController::class,'index']);
 // Route::post('/lien-he',[Contact::class,'index']);
 
 //Auth 

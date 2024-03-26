@@ -67,7 +67,9 @@
                                 </div>
                                 <div class="mb-3">
                                     @isset($slide)
-                                        <img src="{{$slide->image_url}}" class="img-fluid mb-2" width="250" alt="">
+                                        <div class="mb-2">
+                                            <img src="{{$slide->image_url}}" class="img-fluid mb-2" width="250" alt="">
+                                        </div>
                                     @endisset
                                     <label for="image_url" class="form-label">Banner(*)</label>
                                     <input type="file" name="image_url" class="form-control" 
@@ -94,7 +96,7 @@
                                     autocomplete="link"
                                     id="link">   
                                     @error('link')
-                                    <div class="form-text text-danger">{{ $message }}</div>
+                                        <div class="form-text text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="mb-3">

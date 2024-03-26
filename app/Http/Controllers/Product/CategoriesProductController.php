@@ -16,7 +16,7 @@ class CategoriesProductController extends Controller
     public function index()
     {
         //
-        $categories = CategoriesProduct::orderBy('position','asc')->orderByDesc('created_at')->paginate(8);
+        $categories = CategoriesProduct::orderBy('name')->where([['id','!=',1]])->paginate(10);
         $categories_parent = CategoriesProduct::where([
             ['id','!=',1],
         ])->get();
@@ -67,12 +67,12 @@ class CategoriesProductController extends Controller
     {
         //
         $category = CategoriesProduct::findOrFail($id);
-        $categories = CategoriesProduct::orderBy('position','asc')->orderByDesc('created_at')->paginate(8);
+        $categories = CategoriesProduct::orderBy('name','asc')->paginate(10);
         $categories_parent = CategoriesProduct::where([
             ['id','!=',1],
             ['id','!=',$id],
-            ['parent_category_id',null],
-        ])->get();
+
+        ])->orderBy('name')->get();
         return view('layouts.admin.Product.Categories.index',compact('category','categories','categories_parent'));
     }
 

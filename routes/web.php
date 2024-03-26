@@ -22,6 +22,7 @@ use App\Http\Controllers\ProductHotController;
 use App\Http\Controllers\ProductSpecificationController;
 use App\Http\Controllers\ProductVariationController;
 use App\Http\Controllers\RoleAdminController;
+use App\Http\Controllers\ShippingProvidersController;
 use App\Http\Controllers\SlideAdsController;
 use App\Http\Controllers\UserGuestController;
 use Illuminate\Support\Facades\Route;
@@ -69,11 +70,18 @@ Route::middleware(['auth','role:0'])->group(function () {
     Route::delete('/lazi-store-admin/ma-giam-gia-xoa/{id}',[DiscountController::class, 'destroy'])->name('discount.delete');
     // Sản phẩm hot
     Route::get('/lazi-store-admin/san-pham-hot',[ProductHotController::class, 'index'])->name('hot.index');
-    // Vận chuyển
+    //Đơn hàng Vận chuyển
     Route::get('/lazi-store-admin/van-chuyen',[DeliveryController::class, 'index'])->name('delivery.index');
+    //Nhà Vận chuyển
+    Route::get('/lazi-store-admin/nha-van-chuyen',[ShippingProvidersController::class, 'index'])->name('shipping.index');
+    Route::post('/lazi-store-admin/them-nha-van-chuyen',[ShippingProvidersController::class, 'store'])->name('shipping.store');
+    Route::get('/lazi-store-admin/edit-nha-van-chuyen/{id}',[ShippingProvidersController::class, 'edit'])->name('shipping.edit');
+    Route::put('/lazi-store-admin/edit-nha-van-chuyen/{id}',[ShippingProvidersController::class, 'update'])->name('shipping.update');
+    Route::delete('/lazi-store-admin/xoa-nha-van-chuyen/{id}',[ShippingProvidersController::class, 'destroy'])->name('shipping.delete');
     
     // Bình luận sản phẩm
     Route::get('/lazi-store-admin/binh-luan-san-pham',[CommentProductController::class, 'index'])->name('comment.product.index');
+    Route::put('/lazi-store-admin/binh-luan-san-pham/edit/{id}',[CommentProductController::class, 'update'])->name('comment.product.update');
     // Bình luận tin tức
     Route::get('/lazi-store-admin/binh-luan-tin-tuc',[CommentNewsController::class, 'index'])->name('comment.news.index');
     // Tư vấn

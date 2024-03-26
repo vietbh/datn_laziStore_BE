@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CommentProduct;
 use Illuminate\Http\Request;
 
 class CommentProductController extends Controller
@@ -12,7 +13,8 @@ class CommentProductController extends Controller
     public function index()
     {
         //
-        return view('layouts.admin.Comment.Product.index');
+        $comments = CommentProduct::orderByDesc('created_at')->paginate(10);
+        return view('layouts.admin.Comment.Product.index',compact('comments'));
     }
 
     /**

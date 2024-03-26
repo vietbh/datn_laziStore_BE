@@ -21,11 +21,10 @@ class ProductController extends Controller
     public function index()
     {
         //
-        $products = Product::paginate(10);
+        $products = Product::orderByDesc('id')->paginate(10);
         $categories = CategoriesProduct::all();
         $brands = Brands::all();
-        $type = array('hot' => 'type_hot','new'=> 'type_new');
-        $data = compact('products','categories','brands','type');
+        $data = compact('products','categories','brands');
         return view('layouts.admin.Product.index',$data);
     }
     public function create()
@@ -33,7 +32,7 @@ class ProductController extends Controller
         $categories = CategoriesProduct::where('show_hide',true)->get();
         $brands = Brands::where('show_hide',true)->get();
         $data = compact('categories','brands');
-        return view('layouts.admin.Product.store',$data);
+        return view('layouts.admin.Product.edit',$data);
     }
 
     public function store(Request $request, Product $product , ProductVariation $productVariation)
@@ -51,13 +50,14 @@ class ProductController extends Controller
             'categories_product_id.required' => 'Không được bỏ trống trường này.',
             'brand_id.required' => 'Không được bỏ trống trường này.',
         ]);
-  
         $product->name = $request->name;
         $product->slug = Str::slug($request->name);
         $product->seo_keywords = $request->seo_keywords;
         $product->categories_product_id = $request->categories_product_id;
         $product->brand_id = $request->brand_id;
         $product->description = $request->description;
+        $product->product_type = $request->type_hot == 'on' ? true : false ;
+        $product->product_type_new = $request->type_new == 'on' ? true : false;
         $product->show_hide = $request->show_hide;
         $product->save();
         return redirect()->route('varia.create',['id' => $product->id]);
@@ -117,6 +117,8 @@ class ProductController extends Controller
         $product->categories_product_id = $request->categories_product_id;
         $product->brand_id = $request->brand_id;
         $product->description = $request->description;
+        $product->product_type_hot = $request->type_hot == 'on' ? true : false ;
+        $product->product_type_new = $request->type_new == 'on' ? true : false ;
         $product->show_hide = $request->show_hide;
         $product->update();
         // 
@@ -137,7 +139,6 @@ class ProductController extends Controller
             if(!Storage::exists('public/'. $path)){
                 return redirect()->route('product.index')->with('error','Xóa hình ảnh không thành công!');
             };
-            # code...
         }
         if($product->variations()){
             $product->variations()->delete();

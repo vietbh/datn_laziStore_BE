@@ -31,8 +31,13 @@ class ProductVariationController extends Controller
     {
         //
         $request->validate([
-            'image_url' => 'required|image|mimes:jpg, png, jpeg, jfif|max:2048|dimensions:min_width=100,min_height=100,max_width=1000,max_height=1000',
-            'color_type' => 'required|unique:'.ProductVariation::class,
+            // |mimes:jpg, png, jpeg, jfif
+            'image_url' => 'required|image|max:2048|dimensions:min_width=100,min_height=100,max_width=1000,max_height=1000',
+            'color_type' => ['required',
+                Rule::unique('product_variations', 'color_type')->ignore($productVariation->id, 'id')->where(function ($query) use ($productVariation) {
+                    $query->where('product_id', $productVariation->product_id);
+                })
+            ],
             'price' => 'required',
             'price_sale' => 'required|lt:price',
             'quantity' => 'required|min:1',
@@ -107,6 +112,7 @@ class ProductVariationController extends Controller
         $request->validate([
             'image_url' => 'mimes:jpg, png, jpeg, jfif',
             'color_type' => [
+                'required',
                 Rule::unique('product_variations', 'color_type')->ignore($productVariation->id, 'id')->where(function ($query) use ($productVariation) {
                     $query->where('product_id', $productVariation->product_id);
                 }),

@@ -78,6 +78,7 @@
                                     autocomplete="parent_id"
                                     id="parent_id">
                                         <option value='' disabled selected>Chọn danh mục cha</option>
+                                        <option value=''>Không chọn danh mục nào</option>
                                         @isset($categories_parent)
                                             @foreach ($categories_parent as $category_parent)
                                                 <option value="{{$category_parent->id}}">{{$category_parent->name}}</option>

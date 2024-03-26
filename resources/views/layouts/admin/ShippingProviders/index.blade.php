@@ -1,25 +1,24 @@
 @extends('admin')
 @section('content')
-   
-    @if($errors->any())
+    @include('layouts.admin.components.js',['errors' => $errors,'edit'=>$shippingProvider??null,'modal'=>'addShippingProviderModal'])
+    {{-- @if($errors->any())
         <script type="module"> 
-            var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
+            let myModal = new bootstrap.Modal(document.getElementById('addSlideModal'), {
             keyboard: false
             })
             myModal.toggle();
             myModal.show();
         </script>
     @endif
-    
-    @isset ($contact)
+    @if (isset($slide))
         <script type="module"> 
-            var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
+            let myModal = new bootstrap.Modal(document.getElementById('addSlideModal'), {
             keyboard: false
             })
             myModal.toggle();
             myModal.show();
         </script>
-    @endisset
+    @endif --}}
    <!-- Sale & Revenue Start -->
    <div class="container-fluid pt-4 px-4">
        <div class="row g-4">
@@ -67,39 +66,32 @@
    <div class="container-fluid pt-4 px-4">
        <div class="bg-light text-center rounded p-4">
            <div class="d-flex align-items-center justify-content-between mb-4">
-               <h4 class="mb-0">Danh sách tư vấn</h4>
+               <h4 class="mb-0">Danh sách nhà vận chuyển</h4>
                <!-- Button trigger modal -->
-                {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoriesModal">
-                    Thêm danh mục
-                </button> --}}
-            <!-- Modal -->
-            {{-- @include('layouts.admin.components.catProModal') --}}
-            <!--End Modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addShippingProviderModal">
+                    Thêm
+                </button>
            </div>
-           <div class="table-responsive" style="height: 100vh">
+           <div class="table-responsive" style="height: 80vh">
                <table class="table text-start align-middle table-bordered table-hover mb-0" >
                    <thead>
                        <tr class="text-dark">
-                           <th scope="col">Họ và Tên</th>
-                           <th scope="col">Email</th>
-                           <th scope="col">Số điện thoại</th>
-                           <th scope="col">Tiêu đề</th>
-                           <th scope="col">Ngày gửi</th>
+                           <th scope="col">Nhà vận chuyển</th>
+                           <th scope="col">Khu vực</th>
+                           <th scope="col">Phí vận chuyển</th>
                            <th scope="col" colspan="2">Action</th>
                        </tr>
                    </thead>
                    <tbody>
-                    @foreach ($contacts as $cont)
+                    @foreach ($shippingProviders as $s)
                         <tr>
-                            <td>{{$cont->fullname}}</td>
-                            <td>{{$cont->email}}</td>
-                            <td>{{$cont->phone_number}}</td>
-                            <td>{{$cont->title}}</td>
-                            <td>{{$cont->datetime_create}}</td>
+                            <td>{{$s->name}}</td>
+                            <td>{{$s->address}}</td>
+                            <td>{{$s->shipping_cost}}</td>
                             <td>
                             <div class="d-flex justify-content-evenly">
-                                <a class="btn btn-sm btn-primary" href="{{ route('product.cat.edit', ['id' => $cont->id]) }}">Edit</a>
-                                <form action="{{ route('product.cat.delete', ['id' => $cont->id]) }}" method="POST">
+                                <a class="btn btn-sm btn-primary" href="{{ route('shipping.edit', ['id' => $s->id]) }}">Edit</a>
+                                <form action="{{ route('shipping.delete', ['id' => $s->id]) }}" method="POST">
                                     @csrf
                                     @method('delete')
                                     <button class="btn btn-sm btn-danger" type="submit">Xóa</button>
@@ -111,9 +103,11 @@
                    </tbody>
                </table>
            </div>
-        <div class="mt-2">{{ $contacts->links('pagination::bootstrap-5') }}</div>
+           
        </div>
    </div>
    <!-- Table Cate End -->
-
+@endsection
+@section('modal')
+    @include('layouts.admin.components.shippingProviderModal',['modal'=>'addShippingProviderModal'])
 @endsection

@@ -112,38 +112,63 @@
                                         @enderror
                                     </div>
                                 </div>
+                                @isset($product)
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12 col-xl-6 mb-3 px-3">
+                                            <a href="{{ route('varia.create', ['id'=>$product->id]) }}">
+                                                <button type="button" class="w-100 btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductVariationModal">
+                                                    Màu sản phẩm
+                                                </button>
+                                            </a>
+                                        </div>
+                                        <div class="col-sm-12 col-xl-6 mb-3 px-3">
+                                            <a href="{{ route('varia.create', ['id'=>$product->id]) }}">
+                                                <button type="button" class="w-100 btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductSpecifiModal">
+                                                    Thông số sản phẩm
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </div> 
+                                @endisset
                                 <div class="row mb-3">
-                                    <div class="col-sm-12 col-xl-6 mb-3 px-3">
-                                        <a href="{{ route('varia.create', ['id'=>$product->id]) }}">
-                                            <button type="button" class="w-100 btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductVariationModal">
-                                                Màu sản phẩm
-                                            </button>
-                                        </a>
+                                    <div class="col-sm-12 col-xl-6 mb-3">
+                                        <div class="card">
+                                            <div class="card-body pt-1 bg-light">
+                                                <h6 class="fw-normal mb-3">Các setting khác</h6>
+                                                <div class="d-flex justify-content-around">
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox" name="type_hot" autocomplete="off" id="type_hot" 
+                                                        @isset($product)
+                                                            {{$product->product_type_hot ? 'checked' : ''}}
+                                                        @endisset>
+                                                        <label class="form-check-label" for="type_hot">Sản phẩm hot</label>
+                                                    </div>
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox" name="type_new" autocomplete="off" id="type_new" 
+                                                        @isset($product)
+                                                            {{$product->product_type_new ? 'checked' : ''}}
+                                                        @endisset>
+                                                        <label class="form-check-label" for="type_new">Sản phẩm mới</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-12 col-xl-6 mb-3 px-3">
-                                        <a href="{{ route('varia.create', ['id'=>$product->id]) }}">
-                                            <button type="button" class="w-100 btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductSpecifiModal">
-                                                Thông số sản phẩm
-                                            </button>
-                                        </a>
-                                    </div>
-                                </div> 
-                                <div class="row mb-3">
-                                    <div class="col-sm-12 col-xl-12 mb-3">
+                                    <div class="col-sm-12 col-xl-6 mb-3">
                                         <label for="show_hide" class="form-label">Trạng thái (mặc định sẽ là Hiện)</label>
                                         <select class="form-select" name="show_hide" 
-                                        autocomplete="show_hide"
                                         @isset($product)
                                             value="{{$product->show_hide}}"
                                         @else
-                                        value="{{old('show_hide')}}"    
+                                            value="{{old('show_hide')}}"    
                                         @endisset
+                                        autocomplete="show_hide"
                                         id="show_hide">
                                             <option value="1">Hiện</option>
                                             <option value="0">Ẩn</option>
                                         </select>    
                                     </div>
-                                </div>    
+                                </div>      
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-xl-12">
                                         <label for="description" class="form-label">Mô tả sản phẩm</label>
@@ -151,9 +176,7 @@
                                         name="description"
                                         id="description"
                                         class="form-control ck-editor__editable_inline" 
-                                        >
-                                        {{$product->description}}
-                                        </textarea>
+                                        ></textarea>
                                     </div>
                                 </div>     
                                 <div class="mb-3 float-end">
@@ -179,5 +202,7 @@
             </div>
         </div>
     </div>
-    @include('layouts.admin.Product.ckeditor')
+@endsection
+@section('js')
+    @include('layouts.admin.Product.ckeditor') 
 @endsection
