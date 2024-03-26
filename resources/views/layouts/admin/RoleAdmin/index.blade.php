@@ -1,8 +1,5 @@
 @extends('admin')
 @section('content')
-    @if (session('success'))
-        @include('layouts.admin.components.alert')
-    @endif
     @error('title')
     <script type="module"> 
             var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
@@ -90,14 +87,14 @@
                             <td class="text-uppercase fw-bold">{{$role->role_name}}</td>
                             <td>{{$role->show_hide?'Hiện':'Ẩn'}}</td>
                             <td>
-                            <div class="d-flex justify-content-evenly">
+                            {{-- <div class="d-flex justify-content-evenly">
                                 <a class="btn btn-sm btn-primary" href="{{ route('product.cat.edit', ['id' => $role->id]) }}">Edit</a>
                                 <form action="{{ route('product.cat.delete', ['id' => $role->id]) }}" method="POST">
                                     @csrf
                                     @method('delete')
                                     <button class="btn btn-sm btn-danger" type="submit">Xóa</button>
                                 </form>
-                            </div>
+                            </div> --}}
                             </td>
                         </tr>
                     @endforeach                      

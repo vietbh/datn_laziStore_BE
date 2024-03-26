@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('deliveries', function (Blueprint $table) {
             $table->increments('id')->unsigned();
             $table->string('delivery_number', 50)->unique();
-            $table->string('delivery_name', 22);
-            $table->string('delivery_phone', 15);
-            $table->string('delivery_address', 255);
+            $table->string('delivery_name');
+            $table->string('delivery_phone', 30);
+            $table->string('delivery_address');
             $table->decimal('delivery_fee', 10, 2);
             $table->text('delivery_note')->nullable();
             $table->enum('delivery_status', ['pending', 'in_progress', 'completed'])->default('pending');        

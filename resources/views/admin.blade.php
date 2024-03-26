@@ -48,7 +48,7 @@
         
         <!-- Content Start -->
         <div class="content">
-            @if (session('success') && session('error'))
+            @if (session('success') && session('error') || session('success'))
                 @include('layouts.admin.components.alert')
             @endif   
             @include('layouts.admin.Header.nav')   

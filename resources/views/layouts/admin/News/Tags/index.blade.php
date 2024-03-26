@@ -1,14 +1,14 @@
 @extends('admin')
 @section('content')
-@if($errors->any())
-    <script type="module">
-        var myModal = new bootstrap.Modal(document.getElementById('addTagsModal'), {
-            keyboard: false
-        })
-        myModal.toggle();
-        myModal.show();
-    </script>
-@endif
+    @if($errors->any())
+        <script type="module">
+            var myModal = new bootstrap.Modal(document.getElementById('addTagsModal'), {
+                keyboard: false
+            })
+            myModal.toggle();
+            myModal.show();
+        </script>
+    @endif
     @php
         $modal = [
             'id'=>'addTagsModal',
@@ -106,12 +106,8 @@
                 <h6 class="mb-0">Tất cả tag tin tức</h6>
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTagsModal"><i class="fas fa-plus me-1"></i>Thêm Tag</button>
-                <!-- Modal -->
-                @include('layouts.admin.components.modalAdd')
-                @include('layouts.admin.components.comfirmModal')
-                <!--End Modal -->
             </div>
-            <div class="table-responsive" style="height: 90vh">
+            <div class="table-responsive" style="height: 73vh">
                 <table class="table text-start align-middle table-bordered table-hover mb-0">
                     <thead>
                         <tr class="text-dark">
@@ -129,10 +125,12 @@
                                     <td>{{$tag->position}}</td>
                                     <td>{{$tag->show_hide ? 'Hiện' : 'Ẩn'}}</td>
                                     <td>
-                                        <div class="d-flex justify-content-evenly">
-                                            <a href="{{ route('news.tag.edit', ['id' => $tag->id]) }}" class="btn btn-sm btn-primary" id="edit">Edit</a>
-                                            <a href="{{ route('news.tag.show', ['id'=>$tag->id]) }}" class="btn btn-sm btn-danger" id="delete" >Xóa</a>
-                                        </div>
+                                        @if ($tag->id != 1)
+                                            <div class="d-flex justify-content-evenly">
+                                                <a href="{{ route('news.tag.edit', ['id' => $tag->id]) }}" class="btn btn-sm btn-primary" id="edit">Edit</a>
+                                                <a href="{{ route('news.tag.show', ['id'=>$tag->id]) }}" class="btn btn-sm btn-danger" id="delete" >Xóa</a>
+                                            </div>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach                      
@@ -140,8 +138,14 @@
                     </tbody>
                 </table>
             </div>
-
+            {{ $tags->links('pagination::bootstrap-5') }}
         </div>
     </div>
     <!-- Table Cate End -->
+@endsection
+@section('modal')
+    <!-- Modal -->
+    @include('layouts.admin.components.modalAdd')
+    @include('layouts.admin.components.comfirmModal')
+    <!--End Modal -->
 @endsection

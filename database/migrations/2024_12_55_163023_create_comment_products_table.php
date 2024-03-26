@@ -19,11 +19,11 @@ return new class extends Migration
             $table->unsignedInteger('product_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('product_id')->references('id')->on('products');
-            // $table->unsignedInteger('parent_id')->nullable();
-            // $table->foreign('parent_id')
-            //       ->references('id')
-            //       ->on('comment_products')
-            //       ->onDelete('cascade');
+            $table->unsignedInteger('parent_id')->nullable();
+            $table->foreign('parent_id')
+                  ->references('id')
+                  ->on('comment_products')
+                  ->onDelete('cascade');
             $table->timestamps();
         });
     }

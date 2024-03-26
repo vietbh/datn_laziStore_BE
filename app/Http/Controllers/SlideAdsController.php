@@ -14,7 +14,7 @@ class SlideAdsController extends Controller
     public function index()
     {
         //
-        $slides = SlideAds::orderBy('position')->orderByDesc('create_at')->paginate(10);
+        $slides = SlideAds::orderBy('position')->orderByDesc('created_at')->paginate(10);
         return view('layouts.admin.SlideAds.index',compact('slides'));
     }
 
@@ -28,7 +28,7 @@ class SlideAdsController extends Controller
             'title' => 'required',
             'image_url' => 'required|image|mimes:jpg, png, jpeg, jfif|max:2048|dimensions:min_width=100,min_height=100,max_width=1280,max_height=1280',
             'content' => 'required',
-            'link' => 'url',
+            'link' => 'url|nullable',
             'position'=>'required|min:1|max:99999|numeric',
         ],[
             
@@ -54,7 +54,7 @@ class SlideAdsController extends Controller
         }
         $slideAds->title = $request->title;
         $slideAds->content = $request->content ?? '';
-        $slideAds->link = $request->link;
+        $slideAds->link = $request->link ?? '';
         $slideAds->position = $request->position;
         $slideAds->save();
         return redirect()->route('slide.index')->with('success','Thêm mới slide thành công');
@@ -76,7 +76,7 @@ class SlideAdsController extends Controller
     {
         //
         $slide = SlideAds::findOrFail($id);
-        $slides = SlideAds::orderByDesc('create_at')->paginate(10);
+        $slides = SlideAds::orderByDesc('created_at')->paginate(10);
         return view('layouts.admin.SlideAds.index',compact('slides','slide'));
     }
 
@@ -89,9 +89,9 @@ class SlideAdsController extends Controller
         $slideAds = SlideAds::findOrFail($id); 
         $request->validate([
             'title' => 'required',
-            'image_url' => 'required|image|mimes:jpg, png, jpeg, jfif|max:2048|dimensions:min_width=100,min_height=100,max_width=1280,max_height=1280',
+            'image_url' => 'image|mimes:jpg, png, jpeg, jfif|max:2048|dimensions:min_width=100,min_height=100,max_width=1280,max_height=1280',
             'content' => 'required',
-            'link' => 'url',
+            'link' => 'url|nullable',
             'position'=>'required|min:1|max:99999|numeric',
         ],[
             
@@ -102,7 +102,6 @@ class SlideAdsController extends Controller
             'position.min' => 'Nhập số lớn hơn hoặc bằng 1.',
             'position.max' => 'Nhập số nhỏ hơn 99999.',
             'position.numeric' => 'Vui lòng nhập số.',
-            'image_url.required'=>'Vui lòng không bỏ trống trường này.',
             'image_url.image' => 'Chỉ cho phép file hình hoặc gif.',
             'image_url.mimes' => 'Chỉ cho phép file có đuôi là jpg, png, jpeg, jfif.',
             'image_url.max' => 'Chỉ cho phép kích thước tối đa 2048Kb.',
@@ -117,7 +116,7 @@ class SlideAdsController extends Controller
         }
         $slideAds->title = $request->title;
         $slideAds->content = $request->content ?? '';
-        $slideAds->link = $request->link;
+        $slideAds->link = $request->link ?? '';
         $slideAds->position = $request->position;
         $slideAds->update();
         return redirect()->route('slide.index')->with('success','Cập nhật slide thành công');

@@ -58,15 +58,9 @@
                     <tr class="text-dark">
                         <th scope="col">Tên sản phẩm</th>
                         <th scope="col">Danh mục</th>
-                        <th scope="col" class="text-center">
-                            Số lượng màu
-                            {{-- <div class="row">
-                                <div class="col-sm-12 col-lg-3 p-0">Hình ảnh</div>
-                                <div class="col-sm-12 col-lg-3 p-0">Màu sắc</div>
-                                <div class="col-sm-12 col-lg-3 p-0">Giá bán</div>
-                                <div class="col-sm-12 col-lg-3 p-0">Số lượng</div>
-                            </div> --}}
-                        </th>
+                        <th scope="col" class="text-center">Số lượng màu</th>
+                        <th scope="col" class="text-center">Sản phẩm hot</th>
+                        <th scope="col" class="text-center">Sản phẩm mới</th>
                         <th scope="col">Trạng thái</th>
                         <th scope="col">Action</th>
                     </tr>
@@ -74,27 +68,11 @@
                 <tbody>
                  @foreach ($products as $product)
                      <tr title="{{$product->name}}">
-                         <td>{{$product->name}}</td>
-                         <td>{{$product->category->name}}</td>
-                        <td>
-                            {{count($product->variations)}}
-                            {{-- @foreach ($product->variations as $variation)
-                                <div class="row p-2 text-center">
-                                    <div class="col-sm-12 col-lg-3">
-                                        <img src="{{ $variation->image_url }}" loading="lazy" class="rounded" width="100" height="100" alt="{{ $product->image_url }}"/>
-                                    </div>
-                                    <div class="col-sm-12 col-lg-3 d-flex align-items-center">
-                                        <p class="text-uppercase">{{ $variation->color_type }}</p>
-                                    </div>
-                                    <div class="col-sm-12 col-lg-3 d-flex align-items-center">
-                                        <p>{{number_format($variation->price_sale)}} <span style="font-size: 14px">vnđ</span></p>
-                                    </div>
-                                    <div class="col-sm-12 col-lg-3 d-flex align-items-center">
-                                        <p>{{number_format($variation->quantity)}} <span style="font-size: 14px">chiếc</span></p>
-                                    </div>
-                                </div>
-                            @endforeach  --}}
-                        </td>
+                        <td>{{$product->name}}</td>
+                        <td>{{$product->category->name}}</td>
+                        <td><button class="btn btn-sm btn-primary">{{count($product->variations)}}</button></td>
+                        <td><button class="btn btn-sm btn-secondary {{$product->product_type_hot ? '' : 'd-none'}}">Hot</button></td>
+                        <td><button class="btn btn-sm btn-secondary {{$product->product_type_new ? '' : 'd-none'}}">New</button></td>
                          <td>{{$product->show_hide ? 'Hiện':'Ẩn'}}</td>
                          <td>
                          <div class="d-flex justify-content-around">
