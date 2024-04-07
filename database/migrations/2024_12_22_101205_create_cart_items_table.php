@@ -15,6 +15,7 @@ return new class extends Migration
             $table->increments('id')->unsigned();
             $table->unsignedInteger('cart_id');
             $table->unsignedInteger('product_id');
+            $table->integer('quantity')->default(1);
             $table->foreign('cart_id')->references('id')->on('carts');
             $table->foreign('product_id')->references('id')->on('product_variations');
             $table->timestamps();

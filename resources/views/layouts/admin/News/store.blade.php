@@ -120,7 +120,6 @@
                                                 </table>
                                             </div>
                                         </div>
-                                    
                                     @endisset
                                     <div class="col-sm-12 col-xl-12 mb-3">
                                         <label for="tag_id" class="form-label ">Tag <span class="text-danger text-small">(*)</span></label>

@@ -27,7 +27,7 @@ class Controller extends BaseController
             });
         }
 
-        $products = $productQuery->with('product')->orderBy('position')->paginate(8);
+        $products = $productQuery->with('product')->orderBy('position')->paginate(12);
 
         return $products;
     }
