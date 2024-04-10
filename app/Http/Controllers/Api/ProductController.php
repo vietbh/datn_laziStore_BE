@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\CategoriesProduct;
 use App\Models\Product;
 use App\Models\ProductVariation;
+use App\Models\SlideAds;
 use App\Models\SpecificationsProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -141,6 +142,9 @@ class ProductController extends Controller
         $products = $this->getProductsByCategory($category);
         return response()->json($products);
     }
-
+    public function banner(){
+        $banners = SlideAds::where('show_hide',1)->orderBy('position')->get();
+        return response()->json(['banners'=>$banners]);
+    }
   
 }

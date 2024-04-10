@@ -23,10 +23,10 @@ class SlideAdsController extends Controller
      */
     public function store(Request $request, SlideAds $slideAds)
     {
-        //
+        //mimes:jpg, png, jpeg, jfif|
         $request->validate([
             'title' => 'required',
-            'image_url' => 'required|image|mimes:jpg, png, jpeg, jfif|max:2048|dimensions:min_width=100,min_height=100,max_width=1280,max_height=1280',
+            'image_url' => 'required|image|max:2048|dimensions:min_width=100,min_height=100,max_width=1280,max_height=1280',
             'content' => 'required',
             'link' => 'url|nullable',
             'position'=>'required|min:1|max:99999|numeric',
@@ -41,7 +41,7 @@ class SlideAdsController extends Controller
             'position.numeric' => 'Vui lòng nhập số.',
             'image_url.required'=>'Vui lòng không bỏ trống trường này.',
             'image_url.image' => 'Chỉ cho phép file hình hoặc gif.',
-            'image_url.mimes' => 'Chỉ cho phép file có đuôi là jpg, png, jpeg, jfif.',
+            // 'image_url.mimes' => 'Chỉ cho phép file có đuôi là jpg, png, jpeg, jfif.',
             'image_url.max' => 'Chỉ cho phép kích thước tối đa 2048Kb.',
         ]);
         $file = $request->file('image_url'); // Lấy file từ request    
@@ -56,17 +56,10 @@ class SlideAdsController extends Controller
         $slideAds->content = $request->content ?? '';
         $slideAds->link = $request->link ?? '';
         $slideAds->position = $request->position;
+        $slideAds->show_hide = $request->show_hide;
         $slideAds->save();
         return redirect()->route('slide.index')->with('success','Thêm mới slide thành công');
 
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
     }
 
     /**
@@ -76,7 +69,7 @@ class SlideAdsController extends Controller
     {
         //
         $slide = SlideAds::findOrFail($id);
-        $slides = SlideAds::orderByDesc('created_at')->paginate(10);
+        $slides = SlideAds::orderBy('position')->orderByDesc('created_at')->paginate(10);
         return view('layouts.admin.SlideAds.index',compact('slides','slide'));
     }
 
@@ -85,16 +78,15 @@ class SlideAdsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        //mimes:jpg, png, jpeg, jfif|
         $slideAds = SlideAds::findOrFail($id); 
         $request->validate([
             'title' => 'required',
-            'image_url' => 'image|mimes:jpg, png, jpeg, jfif|max:2048|dimensions:min_width=100,min_height=100,max_width=1280,max_height=1280',
-            'content' => 'required',
+            'image_url' => 'image|max:2048|dimensions:min_width=100,min_height=100,max_width=1280,max_height=1280',
+            'content' => 'nullable',
             'link' => 'url|nullable',
-            'position'=>'required|min:1|max:99999|numeric',
+            'position'=>'nullable|min:1|max:99999|numeric',
         ],[
-            
             'title.required'=>'Vui lòng không bỏ trống trường này.',
             'content.required'=>'Vui lòng không bỏ trống trường này.',
             'link.url'=>'Vui lòng nhập dạng link vd(https://....).',
@@ -103,7 +95,7 @@ class SlideAdsController extends Controller
             'position.max' => 'Nhập số nhỏ hơn 99999.',
             'position.numeric' => 'Vui lòng nhập số.',
             'image_url.image' => 'Chỉ cho phép file hình hoặc gif.',
-            'image_url.mimes' => 'Chỉ cho phép file có đuôi là jpg, png, jpeg, jfif.',
+            // 'image_url.mimes' => 'Chỉ cho phép file có đuôi là jpg, png, jpeg, jfif.',
             'image_url.max' => 'Chỉ cho phép kích thước tối đa 2048Kb.',
         ]);
         $file = $request->file('image_url'); // Lấy file từ request    
@@ -118,6 +110,7 @@ class SlideAdsController extends Controller
         $slideAds->content = $request->content ?? '';
         $slideAds->link = $request->link ?? '';
         $slideAds->position = $request->position;
+        $slideAds->show_hide = $request->show_hide;
         $slideAds->update();
         return redirect()->route('slide.index')->with('success','Cập nhật slide thành công');
     }

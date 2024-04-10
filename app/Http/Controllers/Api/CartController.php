@@ -14,7 +14,8 @@ class CartController extends Controller
     //
     public function index($id){
         // take pro
-        $cart = Cart::find($id);
+        $cart = Cart::findOrNew($id);
+        // if($cart)
         if(empty($cart)){
             return response()->json(204);
         }

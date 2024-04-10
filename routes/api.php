@@ -34,6 +34,7 @@ Route::get('/san-pham-laptop',[ProductController::class,'laptop']);
 Route::get('/san-pham-pc',[ProductController::class,'pc']);
 Route::get('/san-pham-dong-ho',[ProductController::class,'watch']);
 Route::get('/san-pham-am-thanh',[ProductController::class,'audio']);
+Route::get('/slide-ads',[ProductController::class,'banner']);
 // Danh muc
 Route::get('/danh-muc-san-pham',[CategoryProController::class,'index']);
 Route::get('/danh-muc-san-pham/{slug}',[CategoryProController::class,'show']);
