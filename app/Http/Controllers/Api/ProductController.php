@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\CategoriesProduct;
 use App\Models\Product;
 use App\Models\ProductVariation;
+use App\Models\SlideAds;
+use App\Models\SpecificationsProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -48,9 +50,25 @@ class ProductController extends Controller
 
     public function show(string $slug)
     {
-        //
-        $product = Product::where('slug',$slug)->with('variations')->first();
-        return response()->json($product);
+        $products = ProductVariation::query()
+        ->whereHas('product', function ($query) use ($slug) {
+            $query->where('slug', $slug)
+                  ->where('show_hide', true);
+        })
+        ->where('show_hide', true)
+        ->orderBy('price_sale')
+        ->get();
+        $product_id = null;
+        foreach ($products as $value) {
+            $product_id = $value->product_id;
+            break;
+        }
+        $product = Product::find($product_id);
+        $speci = SpecificationsProduct::where([['product_id',$product->id],['show_hide',true]])->orderBy('position')->get();
+        return response()->json([
+            'variation' => $products,
+            'product' => $product,
+            'speci'=>$speci]);
     }
 
     public function hot()
@@ -71,13 +89,16 @@ class ProductController extends Controller
         $productQuery->whereHas('product', function($query){
             $query->where([['product_type_new',true],['show_hide',true]]);
         });
-        $products = $productQuery->orderBy('position')->with('product')->limit(8)->get();
+        $products = $productQuery->where([['show_hide',true]])->orderBy('position')->with('product')->limit(8)->get();
         return response()->json($products);
     }
     public function laptop()
     {
         //
         $category = CategoriesProduct::where([['show_hide',true],['slug','laptop']])->first();
+        if(empty($category)){
+            return response()->json(array());
+        }
         $products = $this->getProductsByCategory($category);
         return response()->json($products);
     }
@@ -85,6 +106,9 @@ class ProductController extends Controller
     {
         //
         $category = CategoriesProduct::where([['show_hide',true],['slug','tablet']])->first();
+        if(empty($category)){
+            return response()->json(array());
+        }
         $products = $this->getProductsByCategory($category);
         return response()->json($products);
     }
@@ -92,6 +116,9 @@ class ProductController extends Controller
     {
         //
         $category = CategoriesProduct::where([['show_hide',true],['slug','pc']])->first();
+        if(empty($category)){
+            return response()->json(array());
+        }
         $products = $this->getProductsByCategory($category);
         return response()->json($products);
     }
@@ -99,6 +126,9 @@ class ProductController extends Controller
     {
         //
         $category = CategoriesProduct::where([['show_hide',true],['slug','dong-ho']])->first();
+        if(empty($category)){
+            return response()->json(array());
+        }
         $products = $this->getProductsByCategory($category);
         return response()->json($products);
     }
@@ -106,9 +136,15 @@ class ProductController extends Controller
     {
         //
         $category = CategoriesProduct::where([['show_hide',true],['slug','am-thanh']])->first();
+        if(empty($category)){
+            return response()->json(array());
+        }
         $products = $this->getProductsByCategory($category);
         return response()->json($products);
     }
-
+    public function banner(){
+        $banners = SlideAds::where('show_hide',1)->orderBy('position')->get();
+        return response()->json(['banners'=>$banners]);
+    }
   
 }

@@ -100,6 +100,8 @@ Route::middleware(['auth','role:0'])->group(function () {
     Route::delete('/lazi-store-admin/slide-quang-cao-xoa/{id}',[SlideAdsController::class, 'destroy'])->name('slide.delete');
     // Vai trò quản trị
     Route::get('/lazi-store-admin/vai-tro-quan-tri',[RoleAdminController::class, 'index'])->name('role.index');
+    Route::get('/lazi-store-admin/quan-tri-vien',[UserGuestController::class, 'index'])->name('guest.index');
+
     // Tới cửa hàng
     Route::get('/https://vietbh.github.io/lazi-store',function(){
         return redirect('https://vietbh.github.io/lazi-store');

@@ -1,27 +1,5 @@
 @extends('admin')
 @section('content')
-    @if (session('success'))
-        @include('layouts.admin.components.alert')
-    @endif
-    @error('title')
-    <script type="module"> 
-            var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
-            keyboard: false
-            })
-            myModal.toggle();
-            myModal.show();
-    </script>
-    @enderror
-    
-    @if (isset($category))
-    <script type="module"> 
-            var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
-            keyboard: false
-            })
-            myModal.toggle();
-            myModal.show();
-    </script>
-    @endif
    <!-- Sale & Revenue Start -->
    <div class="container-fluid pt-4 px-4">
        <div class="row g-4">
@@ -70,21 +48,13 @@
        <div class="bg-light text-center rounded p-4">
            <div class="d-flex align-items-center justify-content-between mb-4">
                <h4 class="mb-0">Danh sách đơn hàng</h4>
-               <!-- Button trigger modal -->
-                {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoriesModal">
-                    Thêm danh mục
-                </button> --}}
-            <!-- Modal -->
-            {{-- @include('layouts.admin.components.catProModal') --}}
-            <!--End Modal -->
            </div>
            <div class="table-responsive" style="height: 100vh">
                <table class="table text-start align-middle table-bordered table-hover mb-0" >
                    <thead>
                        <tr class="text-dark">
-                           <th scope="col"><input class="form-check-input" type="checkbox"></th>
                            <th scope="col">Ngày tạo</th>
-                           <th scope="col">Tên danh mục</th>
+                           <th scope="col">Tên khách hàng</th>
                            <th scope="col">Slug</th>
                            <th scope="col">Thứ tự</th>
                            <th scope="col">Trạng thái</th>
@@ -92,14 +62,8 @@
                        </tr>
                    </thead>
                    <tbody>
-                    @foreach ($orders as $order)
+                    @forelse ($orders as $order)                        
                         <tr>
-                            <td><input class="form-check-input" type="checkbox" id="{{$order->id}}"></td>
-                            <td>{{$order->created_at}}</td>
-                            <td>{{$order->title}}</td>
-                            <td>{{$order->slug}}</td>
-                            <td>{{$order->index}}</td>
-                            <td>{{$order->show_hide=='show'?'Hiện':'Ẩn'}}</td>
                             <td>
                             <div class="d-flex justify-content-evenly">
                                 <a class="btn btn-sm btn-primary" href="{{ route('product.cat.edit', ['id' => $order->id]) }}">Edit</a>
@@ -110,12 +74,19 @@
                                 </form>
                             </div>
                             </td>
+                            <td>{{$order->created_at}}</td>
+                            <td>{{$order->full_name}}</td>
+                            <td>{{$order->phone_number}}</td>
+                            <td>{{$order->address}}</td>
+                            <td>{{$order->amount}}</td>
                         </tr>
-                    @endforeach                      
+                    @empty
+                        <td colspan="10"><h3 class="text-center">Không có đơn hàng nào</h3></td>
+                    @endforelse                      
                    </tbody>
                </table>
            </div>
-           
+           {{ $orders->links() }} 
        </div>
    </div>
    <!-- Table Cate End -->

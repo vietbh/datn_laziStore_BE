@@ -17,6 +17,10 @@ return new class extends Migration
             $table->string('full_name',255);
             $table->string('phone_number',30);
             $table->string('address',255);
+            $table->longText('note')->nullable();
+            $table->integer('count_items');
+            $table->decimal('amount',20,2);
+            $table->decimal('total',20,2);
             $table->unsignedInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('date_create');

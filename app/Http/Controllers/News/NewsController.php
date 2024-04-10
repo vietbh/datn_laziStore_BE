@@ -114,7 +114,7 @@ class NewsController extends Controller
         //
         $new = News::findOrFail($id);
         $categories = CategoriesNews::all();
-        $tags = Tag::select('id', 'name')->get()->map(function ($tag) {
+        $tags = Tag::select('id', 'name')->where([TagRelationNews::where(['news_id',$id])->get('tag_id')])->get()->map(function ($tag) {
             return [
                 'id' => $tag->id,
                 'text' => $tag->name,
@@ -165,7 +165,14 @@ class NewsController extends Controller
         $news->slug = Str::slug($request->title);
         $news->categories_news_id = $request->categories_news_id;
         // $news->tag_id = $request->tag_id;
-        
+        if($news->id){
+            foreach ($request->tag_id as $tag_id) {
+                $tag = new TagRelationNews();
+                $tag->news_id = $news->id;
+                $tag->tag_id = $tag_id;
+                $tag->save();
+            }
+        }
         $news->description = $request->description;
         $news->author = $request->author;
         $news->show_hide = $request->show_hide;
