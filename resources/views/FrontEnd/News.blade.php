@@ -10,13 +10,13 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="py-3"></div>
-                        <div class="trending-tittle">
+                        <div class="trending-tittle"  style="color: #E56B6F">
                             <strong>Trending now</strong>
                          
                             <div class="trending-animated">
-                                <ul id="js-news" class="js-hidden">
+                                <ul id="js-news" class="js-hidden hidden">
                                     @foreach ($news as $item)
-                                    <li class="news-item"><a href="{{ route('newsFront.show', ['slug'=>$item->id]) }}">{{$item->title}}</a></li>
+                                    <li class="news-item hidden"><a href="{{ route('newsFront.show', ['slug'=>$item->id]) }}">{{$item->title}}</a></li>
                                     @endforeach
                                 </ul>
                             </div>
@@ -25,9 +25,76 @@
                     </div>
                 </div>
                 <div class="row">
+                {{-- <div class="container px-4 py-5" id="custom-cards">
+    <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
+      <div class="col">
+        <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg" style="background-image: url({{ asset('img/banner_1.webp') }});">
+          <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+            <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Thông tin mới về Mac Pro 2024</h3>
+            <ul class="d-flex list-unstyled mt-auto">
+              <li class="me-auto">
+                <img src="https://github.com/twbs.png" alt="Bootstrap" width="32" height="32" class="rounded-circle border border-white">
+              </li>
+              <li class="d-flex align-items-center me-3">
+                <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"></use></svg>
+                <small>Macbook</small>
+              </li>
+              <li class="d-flex align-items-center">
+                <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#calendar3"></use></svg>
+                <small></small>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg" style="background-image: url({{ asset('img/x_m_16.webp') }}); background-repeat: no-repeat;
+        background-size: cover; ">
+          <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+            <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Much longer title that wraps to multiple lines</h3>
+            <ul class="d-flex list-unstyled mt-auto">
+              <li class="me-auto">
+                <img src="https://github.com/twbs.png" alt="Bootstrap" width="32" height="32" class="rounded-circle border border-white">
+              </li>
+              <li class="d-flex align-items-center me-3">
+                <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"></use></svg>
+                <small>Pakistan</small>
+              </li>
+              <li class="d-flex align-items-center">
+                <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#calendar3"></use></svg>
+                <small>4d</small>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg" style="background-image: url({{ asset('img/v_ng_18.webp') }});  background-repeat: no-repeat;
+        background-size: cover; ">
+          <div class="d-flex flex-column h-100 p-5 pb-3 text-shadow-1">
+            <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Another longer title belongs here</h3>
+            <ul class="d-flex list-unstyled mt-auto">
+              <li class="me-auto">
+                <img src="https://github.com/twbs.png" alt="Bootstrap" width="32" height="32" class="rounded-circle border border-white">
+              </li>
+              <li class="d-flex align-items-center me-3">
+                <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"></use></svg>
+                <small>California</small>
+              </li>
+              <li class="d-flex align-items-center">
+                <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#calendar3"></use></svg>
+                <small>5d</small>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> --}}
                     <div class="col-lg-8">
                         <!-- Trending Top -->
-                        <div class="trending-top mb-30">
+                        {{-- <div class="trending-top mb-30">
                             <div class="trend-top-img">
                                 <img src="news/assets/assets/img/trending/trending_top.jpg" alt="">
                                 <div class="trend-top-cap">
@@ -35,27 +102,46 @@
                                     <h2><a href="details.html">Welcome To The Best Model Winner<br> Contest At Look of the year</a></h2>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <!-- Trending Bottom -->
                         <div class="trending-bottom">
                             <div class="row">
-                                @forelse ($news as $news)
-                                    <div class="col-lg-4">
+                                @forelse ($news as $new)
+                                    {{-- <div class="col-lg-4">
                                         <div class="single-bottom mb-35">
                                             <div class="trend-bottom-img mb-30">
-                                                <img src="{{ asset($news->image_url) }} " width="200" height="200" alt="" loading="lazy">
+                                                
+                                                <img src="{{ $new->image_url }} " width="200" height="200" alt="" loading="lazy">
                                             </div>
                                             <div class="trend-bottom-cap">
-                                                <span class="color1">{{$news->category->name}}</span>
-                                                <h4><a class="a-title d-inline-block text-truncate" style="max-width: 250px;"  href="{{ route('newsFront.show',['slug' => $news->slug]) }}">{{ $news->title }}</a></h4>
+                                                <span class="color1">{{$new->category->name}}</span>
+                                                <h4><a class="a-title d-inline-block text-truncate" style="max-width: 250px;"  href="{{ route('newsFront.show',['slug' => $new->slug]) }}">{{ $new->title }}</a></h4>
                                             </div>
                                         </div>
-                                                    <p class="d-inline-block text-truncate" style="max-width: 150px;">{!! $news->description !!}</p>
+                                                    <p class="d-inline-block text-truncate" style="max-width: 150px;">{!! $new->description !!}</p>
                                         
                                                 <div class="bg-secondary pl-2 rounded pb-0">
-                                                    <p class="text-light ">Ngày đăng: {{  $news->date_create  }}</p>
+                                                    <p class="text-light ">Ngày đăng: {{  $new->date_create  }}</p>
                                                 </div>
-                                    </div>
+                                    </div> --}}
+                                     <a href="">
+                                    <div class="card mb-3" style="max-width: 540px;">
+                                        <div class="row g-0">
+                                          <div class="col-md-4">
+                                            <img src="{{ $new->image_url }}" class="img-fluid  object-fit-cover" alt="..."  style="width:500px; height: 313px;">
+                                          </div>
+                                          <div class="col-md-8">
+                                            <div class="card-body">
+                                            <span class="color1">{{$new->category->name}}</span>
+                                              <p class="card-text">{{ $new->title }}</p>
+                                              <p class="card-text"><small class="text-body-secondary"></small>{!! $new->description !!}</p>
+                                              <a href="{{ route('newsFront.show',['slug' => $new->slug]) }}">Đọc thêm...</a>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </a> 
+                                    
                                 @empty
                                     <div class="col-lg-4">
                                         <div class="single-bottom mb-35">
@@ -215,10 +301,10 @@
     </div> 
     <!-- End Start youtube -->
     <!--  Recent Articles start -->
-    <div class="recent-articles">
+    {{-- <div class="recent-articles">
         <div class="container">
            <div class="recent-wrapper">
-                <!-- section Tittle -->
+                
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="section-tittle mt-30 mb-30">
@@ -227,7 +313,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    {{-- <div class="col-12">
+                    <div class="col-12">
                         <div class="recent-active dot-style d-flex dot-style">
                             @forelse ($news_slide as $item)
                             <div class="single-recent mb-100">
@@ -250,11 +336,11 @@
                         @endforelse
                             
                         </div>
-                    </div> --}}
+                    </div>
                 </div>
            </div>
         </div>
-    </div>           
+    </div>            --}}
     <!--Recent Articles End -->
    
 @endsection

@@ -33,6 +33,9 @@ Route::get('/lazi-store.html', function () {
 
 Route::get('/tin-tuc.html',[FrontEndNewsController::class,'index'])->name('newsFront.index');
 Route::get('/{slug}.html',[FrontEndNewsController::class,'show'])->name('newsFront.show');
+Route::get('/categories-news', [Newscontroller::class,'categories_parent'])->name('categories-news');
+
+
 // Route::resource('/categories',CategoryController::class)->only(['show']);
 // Route::resource('/comment',CommentController::class)->only(['store']);
 // Route::get('/tin/search',[TinController::class,'search'])->name('tin.search');
@@ -41,9 +44,7 @@ Route::get('/{slug}.html',[FrontEndNewsController::class,'show'])->name('newsFro
 // 
 
 
-Route::get('/dashboard', function () {
-    // return view('dashboard');
-    return redirect()->route('home');
+Route::get('/dashboard', function () {return redirect()->route('home');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/authorize', function () {
@@ -137,6 +138,8 @@ Route::middleware(['auth','role:0'])->group(function () {
     Route::put('/lazi-store-admin/tin-tuc-edit/{id}',[NewsController::class, 'update'])->name('news.update');
     Route::delete('/lazi-store-admin/tag-tin-tuc-xoa/{id}/{news}',[NewsController::class, 'deleteTagRelaNews'])->name('news.remove');
     Route::delete('/lazi-store-admin/tin-tuc-xoa/{id}',[NewsController::class, 'destroy'])->name('news.delete');
+    // 
+    
     //Tag tin tức
     Route::get('/lazi-store-admin/tag-tin-tuc',[TagController::class, 'index'])->name('news.tag.index');
     Route::post('/lazi-store-admin/tag-tin-tuc-them',[TagController::class, 'store'])->name('news.tag.store');

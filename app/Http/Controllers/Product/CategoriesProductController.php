@@ -71,7 +71,7 @@ class CategoriesProductController extends Controller
         $categories_parent = CategoriesProduct::where([
             ['id','!=',1],
             ['id','!=',$id],
-            ['parent_category_id',null],
+           
         ])->get();
         return view('layouts.admin.Product.Categories.index',compact('category','categories','categories_parent'));
     }

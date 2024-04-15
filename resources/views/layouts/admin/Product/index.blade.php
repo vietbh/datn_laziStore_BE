@@ -17,7 +17,8 @@
                    <i class="fa fa-chart-bar fa-3x text-primary"></i>
                    <div class="ms-3">
                        <p class="mb-2">Thương hiệu</p>
-                       <h6 class="mb-0">{{count($brands)}}</h6>
+                       <h6 class="mb-0">{{ count($brands) }}</h6>
+
                    </div>
                </div>
            </div>

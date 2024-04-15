@@ -55,18 +55,19 @@
                                         </div>
                                         <div class="col-sm-12 col-xl-12 mb-3">
                                             <label for="value" class="form-label ">Giá trị thông số <span class="text-danger text-small">(*)</span></label>
-                                            <input type="text" name="value" class="form-control 
+                                            <textarea name="value" class="form-control 
                                             @error('value') 
                                                 is-invalid
                                             @enderror" id="value"
-                                            @isset($productSpecification)
-                                                value="{{$productSpecification->value}}"
-                                            @else
-                                                value="{{old('value')}}"
-                                            @endisset
                                             autocomplete="value"
                                             placeholder="Nhập tên thông số (vd:Công nghệ màn hình)"
                                             aria-describedby="value">
+                                            @isset($productSpecification)
+                                            {{$productSpecification->value}}
+                                        @else
+                                            {{old('value')}}
+                                        @endisset
+                                            </textarea>
                                             @error('value')
                                                 <div class="form-text text-danger">{{ $message }}</div>
                                             @enderror

@@ -1,12 +1,14 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CategoryProController;
+use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\EmailVerificationPromptController as ApiEmailVerificationPromptController;
+use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\ProductController;
 
 use App\Http\Controllers\Api\VerifyEmailController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,21 +27,42 @@ use Illuminate\Support\Facades\Route;
 // });
 // Route::middleware('auth:sanctum')->group(function(){
 // });
-Route::get('/san-pham',[ProductController::class,'index']);
+Route::get('/san-pham/{slug}',[ProductController::class,'show']);
+Route::get('/san-pham-moi',[ProductController::class,'new']);
+Route::get('/san-pham-hot',[ProductController::class,'hot']);
+Route::get('/san-pham-tablet',[ProductController::class,'tablet']);
+Route::get('/san-pham-laptop',[ProductController::class,'laptop']);
+Route::get('/san-pham-pc',[ProductController::class,'pc']);
+Route::get('/san-pham-dong-ho',[ProductController::class,'watch']);
+Route::get('/san-pham-am-thanh',[ProductController::class,'audio']);
+Route::get('/slide-ads',[ProductController::class,'banner']);
+// Danh muc
 Route::get('/danh-muc-san-pham',[CategoryProController::class,'index']);
 Route::get('/danh-muc-san-pham/{slug}',[CategoryProController::class,'show']);
-Route::get('/danh-muc-tin-tuc',[CategoryProController::class,'index']);
-// Route::post('/lien-he',[Contact::class,'index']);
+
+Route::post('/chinh-sach',[ContactController::class,'store']);
+Route::post('/lien-he',[ContactController::class,'store']);
 
 //Auth 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/dang-ky', [AuthController::class, 'store']);
+
 Route::get('/quen-mat-khau', [AuthController::class, 'forgotPasswordCreate']);
 Route::post('/quen-mat-khau', [AuthController::class, 'forgotPasswordStore']);
 Route::get('/dat-lai-mat-khau/{token}', [AuthController::class, 'resetPasswordCreate']);
 Route::post('/dat-lai-mat-khau', [AuthController::class, 'resetPasswordStore']);
+// // Gio hang
+
+Route::get('/gio-hang/{id}',[CartController::class,'index']);
+Route::post('/gio-hang/them-san-pham',[CartController::class,'store']);
+Route::post('/gio-hang/cap-nhat-san-pham',[CartController::class,'update']);
+Route::post('/gio-hang/xoa-san-pham',[CartController::class,'destroy']);
+// Thanh toan
+Route::post('/thanh-toan',[PaymentController::class,'store']);
 
 Route::group(['prefix' => 'api'], function () {
+
+
     Route::get('verify-email', ApiEmailVerificationPromptController::class);
 
     Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)

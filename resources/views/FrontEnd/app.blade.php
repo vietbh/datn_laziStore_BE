@@ -7,10 +7,16 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         {{-- <link rel="manifest" href="site.webmanifest"> --}}
-		{{-- <link rel="shortcut icon" type="image/x-icon" href="news/assets/assets/img/favicon.ico"> --}}
-
-		<!-- CSS here -->
-        <link href="{{ asset('news/assets/assets/css/style.css') }}" rel="stylesheet">
+		<link rel="shortcut icon" type="image/x-icon" href="news/assets/assets/img/favicon.ico">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        
+        
+        <!-- CSS here -->
+        {{-- <link href="{{ asset('news/assets/assets/css/themify-icons.css') }}" rel="stylesheet"> 
+        <link href="{{ asset('news/assets/assets/css/style.css') }}" rel="stylesheet"> 
         <link href="{{ asset('news/assets/assets/css/bootstrap.min.css') }}" rel="stylesheet">
         <link href="{{ asset('news/assets/assets/css/owl.carousel.min.css') }}" rel="stylesheet">
         <link href="{{ asset('news/assets/assets/css/ticker-style.css') }}" rel="stylesheet">
@@ -19,189 +25,17 @@
         <link href="{{ asset('news/assets/assets/css/animate.min.css') }}" rel="stylesheet">
         <link href="{{ asset('news/assets/assets/css/magnific-popup.css') }}" rel="stylesheet">
         <link href="{{ asset('news/assets/assets/css/fontawesome-all.min.css') }}" rel="stylesheet">
-        <link href="{{ asset('news/assets/assets/css/themify-icons.css') }}" rel="stylesheet">
         <link href="{{ asset('news/assets/assets/css/slick.css') }}" rel="stylesheet">
-        <link href="{{ asset('news/assets/assets/css/nice-select.css') }}" rel="stylesheet">
-           
+        <link href="{{ asset('news/assets/assets/css/nice-select.css') }}" rel="stylesheet">  --}}
+
    </head>
-
    <body>
-       
-    <!-- Preloader Start -->
-     {{-- <div id="preloader-active">
-        <div class="preloader d-flex align-items-center justify-content-center">
-            <div class="preloader-inner position-relative">
-                <div class="preloader-circle"></div>
-                <div class="preloader-img pere-text">
-                    <img src="{{asset('upload/images/Logo-Tinh-Ba-Ria-Vung-Tau.png')}}" width="60" height="60" alt="">
-                    
-                </div>
-            </div>
-        </div>
-    </div>  --}}
-    <!-- Preloader Start -->
+        @include('FrontEnd.part.Header')
+        <main>
+            @yield('content')
+        </main>
+         @include('FrontEnd.part.Footer')
 
-    <header>
-        <!-- Header Start -->
-       <div class="header-area">
-            <div class="main-header ">
-                <div class="header-top black-bg d-none d-md-block">
-                   <div class="container">
-                       <div class="col-xl-12">
-                            <div class="row d-flex justify-content-between align-items-center">
-                                <div class="header-info-left">
-                                    <ul>     
-                                        <li><img src="{{asset('news/assets/assets/img/icon/header_icon1.png')}}" alt="">27ºc, Sunny </li>
-                                        <li><img src="{{asset('news/assets/assets/img/icon/header_icon1.png')}}" alt=""><script>document.write(new Date().toLocaleString());</script></li>
-                                    </ul>
-                                </div>
-                                <div class="header-info-right">
-                                    <ul class="header-social">    
-                                        <li><a href="#"><i class="fab fa-twitter"></i></a></li>
-                                        <li><a href="#"><i class="fab fa-instagram"></i></a></li>
-                                       <li> <a href="#"><i class="fab fa-pinterest-p"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                       </div>
-                   </div>
-                </div>
-                <div class="header-mid d-none d-md-block">
-                   <div class="container">
-                        <div class="row d-flex align-items-center">
-                            <!-- Logo -->
-                            <div class="col-xl-3 col-lg-3 col-md-3">
-                                <div class="logo ">
-                                    <a class="d-flex align-items-center text-decoration-none" href="{{ route('newsFront.index') }}">
-                                            <img src="{{asset('news/assets/upload/images/Logo-Tinh-Ba-Ria-Vung-Tau.png')}}" width="50" height="50">
-                                            <h4 class="text-secondary text-bolder ">Lazi Store</h4>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-xl-9 col-lg-9 col-md-9">
-                                <div class="header-banner f-right ">
-                                    <img src="news/assets/assets/img/hero/header_card.jpg" alt="">
-                                </div>
-                            </div>
-                        </div>
-                   </div>
-                </div>
-               <div class="header-bottom header-sticky">
-                    <div class="container">
-                        <div class="row align-items-center">
-                            <div class="col-xl-10 col-lg-10 col-md-12 header-flex">
-                                <!-- sticky -->
-                                    <div class="sticky-logo">
-                                        <a href="{{ route('newsFront.index') }}">
-                                            <img src="{{asset('news/assets/upload/images/Logo-Tinh-Ba-Ria-Vung-Tau.png')}}" width="50" height="50" alt="">
-                                            <h4 class="text-secondary text-bolder">Lazi Store</h4>
-                                        </a>
-                                    </div>
-                                <!-- Main-menu -->
-                                    @include('FrontEnd.part.nav')
-                         </div>
-                    </div>
-               </div>
-            </div>
-       </div>
-        <!-- Header End -->
-    </header>
-<main>
-    @yield('content')
-</main>
-    
-    <footer>
-       <!-- Footer Start-->
-       <div class="footer-area footer-padding fix">
-            <div class="container">
-                <div class="row d-flex justify-content-between">
-                    <div class="col-xl-5 col-lg-5 col-md-7 col-sm-12">
-                        <div class="single-footer-caption">
-                            <div class="single-footer-caption">
-                                <!-- logo -->
-                                <div class="footer-logo">
-                                    {{-- <a href="index.html"><img src="news/assets/assets/img/logo/logo2_footer.png" alt=""></a> --}}
-                                    <a href="{{ route('newsFront.index') }}"><h4 class="text-warning"><img src="{{asset('upload/images/Logo-Tinh-Ba-Ria-Vung-Tau.png')}}" width="70" height="70" alt=""> Lazi Store Page</h4></a>
-                                </div>
-                                <div class="footer-tittle">
-                                    <div class="footer-pera">
-                                        <p>Suscipit mauris pede for con sectetuer sodales adipisci for cursus fames lectus tempor da blandit gravida sodales  Suscipit mauris pede for con sectetuer sodales adipisci for cursus fames lectus tempor da blandit gravida sodales  Suscipit mauris pede for sectetuer.</p>
-                                    </div>
-                                </div>
-                                <!-- social -->
-                                <div class="footer-social">
-                                    <a href="#"><i class="fab fa-twitter"></i></a>
-                                    <a href="#"><i class="fab fa-instagram"></i></a>
-                                    <a href="#"><i class="fab fa-pinterest-p"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-3 col-md-4  col-sm-6">
-                        <div class="single-footer-caption mt-60">
-                            <div class="footer-tittle">
-                                <h4>Newsletter</h4>
-                                <p>Heaven fruitful doesn't over les idays appear creeping</p>
-                                <!-- Form -->
-                                <div class="footer-form" >
-                                    <div id="mc_embed_signup">
-                                        <form target="_blank" action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
-                                        method="get" class="subscribe_form relative mail_part">
-                                            <input type="email" name="email" id="newsletter-form-email" placeholder="Email Address"
-                                            class="placeholder hide-on-focus" onfocus="this.placeholder = ''"
-                                            onblur="this.placeholder = ' Email Address '">
-                                            <div class="form-icon">
-                                            <button type="submit" name="submit" id="newsletter-submit"
-                                            class="email_icon newsletter-submit button-contactForm"><img src="news/assets/assets/img/logo/form-iocn.png" alt=""></button>
-                                            </div>
-                                            <div class="mt-10 info"></div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-3 col-md-5 col-sm-6">
-                        <div class="single-footer-caption mb-50 mt-60">
-                            <div class="footer-tittle">
-                                <h4>Map</h4>
-                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15673.878191566528!2d106.67631391966556!3d10.851846754502919!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m3!3e0!4m0!4m0!5e0!3m2!1svi!2s!4v1691591901915!5m2!1svi!2s" width="350" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-       <!-- footer-bottom aera -->
-       <div class="footer-bottom-area">
-           <div class="container">
-               <div class="footer-border">
-                    <div class="row d-flex align-items-center justify-content-between">
-                        <div class="col-lg-6">
-                            <div class="footer-copy-right">
-                                <p>
-                                    Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="ti-heart" aria-hidden="true"></i> by <a href="#" target="_blank">BH_Ix5</a>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="footer-menu f-right">
-                                <ul>                             
-                                    <li><a href="#">Terms of use</a></li>
-                                    <li><a href="#">Privacy Policy</a></li>
-                                    <li><a href="#">Contact</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-               </div>
-           </div>
-       </div>
-       <!-- Footer End-->
-   </footer>
-   
-	<!-- JS here -->
-	
 		<!-- All JS Custom Plugins Link Here here -->
         <script src="{{ asset('news/assets/assets/js/vendor/modernizr-3.5.0.min.js') }}" ></script>
         {{-- <script src="news/assets/assets/js/vendor/modernizr-3.5.0.min.js"></script> --}}

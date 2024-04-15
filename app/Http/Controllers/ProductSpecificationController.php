@@ -105,6 +105,6 @@ class productSpecificationController extends Controller
         $productSpecification = SpecificationsProduct::findOrFail($id);
         $product = Product::findOrFail($productSpecification->product_id);
         $productSpecification->delete();
-        return redirect()->route('varia.create',['id' => $product->id])->with('success','Xóa thành công!');
+        return redirect()->route('specifi.create',['id' => $product->id])->with('success','Xóa thành công!');
     }
 }

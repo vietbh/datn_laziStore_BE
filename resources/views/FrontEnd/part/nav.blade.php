@@ -1,13 +1,13 @@
-<div class="main-menu d-none d-md-block">
+{{-- <div class="main-menu d-none d-md-block">
     
-    <nav>
-        <ul id="navigation">
+    <nav class="text-center">
+        <ul id="">
             <li><a href="{{ route('newsFront.index') }}">Trang chủ</a></li>
-            <li><a href="#">Danh mục</a>
+            <li><a href="{{route('categories-news')}}">Danh mục</a>
                 <ul class="submenu">
-                    @foreach ($news as $tl)
+                    @foreach ($categories_news as $category)
                         <li class="nav-item">
-                            {{-- <a class="nav-link" href="{{ route('categories.show', ['slug' => $tl->id]) }}">{{ $tl->category_nm }}</a> --}}
+                            <a href="">{{ $category->name }}</a>
                         </li>
                     @endforeach
                 </ul>
@@ -59,15 +59,15 @@
 
                             {{-- <a class="nav-link"
                                 href="{{ route('tin.category', ['idTL' => $tl->id]) }}">{{ $tl->category_nm }}</a> --}}
-                        </li>
-                    </ul>
+                        {{-- </li> --}}
+                    {{-- </ul>
                 </li>        
             @endif
         </ul>
     </nav>
 
-</div>
-</div>
+</div> --}}
+{{-- </div>
 <div class="col-xl-2 col-lg-2 col-md-4">
     <div class="header-right-btn f-right d-none d-lg-block">
         <i class="fas fa-search special-tag"></i>
@@ -82,6 +82,6 @@
 <!-- Mobile Menu -->
 <div class="col-12">
     <div class="mobile_menu d-block d-md-none"></div>
-</div>
+</div>  --}}
 
 

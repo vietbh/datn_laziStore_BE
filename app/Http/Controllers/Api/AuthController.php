@@ -7,7 +7,10 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules;
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
+use App\Models\Role;
 use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -34,11 +37,14 @@ class AuthController extends Controller
             ]);
         }
         $data = [
-           ['id' => $user->id,
+           'user'=>[
+            'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
-            'image_url' => $user->image_url
-            ]
+            'image_url' => $user->image_url,
+            'remember_token' => $user->remember_token,
+            'cart_id' => $user->cart->id,
+           ]
         ];
         return response()->json($data);     
     }
@@ -60,24 +66,35 @@ class AuthController extends Controller
             'password.required' =>'Vui lòng không bỏ trống trường này.',
             'password.confirmed' =>'Mật khẩu xác nhận chưa chính xác.',
         ]);
-
+        $role = Role::where('role_name','guest')->first();
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $role->id,
             'remember_token' => Str::random(10),
         ]);
 
         // event(new Registered($user));
+        
+        // Auth::login($user);
+        
+        Cart::create([
+            'user_id' => $user->id,
+            'amount' => 0,
+        ]);
 
-        Auth::login($user);
-        $data = array(
-            ['id' => $user->id,
-            'name' => $user->name,
-            'email' => $user->email,
-            'image_url' => $user->image_url
-            ]);
-        return response()->json($data);
+        $data = [
+            'user'=>[
+             'id' => $user->id,
+             'name' => $user->name,
+             'email' => $user->email,
+             'image_url' => $user->image_url,
+             'remember_token' => $user->remember_token,
+             'cart_id' => $user->cart->id,
+            ]
+         ];
+        return response()->json($data);   
     }
 
     public function forgotPasswordCreate()

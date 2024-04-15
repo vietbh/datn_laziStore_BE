@@ -13,7 +13,7 @@ class Product extends Model
 {
     use HasFactory;
     protected $primaryKey = 'id';
-    protected $fillable = ['name','seo_keywords','image_url','categories_product_id','brand_id','description','show_hide'];
+    protected $fillable = ['name','seo_keywords','product_type_hot','product_type_new','image_url','categories_product_id','brand_id','description','show_hide'];
 
     public function variations(): HasMany
     {

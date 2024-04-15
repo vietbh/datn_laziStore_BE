@@ -46,7 +46,7 @@ class NewsController extends Controller
             'title' => 'required|unique:'.News::class,
             'seo_keywords' => 'required|unique:news,seo_keywords',
             'author' => 'required',
-            'image_url' => 'required|mimes:jpg, png, jpeg, jfif, gif, svg|max:2048|dimensions:min_width=100,min_height=100,max_width=1080,max_height=1080',
+            'image_url' => 'required|mimes:jpg, png, jpeg, jfif, gif, webp, svg|max:2048|dimensions:min_width=100,min_height=100,max_width=1080,max_height=1080',
             'categories_news_id' => 'required',
             'description' => 'required'
         ],[
@@ -54,7 +54,7 @@ class NewsController extends Controller
             'title.unique'=>'Đã tồn tại tiêu đề này.',
             'image_url.required'=>'Vui lòng không bỏ trống trường này.',
             'image_url.image' => 'Chỉ cho phép file hình hoặc gif.',
-            'image_url.mimes' => 'Chỉ cho phép file có đuôi là jpg, png, jpeg, jfif.',
+            'image_url.mimes' => 'Chỉ cho phép file có đuôi là jpg, png, jpeg, jfif, webp.',
             'image_url.max' => 'Chỉ cho phép kích thước tối đa 2048Kb.',
             'author.required'=>'Vui lòng không bỏ trống trường này.',
             'categories_news_id.required'=>'Vui lòng không bỏ trống trường này.',

@@ -3,8 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\CategoriesProduct;
 use App\Models\Product;
+use App\Models\ProductVariation;
+use App\Models\SlideAds;
+use App\Models\SpecificationsProduct;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -13,58 +18,133 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
-        $variations = [];
-        foreach ($products as $product) {
-            foreach ($product->variations()->get() as $variation) {
-                array_push($variations, $variation);
-            }
-        }
-        
-        $data = [
-            'products' => $products,
-            'variations' => $variations
-        ];
-        
-        return response()->json($data);
-    }
-
-    public function show(string $id)
-    {
-        //
-        $products = Product::with('variations')->paginate(10);
-    
+        $products = ProductVariation::where('show_hide',true)->orderBy('price_sale')->with('product')->paginate(8);
         return response()->json($products);
     }
-
-    // public function loadMore(Request $request)
+    // public function index()
     // {
-    //     $offset = $request->input('offset');
-    //     $products = Product::skip($offset)->take(10)->get();
-
-    //     return response()->json($products);
+    //     $products = Product::all();
+    //     $variations = [];
+    
+    //     foreach ($products as $product) {
+    //         $lowestPrice = PHP_INT_MAX;
+    //         $lowestPriceVariation = null;
+    
+    //         foreach ($product->variations as $variation) {
+    //             if ($variation->price_sale < $lowestPrice) {
+    //                 $lowestPrice = $variation->price_sale;
+    //                 $lowestPriceVariation = $variation;
+    //             }
+    //         }
+    
+    //         $variations[$product->id] = $lowestPriceVariation;
+    //     }
+    
+    //     $data = [
+    //         'products' => $products,
+    //         'variations' => $variations
+    //     ];
+    
+    //     return response()->json($data);
     // }
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+
+    public function show(string $slug)
     {
-        //
+        $products = ProductVariation::query()
+        ->whereHas('product', function ($query) use ($slug) {
+            $query->where('slug', $slug)
+                  ->where('show_hide', true);
+        })
+        ->where('show_hide', true)
+        ->orderBy('price_sale')
+        ->get();
+        $product_id = null;
+        foreach ($products as $value) {
+            $product_id = $value->product_id;
+            break;
+        }
+        $product = Product::find($product_id);
+        $speci = SpecificationsProduct::where([['product_id',$product->id],['show_hide',true]])->orderBy('position')->get();
+        return response()->json([
+            'variation' => $products,
+            'product' => $product,
+            'speci'=>$speci]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function hot()
     {
         //
+        $productQuery = ProductVariation::query();
+        $productQuery->whereHas('product', function($query){
+            $query->where([['product_type_hot',true],['show_hide',true]])
+            ->orderBy('position');
+        });
+        $products = $productQuery->where([['show_hide',true]])->orderBy('position')->with('product')->limit(8)->get();
+        return response()->json($products);
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function new()
     {
         //
+        $productQuery = ProductVariation::query();
+        $productQuery->whereHas('product', function($query){
+            $query->where([['product_type_new',true],['show_hide',true]]);
+        });
+        $products = $productQuery->where([['show_hide',true]])->orderBy('position')->with('product')->limit(8)->get();
+        return response()->json($products);
     }
+    public function laptop()
+    {
+        //
+        $category = CategoriesProduct::where([['show_hide',true],['slug','laptop']])->first();
+        if(empty($category)){
+            return response()->json(array());
+        }
+        $products = $this->getProductsByCategory($category);
+        return response()->json($products);
+    }
+    public function tablet()
+    {
+        //
+        $category = CategoriesProduct::where([['show_hide',true],['slug','tablet']])->first();
+        if(empty($category)){
+            return response()->json(array());
+        }
+        $products = $this->getProductsByCategory($category);
+        return response()->json($products);
+    }
+    public function pc()
+    {
+        //
+        $category = CategoriesProduct::where([['show_hide',true],['slug','pc']])->first();
+        if(empty($category)){
+            return response()->json(array());
+        }
+        $products = $this->getProductsByCategory($category);
+        return response()->json($products);
+    }
+    public function watch()
+    {
+        //
+        $category = CategoriesProduct::where([['show_hide',true],['slug','dong-ho']])->first();
+        if(empty($category)){
+            return response()->json(array());
+        }
+        $products = $this->getProductsByCategory($category);
+        return response()->json($products);
+    }
+    public function audio()
+    {
+        //
+        $category = CategoriesProduct::where([['show_hide',true],['slug','am-thanh']])->first();
+        if(empty($category)){
+            return response()->json(array());
+        }
+        $products = $this->getProductsByCategory($category);
+        return response()->json($products);
+    }
+    public function banner(){
+        $banners = SlideAds::where('show_hide',1)->orderBy('position')->get();
+        return response()->json(['banners'=>$banners]);
+    }
+  
 }

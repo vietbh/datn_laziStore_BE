@@ -14,7 +14,7 @@ class SlideAdsController extends Controller
     public function index()
     {
         //
-        $slides = SlideAds::orderBy('position')->orderByDesc('create_at')->paginate(10);
+        $slides = SlideAds::orderBy('position')->orderByDesc('created_at')->paginate(10);
         return view('layouts.admin.SlideAds.index',compact('slides'));
     }
 
@@ -76,7 +76,7 @@ class SlideAdsController extends Controller
     {
         //
         $slide = SlideAds::findOrFail($id);
-        $slides = SlideAds::orderByDesc('create_at')->paginate(10);
+        $slides = SlideAds::orderByDesc('created_at')->paginate(10);
         return view('layouts.admin.SlideAds.index',compact('slides','slide'));
     }
 
