@@ -14,7 +14,7 @@ class PaymentController extends Controller
     public function index()
     {
         //
-        $orders = Orders::paginate(10);
+        $orders = Orders::with('payment')->paginate(10);
         return view('layouts.admin.Payment.index',compact('orders'));
     }
 
@@ -48,6 +48,8 @@ class PaymentController extends Controller
     public function edit(string $id)
     {
         //
+        $order = Orders::with(['payment','orderItems'])->findOrFail($id);
+        return view('layouts.admin.Payment.edit',compact('order'));
     }
 
     /**

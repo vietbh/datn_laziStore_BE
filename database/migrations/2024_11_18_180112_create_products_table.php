@@ -23,8 +23,8 @@ return new class extends Migration
             $table->longText('description');
             $table->boolean('show_hide')->default(true);
             $table->string('status')->default('none');
-            $table->unsignedInteger('categories_product_id');
             $table->unsignedInteger('brand_id');            
+            $table->unsignedInteger('categories_product_id');
             $table->foreign('categories_product_id')->references('id')->on('categories_products');
             $table->foreign('brand_id')->references('id')->on('brands');
             $table->timestamps();

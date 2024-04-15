@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('google_avatar',255)->nullable();
             $table->string('status')->default('online');
             $table->tinyInteger('role')->default(1);
+            $table->softDeletes(); 
             $table->rememberToken();
             $table->timestamps();
         });

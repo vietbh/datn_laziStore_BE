@@ -16,6 +16,10 @@ class CategoriesProduct extends Model
     {
         return $this->hasMany(Product::class);
     }
+    public function specis() :HasMany
+    {
+        return $this->hasMany(Specification::class,'categories_product_id','id');
+    }
     public function parent() : BelongsTo
     {
         return $this->belongsTo(CategoriesProduct::class,'parent_category_id','id');

@@ -122,7 +122,7 @@
                                             </a>
                                         </div>
                                         <div class="col-sm-12 col-xl-6 mb-3 px-3">
-                                            <a href="{{ route('varia.create', ['id'=>$product->id]) }}">
+                                            <a href="{{ route('varia.create', ['id'=>$product->id,'tab'=>'general']) }}">
                                                 <button type="button" class="w-100 btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductSpecifiModal">
                                                     Thông số sản phẩm
                                                 </button>

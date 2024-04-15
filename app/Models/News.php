@@ -18,7 +18,7 @@ class News extends Model
         return $this->belongsTo(CategoriesNews::class,'categories_news_id');
     }
 
-    public function tags():HasMany
+    public function tags(): HasMany
     {
         return $this->hasMany(TagRelationNews::class,'news_id','id');
     }

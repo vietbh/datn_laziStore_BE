@@ -13,12 +13,15 @@ return new class extends Migration
     {
         Schema::create('specifications_products', function (Blueprint $table) {
             $table->increments('id')->unsigned();
-            $table->string('name');
-            $table->string('value');
+            $table->string('value')->nullable();
             $table->integer('position')->default(1);
             $table->boolean('show_hide')->default(true);
+            $table->boolean('type_speci')->default(false);
+            $table->unsignedInteger('speci_id')->nullable();
             $table->unsignedInteger('product_id')->nullable();
+            $table->unsignedInteger('rep_speci_product_id')->nullable();
             $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('speci_id')->references('id')->on('specifications');
             $table->timestamps();
         });
     }
