@@ -98,7 +98,28 @@
                                         </div>
                                     </div>
                                     <div class="row mb-3">
-                                        <div class="col-sm-12 col-xl-12 mb-3">
+                                        <div class="col-sm-12 col-xl-6 mb-3">
+                                            <div class="card">
+                                                <div class="card-body pt-1 bg-light">
+                                                    <h6 class="fw-normal mb-3">Các setting khác</h6>
+                                                    <div class="d-flex justify-content-around">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox" name="type_hot" id="type_hot" 
+                                                            @isset($product)
+                                                            {{$product->product_type_hot ? 'checked' : ''}}
+                                                            @endisset>
+                                                            <label class="form-check-label" for="type_hot">Sản phẩm hot</label>
+                                                        </div>
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox" name="type_new" id="type_new" 
+                                                            @isset($product){{$product->product_type_new ? 'checked' : ''}} @endisset> >
+                                                            <label class="form-check-label" for="type_new">Sản phẩm mới</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 col-xl-6 mb-3">
                                             <label for="show_hide" class="form-label">Trạng thái (mặc định sẽ là Hiện)</label>
                                             <select class="form-select" name="show_hide" 
                                             @isset($product)

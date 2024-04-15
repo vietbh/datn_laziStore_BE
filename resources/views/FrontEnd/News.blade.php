@@ -10,8 +10,13 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="py-3"></div>
+
                         <div class="trending-tittle"  style="color: #E56B6F">
                             <strong>Trending now</strong>
+
+                        <div class="trending-tittle">
+                            <strong>Tin mới nhất</strong>
+
                          
                             <div class="trending-animated">
                                 <ul id="js-news" class="js-hidden hidden">

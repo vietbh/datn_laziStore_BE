@@ -14,7 +14,7 @@ class TagController extends Controller
      */
     public function index()
     {
-        $tags = Tag::paginate(5);
+        $tags = Tag::paginate(10);
         return view('layouts.admin.News.Tags.index',compact('tags'));
     }
 
@@ -60,12 +60,7 @@ class TagController extends Controller
     {
         //
         $tag = Tag::findOrFail($id);
-        $tags = Tag::all();
-        // $categories_parent = Tag::where([
-        //     ['id','!=',1],
-        //     ['id','!=',$id],
-        //     ['parent_category_id',null],
-        // ])->get();
+        $tags = Tag::paginate(10);
         return view('layouts.admin.News.Tags.index',compact('tag','tags'));       
     }
 

@@ -29,35 +29,20 @@ class CategoriesProductController extends Controller
      */
     public function store(Request $request, CategoriesProduct $categoriesProduct)
     {
-        // Kiểm tra và xác thực dữ liệu đầu vào
-        $request->validate([
-            'name' => 'required|unique:'.CategoriesProduct::class,
-            'position' => 'required|min:1|max:99999|numeric',
-            'parent_id' => 'nullable|exists:categories_products,id',
-            'show_hide' => 'required|boolean',
-        ], [
-            'name.required' => 'Vui lòng không bỏ trống trường này.',
-            'name.unique' => 'Đã tồn tại danh mục này.',
-            'position.min' => 'Vui lòng nhập số lớn hơn hoặc bằng 1!',
-            'parent_id.exists' => 'Danh mục cha không hợp lệ!',
-            'show_hide.required' => 'Vui lòng không bỏ trống trường này.',
-            'show_hide.boolean' => 'Giá trị không hợp lệ cho trường này!',
+        //
+        $validated = $request->validate([
+            'title' => 'required|unique:categories_products|max:255',
+        ],[
+            'title.required'=>'Không được để trống trường này!',
+            'title.unique'=>'Đã tồn tại danh mục này rồi!',
         ]);
-    
-        // Tạo slug từ tên danh mục
-        $slug = Str::slug($request->name);
-    
-        // Gán giá trị vào các thuộc tính của đối tượng CategoriesProduct
-        $categoriesProduct->name = $request->name;
+        $slug = Str::slug($request->title); 
+        $categoriesProduct->title = $request->title;
         $categoriesProduct->slug = $slug;
-        $categoriesProduct->position = $request->position;
-        $categoriesProduct->parent_category_id = $request->parent_id;
+        $categoriesProduct->index = $request->index;
         $categoriesProduct->show_hide = $request->show_hide;
-    
-        // Lưu đối tượng CategoriesProduct vào cơ sở dữ liệu
         $categoriesProduct->save();
-    
-        return redirect()->route('product.cat.index')->with('success', 'Thêm mới danh mục thành công');
+        return redirect()->route('product.cat.index')->with('success','Thêm mới danh mục thành công');
     }
 
     /**
@@ -83,22 +68,18 @@ class CategoriesProductController extends Controller
     {
         //
         $category = CategoriesProduct::findOrFail($id);
-        $request->validate([
-            'name' => 'required|max:255|unique:'.CategoriesProduct::class.',name,'.$id,
-            'position' => 'required|min:1|max:99999|numeric',
+        $validated = $request->validate([
+            'title' => 'required|unique:categories_products|max:255',
+            'index' => 'required|min:1'
         ],[
-            'name.required'=>'Vui lòng không để trống trường này.',
-            'name.unique'=>'Đã tồn tại danh mục này rồi!',
-            'position.required'=>'Vui lòng không để trống trường này.',
-            'position.min'=>'Vui lòng nhập lớn hơn hoặc bằng 1.',
-            'position.max'=>'Vui lòng nhập nhỏ hơn 99999.',
-            'position.numeric'=>'Vui lòng nhập số.',
+            'title.required'=>'Không được để trống trường này!',
+            'title.unique'=>'Đã tồn tại danh mục này rồi!',
+            'index.required'=>'Không được để trống trường này!',
         ]);
-        $slug = Str::slug($request->name); 
-        $category->name = $request->name;
+        $slug = Str::slug($request->title); 
+        $category->title = $request->title;
         $category->slug = $slug;
-        $category->position = $request->position;
-        $category->parent_category_id = $request->parent_id;
+        $category->index = $request->index;
         $category->show_hide = $request->show_hide;
         $category->update();
         return redirect()->route('product.cat.index')->with('success','Cập nhật danh mục thành công');
@@ -111,8 +92,10 @@ class CategoriesProductController extends Controller
     {
         //
         $category = CategoriesProduct::findOrFail($id);
+        // dd($category);
+        
         $category->delete();
-        $alert='Danh mục '.$category->name.' đã được xóa thành công.';
+        $alert='Danh mục '.$category->title.' đã được xóa thành công.';
         return redirect()->route('product.cat.index')->with('success',$alert);
 
     }

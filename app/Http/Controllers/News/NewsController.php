@@ -32,11 +32,9 @@ class NewsController extends Controller
                 'id' => $tag->id,
                 'text' => $tag->name,
             ];
-        });
-        $tagJson = json_encode($tags);
-        $tagss = Tag::all();
+        })->toJson();
         $categories = CategoriesNews::all();
-        return view('layouts.admin.News.store',compact('news','tagJson','categories'));
+        return view('layouts.admin.News.store',compact('news','tags','categories'));
     }
 
     public function store(Request $request, News $news)
@@ -114,14 +112,22 @@ class NewsController extends Controller
         //
         $new = News::findOrFail($id);
         $categories = CategoriesNews::all();
-        $tags = Tag::select('id', 'name')->get()->map(function ($tag) {
+      
+        $tags = Tag::select('id', 'name')->whereNotIn('id',$new->tags()->get(['tag_id']))->get()->map(function ($tag) {
             return [
                 'id' => $tag->id,
                 'text' => $tag->name,
             ];
-        });
-        $tagJson = json_encode($tags);
-        return view('layouts.admin.News.store',compact('new','tagJson','categories'));
+        })->toJson();
+        // if($new->tags()->count() > 0){
+        //     $tagsSelected = json_encode(Tag::select('id', 'name')->findMany($new->tags()->get())->map(function ($tag) {
+        //         return [
+        //             'id' => $tag->id,
+        //             'text' => $tag->name,
+        //         ];
+        //     }));
+        // }
+        return view('layouts.admin.News.store',compact('new','tags','categories'));
     }
 
     /**
@@ -164,8 +170,14 @@ class NewsController extends Controller
         $news->seo_keywords = Str::slug($request->seo_keywords);
         $news->slug = Str::slug($request->title);
         $news->categories_news_id = $request->categories_news_id;
-        // $news->tag_id = $request->tag_id;
-        
+        if($news->id){
+            foreach ($request->tag_id as $tag_id) {
+                $tag = new TagRelationNews();
+                $tag->news_id = $news->id;
+                $tag->tag_id = $tag_id;
+                $tag->save();
+            }
+        }
         $news->description = $request->description;
         $news->author = $request->author;
         $news->show_hide = $request->show_hide;
@@ -174,11 +186,11 @@ class NewsController extends Controller
         return redirect()->route('news.index')->with('success', 'Cập nhật tin tức thành công');
     }
 
-    public function deleteTagRelaNews(string $id,string $news){
-        $news = News::find($news);
-        $tagRelaNews = TagRelationNews::findOrFail($id);
+    public function deleteTagRelaNews(string $id,string $tagId){
+        $new = News::find($id);
+        $tagRelaNews = TagRelationNews::findOrFail($tagId);
         $tagRelaNews->delete();
-        return redirect()->route('news.edit',['id'=>$news->id])->with('success','Bỏ tag thành công!');
+        return redirect()->route('news.edit',['id'=>$new->id])->with('success','Bỏ tag thành công!');
     }
     /**
      * Remove the specified resource from storage.
@@ -187,11 +199,14 @@ class NewsController extends Controller
     {
         //
         $new = News::findOrFail($id);
+        if($new->tags()->count() > 0){
+            $new->tags()->delete();
+        }
+
         $path = $new->image_path; // Đường dẫn tới file cần xóa trong thư mục 'public'
-        if(!Storage::exists('public/'. $path)){
-            return redirect()->route('news.index')->with('error','Xóa hình ảnh không thành công!');
+        if(Storage::exists('public/'. $path)){
+            Storage::delete('public/'. $path); // Xóa file
         };
-        Storage::delete('public/'. $path); // Xóa file
         $new->delete();
         return redirect()->route('news.index')->with('success','Xóa tin tức thành công!');
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Orders;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 
@@ -13,7 +14,7 @@ class PaymentController extends Controller
     public function index()
     {
         //
-        $orders = Payment::all();
+        $orders = Orders::with('payment')->paginate(10);
         return view('layouts.admin.Payment.index',compact('orders'));
     }
 
@@ -47,6 +48,8 @@ class PaymentController extends Controller
     public function edit(string $id)
     {
         //
+        $order = Orders::with(['payment','orderItems'])->findOrFail($id);
+        return view('layouts.admin.Payment.edit',compact('order'));
     }
 
     /**

@@ -45,32 +45,32 @@
                <table class="table text-start align-middle table-bordered table-hover mb-0" >
                    <thead>
                        <tr class="text-dark">
+                           <th scope="col">Action</th>
                            <th scope="col">Tên tin tức</th>
                            <th scope="col">Danh mục</th>
                            <th scope="col">Tác giả</th>
                            <th scope="col">Số lượng tag</th>
                            <th scope="col">Trạng thái</th>
-                           <th scope="col" colspan="2">Action</th>
                        </tr>
                    </thead>
                    <tbody>
                         @foreach ($news as $n)
                             <tr title="{{$n->title}}">
+                                <td>
+                                    <div class="d-flex justify-content-evenly">
+                                        <a class="btn btn-sm btn-primary" href="{{ route('news.edit', ['id' => $n->id]) }}">Detail</a>
+                                        <form action="{{ route('news.delete', ['id' => $n->id]) }}" method="POST">
+                                            @csrf
+                                            @method('delete')
+                                            <button class="btn btn-sm btn-danger" type="submit">Xóa</button>
+                                        </form>
+                                    </div>
+                                </td>
                                 <td>{{$n->title}}</td>
                                 <td>{{$n->category->name}}</td>
                                 <td>{{$n->author}}</td>
                                 <td><button class='btn btn-primary'>{{count($n->tags)}}</button></td>
                                 <td>{{$n->show_hide ? 'Hiện' : 'Ẩn'}}</td>
-                                <td>
-                                <div class="d-flex justify-content-evenly">
-                                    <a class="btn btn-sm btn-primary" href="{{ route('news.edit', ['id' => $n->id]) }}">Detail</a>
-                                    <form action="{{ route('news.delete', ['id' => $n->id]) }}" method="POST">
-                                        @csrf
-                                        @method('delete')
-                                        <button class="btn btn-sm btn-danger" type="submit">Xóa</button>
-                                    </form>
-                                </div>
-                                </td>
                             </tr>
                         @endforeach                      
                    </tbody>

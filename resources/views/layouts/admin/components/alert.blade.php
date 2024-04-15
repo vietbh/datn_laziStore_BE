@@ -1,5 +1,5 @@
-<div class="position-fixed top-25 end-0">
-    <div class="d-block me-2 mt-3 alert {{session('error') ? 'alert-danger' : 'alert-success' }} alert-dismissible fade show p-3" id="alert" role="alert">
+<div class="position-fixed top-25 end-0 mt-4 me-2">
+    <div class="d-block me-2 mt-5 alert {{session('error') ? 'alert-danger' : 'alert-success' }} alert-dismissible fade show p-3" id="alert" role="alert">
         <div class="d-flex align-items-center">
             <i class="fa fa-exclamation-circle me-2"></i>
             {{session('success')}}

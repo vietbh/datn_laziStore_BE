@@ -91,15 +91,28 @@
                                 <td>{{$dis->discount_total}}</td>
                                 <td class="text-uppercase">{{$dis->status}}</td>
                                 <td>
-                                    @php
-                                        $startDateTime = Carbon\Carbon::parse($dis->start_date);
-                                        $endDateTime = Carbon\Carbon::parse($dis->end_date);
-                                        $currentDate = Carbon\Carbon::now();
-                                        $remainingTime = $currentDate->diff($endDateTime);
-                                    @endphp
-                                    <div class="d-flex p-1">
-                                        <p class=" fw-bold">Còn lại {{ $remainingTime->days.' ngày'}} {{$remainingTime->h == 0 ? '' : '- '.$remainingTime->h.' giờ'}} </p>
-                                    </div>
+                                    @if ($dis->status != 'active')
+                                        <span class="text-warning">Chưa được kích hoạt</span>
+                                    @else
+                                        @php
+                                            $startDateTime = Carbon\Carbon::parse($dis->start_date);
+                                            $endDateTime = Carbon\Carbon::parse($dis->end_date);
+                                            $currentDate = Carbon\Carbon::now();                                        
+                                            $remainingTimeStart = $currentDate->diff($startDateTime);
+                                            $remainingTimeEnd = $currentDate->diff($endDateTime);
+                                        @endphp
+                                        @if ($remainingTimeStart->days > 0 || $remainingTimeStart->h > 0 || $remainingTimeStart->i > 0)
+                                            <div class="d-flex p-1">
+                                                <span class="fw-bold">Hiệu lực sau {{ $remainingTimeStart->days.' ngày'}} 
+                                                    {{$remainingTimeStart->h == 0 ? '' : '- '.$remainingTimeStart->h.' giờ'}}
+                                                    {{$remainingTimeStart->i == 0 ? '' : '- '.$remainingTimeStart->i.' phút'}} </span>
+                                            </div>
+                                        @else
+                                            <div class="d-flex p-1">
+                                                <span class=" fw-bold text-danger">Hết hiệu lực sau {{ $remainingTimeEnd->days.' ngày'}} {{$remainingTimeEnd->h == 0 ? '' : '- '.$remainingTimeEnd->h.' giờ'}} </span>
+                                            </div>
+                                        @endif
+                                    @endif
                                 </td>
                                 <td>{{$dis->show_hide ? 'Hiện' : 'Ẩn'}}</td>
                                 <td>

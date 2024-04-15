@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">
+            <h5 class="modal-title">
                 @isset($slide)
                     Sửa slide {{$slide->name}}
                 @else
@@ -67,7 +67,9 @@
                                 </div>
                                 <div class="mb-3">
                                     @isset($slide)
-                                        <img src="{{$slide->image_url}}" class="img-fluid mb-2" width="250" alt="">
+                                        <div class="mb-2">
+                                            <img src="{{$slide->image_url}}" class="img-fluid mb-2" width="250" alt="">
+                                        </div>
                                     @endisset
                                     <label for="image_url" class="form-label">Banner(*)</label>
                                     <input type="file" name="image_url" class="form-control" 
@@ -84,7 +86,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="link" class="form-label">Url</label>
-                                    <input type="url" name="link" class="form-control" 
+                                    <input type="text" name="link" class="form-control" 
                                     @isset($slide)
                                         value="{{$slide->link}}"
                                     @else
@@ -94,7 +96,7 @@
                                     autocomplete="link"
                                     id="link">   
                                     @error('link')
-                                    <div class="form-text text-danger">{{ $message }}</div>
+                                        <div class="form-text text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="mb-3">

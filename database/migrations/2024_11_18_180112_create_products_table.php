@@ -18,12 +18,13 @@ return new class extends Migration
             $table->string('name',255)->unique();
             $table->string('slug',255);
             $table->string('seo_keywords',255)->unique();
-            $table->string('product_type',255)->nullable();
+            $table->boolean('product_type_hot')->nullable();
+            $table->boolean('product_type_new')->nullable();
             $table->longText('description');
             $table->boolean('show_hide')->default(true);
             $table->string('status')->default('none');
-            $table->unsignedInteger('categories_product_id');
             $table->unsignedInteger('brand_id');            
+            $table->unsignedInteger('categories_product_id');
             $table->foreign('categories_product_id')->references('id')->on('categories_products');
             $table->foreign('brand_id')->references('id')->on('brands');
             $table->timestamps();
