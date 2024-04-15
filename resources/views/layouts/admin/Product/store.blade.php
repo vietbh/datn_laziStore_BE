@@ -106,15 +106,13 @@
                                                         <div class="form-check form-switch">
                                                             <input class="form-check-input" type="checkbox" name="type_hot" id="type_hot" 
                                                             @isset($product)
-                                                            {{$product->product_type ? 'checked' : ''}}
+                                                            {{$product->product_type_hot ? 'checked' : ''}}
                                                             @endisset>
                                                             <label class="form-check-label" for="type_hot">Sản phẩm hot</label>
                                                         </div>
                                                         <div class="form-check form-switch">
                                                             <input class="form-check-input" type="checkbox" name="type_new" id="type_new" 
-                                                            {{-- @isset($product)
-                                                            {{$product->product_type ? 'checked' : ''}}
-                                                            @endisset> --}}>
+                                                            @isset($product){{$product->product_type_new ? 'checked' : ''}} @endisset> >
                                                             <label class="form-check-label" for="type_new">Sản phẩm mới</label>
                                                         </div>
                                                     </div>

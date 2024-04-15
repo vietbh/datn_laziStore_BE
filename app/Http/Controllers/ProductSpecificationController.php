@@ -2,29 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CategoriesProduct;
 use App\Models\Product;
+use App\Models\Specification;
 use App\Models\SpecificationsProduct;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class productSpecificationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
 
     public function create($id)
     {
         //
+        $param = request()->query('speci',null);
+       
         $product = Product::findOrFail($id);
-        $productSpecifications = SpecificationsProduct::where('product_id','=',$product->id)->get();
-        $productSpecificationCount = SpecificationsProduct::where('product_id','=',$product->id)->count();
-        return view('layouts.admin.components.speciModal',compact('product','productSpecifications','productSpecificationCount'));
+        $products = Product::where('show_hide',true)->get();
+        $categories = CategoriesProduct::where([['show_hide',true],['parent_category_id',null]])->get();
+        $category = $product->category;
+        $specis = $category->specis()->get(); 
+        $specisKey = Specification::where('categories_product_id',$param)->get();
+        $productSpecifications = $product->specifications()->get();
+        $productSpecificationCount = SpecificationsProduct::where('product_id',$product->id)->count();
+        return view('layouts.admin.components.speciModal',compact(
+            'product','productSpecifications','products',
+            'productSpecificationCount','specis',
+            'categories','specisKey'));
     }
 
     /**
@@ -34,7 +38,12 @@ class productSpecificationController extends Controller
     {
         //
         $request->validate([
-            'name' => 'required|unique:'.SpecificationsProduct::class,
+            // 'name' => ['required',
+            // Rule::unique('specifications_products', 'name')->ignore($productVariation->id, 'id')->where(function ($query) use ($productVariation) {
+            //     $query->where('product_id', $productVariation->product_id);
+            // })
+            // ],
+            // 'name' => 'required|unique:'.SpecificationsProduct::class,
             'value' => 'required',
             'position' => 'required|min:1|max:99999',
         ],[
@@ -47,10 +56,17 @@ class productSpecificationController extends Controller
         ]);
 
         $product = Product::findOrFail($request->product_id);
-        $productSpecification->name = $request->name;
+        // Luu id key speci 
+        $productSpecification->speci_id = $request->speci_id;
+
         $productSpecification->value = $request->value;
         $productSpecification->position = $request->position;
         $productSpecification->product_id = $product->id;
+        // Copy lai thong so san pham bang cach luu id cu san pham do
+        $productSpecification->rep_speci_product_id = $request->rep_speci_product_id;
+        // Kiem tra xem do co phai la thong so dac biet ko
+        $productSpecification->type_speci = $request->type_speci == 'on' || $request->rep_speci_product_id ? true : false;
+
         $productSpecification->show_hide = $request->show_hide;
         $productSpecification->save();
         return redirect()->route('specifi.create',['id' => $product->id]);
@@ -62,9 +78,10 @@ class productSpecificationController extends Controller
         //
         $productSpecification = SpecificationsProduct::findOrFail($id);
         $product = Product::findOrFail($productSpecification->product_id);
-        $productSpecifications = SpecificationsProduct::where('product_id','=',$product->id)->get();
-        $productSpecificationCount = SpecificationsProduct::where('product_id','=',$product->id)->count();
-        return view('layouts.admin.components.speciModal',compact('productSpecification','productSpecifications','product','productSpecificationCount'));
+        $category = $product->category;
+        $specis = $category->specis()->get();        $productSpecifications = SpecificationsProduct::where('product_id',$product->id)->get();
+        $productSpecificationCount = SpecificationsProduct::where('product_id',$product->id)->count();
+        return view('layouts.admin.components.speciModal',compact('productSpecification','productSpecifications','product','specis','productSpecificationCount'));
     }
 
     /**
@@ -105,6 +122,6 @@ class productSpecificationController extends Controller
         $productSpecification = SpecificationsProduct::findOrFail($id);
         $product = Product::findOrFail($productSpecification->product_id);
         $productSpecification->delete();
-        return redirect()->route('varia.create',['id' => $product->id])->with('success','Xóa thành công!');
+        return redirect()->route('specifi.create',['id' => $product->id])->with('success','Xóa thành công!');
     }
 }

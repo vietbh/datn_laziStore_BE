@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CategoryProController;
+use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\EmailVerificationPromptController as ApiEmailVerificationPromptController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\ProductController;
@@ -38,9 +39,9 @@ Route::get('/slide-ads',[ProductController::class,'banner']);
 // Danh muc
 Route::get('/danh-muc-san-pham',[CategoryProController::class,'index']);
 Route::get('/danh-muc-san-pham/{slug}',[CategoryProController::class,'show']);
-// Gio hang
 
-// Route::post('/lien-he',[Contact::class,'index']);
+Route::post('/chinh-sach',[ContactController::class,'store']);
+Route::post('/lien-he',[ContactController::class,'store']);
 
 //Auth 
 Route::post('/login', [AuthController::class, 'login']);
@@ -50,11 +51,13 @@ Route::get('/quen-mat-khau', [AuthController::class, 'forgotPasswordCreate']);
 Route::post('/quen-mat-khau', [AuthController::class, 'forgotPasswordStore']);
 Route::get('/dat-lai-mat-khau/{token}', [AuthController::class, 'resetPasswordCreate']);
 Route::post('/dat-lai-mat-khau', [AuthController::class, 'resetPasswordStore']);
-// 
+// // Gio hang
+
 Route::get('/gio-hang/{id}',[CartController::class,'index']);
 Route::post('/gio-hang/them-san-pham',[CartController::class,'store']);
 Route::post('/gio-hang/cap-nhat-san-pham',[CartController::class,'update']);
 Route::post('/gio-hang/xoa-san-pham',[CartController::class,'destroy']);
+// Thanh toan
 Route::post('/thanh-toan',[PaymentController::class,'store']);
 
 Route::group(['prefix' => 'api'], function () {

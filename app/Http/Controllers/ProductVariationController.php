@@ -19,8 +19,8 @@ class ProductVariationController extends Controller
     {
         //
         $product = Product::findOrFail($id);
-        $productVariations = ProductVariation::where('product_id','=',$product->id)->get();
-        $productVariationCount = ProductVariation::where('product_id','=',$product->id)->count();
+        $productVariations = ProductVariation::where('product_id',$product->id)->get();
+        $productVariationCount = ProductVariation::where('product_id',$product->id)->count();
         return view('layouts.admin.components.variaModal',compact('product','productVariations','productVariationCount'));
     }
 
@@ -52,7 +52,7 @@ class ProductVariationController extends Controller
             'price_sale.required' => 'Không được bỏ trống trường này.',
             'price_sale.lt' => 'Giá khuyến mãi phải nhỏ hơn giá gốc.',
             'quantity.required' => 'Không được bỏ trống trường này.',
-            'quantity.min' => 'Không tồn tại số lượng 0.',
+            'quantity.min' => 'Số lượng nhỏ nhất là 1.',
         ]);
 
         $file = $request->file('image_url'); // Lấy file từ request    

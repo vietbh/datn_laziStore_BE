@@ -56,7 +56,7 @@ class ProductController extends Controller
         $product->categories_product_id = $request->categories_product_id;
         $product->brand_id = $request->brand_id;
         $product->description = $request->description;
-        $product->product_type = $request->type_hot == 'on' ? true : false ;
+        $product->product_type_hot = $request->type_hot == 'on' ? true : false ;
         $product->product_type_new = $request->type_new == 'on' ? true : false;
         $product->show_hide = $request->show_hide;
         $product->save();

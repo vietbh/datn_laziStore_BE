@@ -1,17 +1,17 @@
 @extends('admin')
 @section('content')
     <div class="container-fluid mt-5 mb-5" style="height: 120vh">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{{ route('product.edit', ['id'=>$product->id]) }}">Sản phẩm {{$product->name}}</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Thêm màu sắc</li>
+            </ol>
+        </nav>
         <div class="card bg-light">
             <div class="card-body p-1 m-3">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12">
-                            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-                                  <li class="breadcrumb-item"><a href="{{ route('product.edit', ['id'=>$product->id]) }}">Sản phẩm {{$product->name}}</a></li>
-                                  <li class="breadcrumb-item active" aria-current="page">Thêm màu sắc</li>
-                                </ol>
-                            </nav>
                             <h5 class="card-title my-3">
                                 @isset($productVariation)
                                     Sửa 
@@ -95,12 +95,10 @@
                                         </div>
                                         <div class="col-sm-12 col-xl-12 mb-3">
                                             <label for="quantity" class="form-label ">Số lượng <span class="text-danger text-small">(*)</span></label>
-                                            <input type="number" name="quantity"
-                                            class="form-control 
-                                            @error('quantity') 
-                                                is-invalid
-                                            @enderror" 
-                                            id="quantity"
+                                            <input 
+                                            type="number" name="quantity" class="form-control 
+                                            @error('quantity') is-invalid @enderror" 
+                                            id="quantity" min="1"
                                             @isset($productVariation)
                                                 value="{{$productVariation->quantity}}"
                                             @else
@@ -174,7 +172,7 @@
                                                 @else
                                                     @if($productVariationCount > 0)
                                                         <a href="{{ route('specifi.create',['id'=>$product->id]) }}">
-                                                            <button type="button" class="float-right btn btn-sm btn-secondary me-2">Tiếp theo</button>
+                                                            <button type="button" class="float-right btn btn-sm btn-secondary me-2">Thông số</button>
                                                         </a>      
                                                         <a href="{{ route('product.index') }}">
                                                             <button type="button" class="float-right btn btn-sm btn-secondary me-2">Đóng</button>

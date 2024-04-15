@@ -22,17 +22,11 @@
                     <div class="col-sm-12 col-xl-12">
                         <div class="bg-light rounded h-100 p-4 text-start">
                             <form 
-                            @isset($policy)
-                                action="{{ route('policy.update',['id'=>$policy->id]) }}"
-                            @else
-                                action="{{ route('policy.store') }}"
-                            @endisset
+                            action="@isset($policy) {{ route('policy.update',['id'=>$policy->id]) }} @else {{ route('policy.store') }} @endisset"
                             method="POST">
                                 @csrf
-                                @isset($policy)
-                                    @method('put')
-                                @else
-                                    @method('post')
+                                @isset($policy) @method('put')
+                                @else @method('post')
                                 @endisset
                                 <div class="mb-3">
                                     <label for="name" class="form-label ">Tên chính sách <span class="text-danger text-small">*</span></label>

@@ -50,13 +50,14 @@
         <div class="content">
             @if (session('success') && session('error') || session('success'))
                 @include('layouts.admin.components.alert')
-            @endif   
+            @endif  
+             
             @include('layouts.admin.Header.nav')   
             
             @yield('content')
 
             <!-- Footer Start -->
-            @include('layouts.admin.components.Footer')
+            @include('layouts.admin.components.footer')
             <!-- Footer End -->
         </div>
         <!-- Content End -->
@@ -83,13 +84,24 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
     <script type="module">
-       setTimeout(() => {
-            let alerts = document.getElementsByClassName('alert');
-            for (let i = 0; i < alerts.length; i++) {
-                let bsAlert = new bootstrap.Alert(alerts[i]);
-                bsAlert.close();
-            }
+        setTimeout(() => {
+                let alerts = document.getElementsByClassName('alert');
+                for (let i = 0; i < alerts.length; i++) {
+                    let bsAlert = new bootstrap.Alert(alerts[i]);
+                    bsAlert.close();
+                }
         }, 2000);
+        $(document).ready(function() {
+            $('.js-example-basic-single').select2({
+                theme: "bootstrap-5",
+                language: "es",
+                // allowClear: true,
+            });
+            $('textarea').each(function(){
+                $(this).val($(this).val().trim());
+                }
+            );
+        });
     </script>
     @yield('js')
 </html>
