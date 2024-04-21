@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Product;
 
 use App\Models\Brands;
 use App\Models\Product;
-use App\Models\ProductVariation;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\CategoriesProduct;
@@ -21,10 +20,12 @@ class ProductController extends Controller
     public function index()
     {
         //
-        $products = Product::orderByDesc('id')->paginate(10);
+        $products = Product::orderByDesc('id')->paginate(9);
+        $paginate = $products;
+        $productsCount = Product::all()->count();
         $categories = CategoriesProduct::all();
         $brands = Brands::all();
-        $data = compact('products','categories','brands');
+        $data = compact('products','categories','brands','paginate','productsCount');
         return view('layouts.admin.Product.index',$data);
     }
     public function create()
@@ -35,7 +36,7 @@ class ProductController extends Controller
         return view('layouts.admin.Product.edit',$data);
     }
 
-    public function store(Request $request, Product $product , ProductVariation $productVariation)
+    public function store(Request $request, Product $product)
     {
         $request->validate([
             'name' => 'required|unique:'.Product::class,
@@ -149,4 +150,51 @@ class ProductController extends Controller
         $product->delete();
         return redirect()->route('product.index')->with('success','Xóa sản phẩm thành công!');
     }
+
+    public function filter(Request $request)
+    {
+        // Lấy các tham số lọc từ yêu cầu
+        $search = $request->input('search');
+        $name = $request->input('name');
+        // $price = $request->input('price');
+        $brand = $request->input('brand');
+        $category = $request->input('category');
+        // Xây dựng truy vấn lọc sản phẩm
+        $query = Product::query();
+
+        if ($search) {
+            $query->whereAll([
+                'name',
+            ], 'LIKE', '%'.$search.'%');
+        }
+        if ($name) {
+            $query->orderBy('name', $name);
+        }
+
+        if ($category) {
+            $query->whereHas('category', function ($query) use ($category) {
+                $query->where('name', $category);
+            });
+        }
+
+        if ($brand) {
+            $query->whereHas('brand', function ($query) use ($brand) {
+                $query->where('name', $brand);
+            });
+
+        }
+
+  
+
+        // Thực hiện truy vấn và lấy danh sách sản phẩm đã lọc với phân trang
+        $products = $query->get();
+
+        // Truyền danh sách sản phẩm đã lọc và các thông tin phân trang cho giao diện người dùng
+        $categories = CategoriesProduct::all();
+        $brands = Brands::all();
+        $productsCount = Product::all()->count();
+        $data = compact('products','categories','brands','productsCount');
+        return view('layouts.admin.Product.index',$data);
+    }
+
 }

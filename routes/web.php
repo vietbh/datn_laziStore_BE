@@ -25,7 +25,10 @@ use App\Http\Controllers\RoleAdminController;
 use App\Http\Controllers\ShippingProvidersController;
 use App\Http\Controllers\SlideAdsController;
 use App\Http\Controllers\SpecificationController;
+use App\Http\Controllers\User\ProfileController as UserProfileController;
 use App\Http\Controllers\UserGuestController;
+use App\Models\Role;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Route;
 
 // Tin tuc
@@ -49,41 +52,53 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/authorize', function () {
+    // dd('role:'.Role::whereNot('role_name','guest')->pluck('role_name')->join(','));
     return view('layouts.abort.401');
-})->middleware(['auth', 'verified'])->name('401');
+})->middleware(['auth'])->name('401');
 
-Route::prefix('lazi-store-admin')->middleware(['auth','role:0'])->group(function () {
+Route::middleware(['auth','role:'.Role::whereNot('role_name','guest')->pluck('role_name')->join('::')])->prefix(RouteServiceProvider::HOME)->group(function () {
     // Dashboard
     Route::get('/',[DashBoardController::class, 'index'])->name('home');
     // Thống kê
     Route::get('/thong-ke',[ChartController::class, 'index'])->name('chart.index');
     // Khách hàng
-    Route::get('/khach-hang',[UserGuestController::class, 'index'])->name('guest.index');
-    Route::get('/khach-hang-detail/{id}',[UserGuestController::class, 'edit'])->name('guest.edit');
+    Route::prefix('khach-hang')->group(function(){
+        Route::get('/',[UserGuestController::class, 'index'])->name('guest.index');
+        Route::get('/detail/{id}',[UserGuestController::class, 'edit'])->name('guest.edit');
+    })->name('guest');
     // Đơn hàng
-    Route::get('/don-hang',[PaymentController::class, 'index'])->name('payment.index');
-    Route::get('/don-hang-detail/{id}',[PaymentController::class, 'edit'])->name('payment.edit');
+    Route::prefix('don-hang')->group(function(){
+        Route::get('/',[PaymentController::class, 'index'])->name('payment.index');
+        Route::get('/detail/{id}',[PaymentController::class, 'edit'])->name('payment.edit');
+    });    
     // Mã giảm giá
-    Route::get('/ma-giam-gia',[DiscountController::class, 'index'])->name('discount.index');
-    Route::post('/ma-giam-gia-them',[DiscountController::class, 'store'])->name('discount.store');
-    Route::get('/ma-giam-gia-edit/{id}',[DiscountController::class, 'edit'])->name('discount.edit');
-    Route::put('/ma-giam-gia-edit/{id}',[DiscountController::class, 'update'])->name('discount.update');
-    Route::delete('/ma-giam-gia-xoa/{id}',[DiscountController::class, 'destroy'])->name('discount.delete');
+    Route::prefix('ma-giam-gia')->group(function(){
+        Route::get('/',[DiscountController::class, 'index'])->name('discount.index');
+        Route::post('/them',[DiscountController::class, 'store'])->name('discount.store');
+        Route::get('/edit/{id}',[DiscountController::class, 'edit'])->name('discount.edit');
+        Route::put('/edit/{id}',[DiscountController::class, 'update'])->name('discount.update');
+        Route::delete('/xoa/{id}',[DiscountController::class, 'destroy'])->name('discount.delete');
+    });
     // Sản phẩm hot
     Route::get('/san-pham-hot',[ProductHotController::class, 'index'])->name('hot.index');
     //Đơn hàng Vận chuyển
     Route::get('/van-chuyen',[DeliveryController::class, 'index'])->name('delivery.index');
     //Nhà Vận chuyển
-    Route::get('/nha-van-chuyen',[ShippingProvidersController::class, 'index'])->name('shipping.index');
-    Route::post('/them-nha-van-chuyen',[ShippingProvidersController::class, 'store'])->name('shipping.store');
-    Route::get('/edit-nha-van-chuyen/{id}',[ShippingProvidersController::class, 'edit'])->name('shipping.edit');
-    Route::put('/edit-nha-van-chuyen/{id}',[ShippingProvidersController::class, 'update'])->name('shipping.update');
-    Route::delete('/xoa-nha-van-chuyen/{id}',[ShippingProvidersController::class, 'destroy'])->name('shipping.delete');
+    Route::prefix('nha-van-chuyen')->group(function(){
+        Route::get('/',[ShippingProvidersController::class, 'index'])->name('shipping.index');
+        Route::post('/them',[ShippingProvidersController::class, 'store'])->name('shipping.store');
+        Route::get('/edit/{id}',[ShippingProvidersController::class, 'edit'])->name('shipping.edit');
+        Route::put('/edit/{id}',[ShippingProvidersController::class, 'update'])->name('shipping.update');
+        Route::delete('/xoa/{id}',[ShippingProvidersController::class, 'destroy'])->name('shipping.delete');
+    });
     
     // Bình luận sản phẩm
-    Route::get('/binh-luan-san-pham',[CommentProductController::class, 'index'])->name('comment.product.index');
-    Route::put('/binh-luan-san-pham/edit/{id}',[CommentProductController::class, 'update'])->name('comment.product.update');
+    Route::prefix('nha-van-chuyen')->group(function(){
+        Route::get('/binh-luan-san-pham',[CommentProductController::class, 'index'])->name('comment.product.index');
+        Route::put('/binh-luan-san-pham/edit/{id}',[CommentProductController::class, 'update'])->name('comment.product.update');
+    });
     // Bình luận tin tức
+  
     Route::get('/binh-luan-tin-tuc',[CommentNewsController::class, 'index'])->name('comment.news.index');
     // Tư vấn
     Route::get('/tu-van',[ContactController::class, 'index'])->name('contact.index');
@@ -96,87 +111,128 @@ Route::prefix('lazi-store-admin')->middleware(['auth','role:0'])->group(function
         Route::delete('/xoa/{id}',[PolicyController::class, 'destroy'])->name('policy.delete');
     });
     // Slide quảng cáo
-    Route::get('/slide-quang-cao',[SlideAdsController::class, 'index'])->name('slide.index');
-    Route::post('/slide-quang-cao-them',[SlideAdsController::class, 'store'])->name('slide.store');
-    Route::get('/slide-quang-cao-edit/{id}',[SlideAdsController::class, 'edit'])->name('slide.edit');
-    Route::put('/slide-quang-cao-edit/{id}',[SlideAdsController::class, 'update'])->name('slide.update');
-    Route::delete('/slide-quang-cao-xoa/{id}',[SlideAdsController::class, 'destroy'])->name('slide.delete');
-    // Vai trò quản trị
-    Route::get('/vai-tro-quan-tri',[RoleAdminController::class, 'index'])->name('role.index');
-    Route::get('/quan-tri-vien',[UserGuestController::class, 'index'])->name('guest.index');
-
-    
-    //Sản phẩm
-    Route::get('/san-pham',[ProductController::class, 'index'])->name('product.index');
-    Route::get('/them-san-pham',[ProductController::class, 'create'])->name('product.create');
-    Route::post('/them-san-pham',[ProductController::class, 'store'])->name('product.store');
-    Route::post('/san-pham/hinh-anh-mo-ta',[ProductController::class, 'uploadCk'])->name('ckeditor.product.upload');
-    Route::get('/edit-san-pham/{id}',[ProductController::class, 'edit'])->name('product.edit');
-    Route::put('/edit-san-pham/{id}',[ProductController::class, 'update'])->name('product.update');
-    Route::delete('/xoa-san-pham/{id}',[ProductController::class, 'destroy'])->name('product.delete');
-   
-    Route::prefix('san-pham')->group(function(){
-        // Varia
-        Route::get('/them-variation/{id}',[ProductVariationController::class, 'create'])->name('varia.create');
-        Route::post('/them-variation',[ProductVariationController::class, 'store'])->name('varia.store');
-        Route::get('/edit-variation/{id}',[ProductVariationController::class, 'edit'])->name('varia.edit');
-        Route::put('/edit-variation/{id}',[ProductVariationController::class, 'update'])->name('varia.update');
-        Route::delete('/delete-variation/{id}',[ProductVariationController::class, 'destroy'])->name('varia.delete');
-        // Speci 
-        // Route::get('/them-speci/{id}',[SpecificationController::class, 'create'])->name('specifi.create');
-        Route::post('/them-speci',[SpecificationController::class, 'store'])->name('speci.store');
-        Route::get('/edit-speci/{productId}/{id}',[SpecificationController::class, 'edit'])->name('speci.edit');
-        Route::put('/edit-speci/{id}',[SpecificationController::class, 'update'])->name('speci.update');
-        Route::delete('/delete-speci/{id}',[SpecificationController::class, 'destroy'])->name('speci.delete');
-        // Speci product
-        Route::get('/them-specification/{id}',[ProductSpecificationController::class, 'create'])->name('specifi.create');
-        Route::post('/them-specification',[ProductSpecificationController::class, 'store'])->name('specifi.store');
-        Route::get('/edit-specification/{id}',[ProductSpecificationController::class, 'edit'])->name('specifi.edit');
-        Route::put('/edit-specification/{id}',[ProductSpecificationController::class, 'update'])->name('specifi.update');
-        Route::delete('/delete-specification/{id}',[ProductSpecificationController::class, 'destroy'])->name('specifi.delete');
+    Route::prefix('slide-quang-cao')->group(function(){
+        Route::get('/',[SlideAdsController::class, 'index'])->name('slide.index');
+        Route::post('/them',[SlideAdsController::class, 'store'])->name('slide.store');
+        Route::get('/edit/{id}',[SlideAdsController::class, 'edit'])->name('slide.edit');
+        Route::put('/edit/{id}',[SlideAdsController::class, 'update'])->name('slide.update');
+        Route::delete('/xoa/{id}',[SlideAdsController::class, 'destroy'])->name('slide.delete');
     });
     
-    // Thương hiệu
-    Route::get('/san-pham/thuong-hieu',[BrandController::class, 'index'])->name('brand.index');
-    Route::post('/thuong-hieu/them',[BrandController::class, 'store'])->name('brand.store');
-    Route::get('/thuong-hieu/edit/{id}',[BrandController::class, 'edit'])->name('brand.edit');
-    Route::put('/thuong-hieu/edit/{id}',[BrandController::class, 'update'])->name('brand.update');
-    Route::delete('/thuong-hieu/xoa/{id}',[BrandController::class, 'destroy'])->name('brand.delete');
-    // Danh mục sản phẩm
-    Route::get('/danh-muc-san-pham',[CategoriesProductController::class, 'index'])->name('product.cat.index');
-    Route::post('/danh-muc-san-pham/them',[CategoriesProductController::class, 'store'])->name('product.cat.store');
-    Route::get('/danh-muc-san-pham/edit/{id}',[CategoriesProductController::class, 'edit'])->name('product.cat.edit');
-    Route::put('/danh-muc-san-pham/edit/{id}',[CategoriesProductController::class, 'update'])->name('product.cat.update');
-    Route::delete('/danh-muc-san-pham/xoa/{id}',[CategoriesProductController::class, 'destroy'])->name('product.cat.delete');
-    //Iin tức
-    Route::get('/tin-tuc',[NewsController::class, 'index'])->name('news.index');
-    Route::get('/tin-tuc-them',[NewsController::class, 'create'])->name('news.create');
-    Route::post('/tin-tuc-them',[NewsController::class, 'store'])->name('news.store');
-    Route::post('/tin-tuc/hinh-anh-mo-ta',[NewsController::class, 'uploadCk'])->name('ckeditor.news.upload');
-    Route::get('/tin-tuc-edit/{id}',[NewsController::class, 'edit'])->name('news.edit');
-    Route::put('/tin-tuc-edit/{id}',[NewsController::class, 'update'])->name('news.update');
-    Route::delete('/tin-tuc-xoa-tag/{id}/{tagId}',[NewsController::class, 'deleteTagRelaNews'])->name('news.remove');
-    Route::delete('/tin-tuc-xoa/{id}',[NewsController::class, 'destroy'])->name('news.delete');
-    //Tag tin tức
-    Route::get('/tag-tin-tuc',[TagController::class, 'index'])->name('news.tag.index');
-    Route::post('/tag-tin-tuc-them',[TagController::class, 'store'])->name('news.tag.store');
-    Route::get('/tag-tin-tuc-edit/{id}',[TagController::class, 'edit'])->name('news.tag.edit');
-    Route::put('/tag-tin-tuc-edit/{id}',[TagController::class, 'update'])->name('news.tag.update');
-    Route::get('/tag-tin-tuc-xoa/{id}',[TagController::class, 'show'])->name('news.tag.show');
-    Route::delete('/tag-tin-tuc-xoa/{id}',[TagController::class, 'destroy'])->name('news.tag.delete');
-    //Danh mục tin tức
-    Route::get('/danh-muc-tin-tuc',[CategoriesNewsController::class, 'index'])->name('news.cat.index');
-    Route::post('/danh-muc-tin-tuc/them',[CategoriesNewsController::class, 'store'])->name('news.cat.store');
-    Route::get('/danh-muc-tin-tuc/edit/{id}',[CategoriesNewsController::class, 'edit'])->name('news.cat.edit');
-    Route::put('/danh-muc-tin-tuc/edit/{id}',[CategoriesNewsController::class, 'update'])->name('news.cat.update');
-    Route::get('/danh-muc-tin-tuc/xoa/{id}',[CategoriesNewsController::class, 'show'])->name('news.cat.show');
-    Route::delete('/danh-muc-tin-tuc/xoa/{id}',[CategoriesNewsController::class, 'destroy'])->name('news.cat.delete');
+    //Sản phẩm
+    Route::prefix('san-pham')->group(function(){
+        Route::get('/',[ProductController::class, 'index'])->name('product.index');
+        Route::get('/bo-loc',[ProductController::class, 'filter'])->name('product.filter');
+        Route::get('/them',[ProductController::class, 'create'])->name('product.create');
+        Route::post('/them',[ProductController::class, 'store'])->name('product.store');
+        Route::post('/hinh-anh-mo-ta',[ProductController::class, 'uploadCk'])->name('ckeditor.product.upload');
+        Route::get('/edit/{id}',[ProductController::class, 'edit'])->name('product.edit');
+        Route::put('/edit/{id}',[ProductController::class, 'update'])->name('product.update');
+        Route::delete('/xoa/{id}',[ProductController::class, 'destroy'])->name('product.delete');
+        // Varia
+        Route::prefix('variation')->group(function(){
+            Route::get('/them/{id}',[ProductVariationController::class, 'create'])->name('varia.create');
+            Route::post('/them-variation',[ProductVariationController::class, 'store'])->name('varia.store');
+            Route::get('/edit-variation/{id}',[ProductVariationController::class, 'edit'])->name('varia.edit');
+            Route::put('/edit-variation/{id}',[ProductVariationController::class, 'update'])->name('varia.update');
+            Route::delete('/delete-variation/{id}',[ProductVariationController::class, 'destroy'])->name('varia.delete');
 
-    // 
+        });
+        // Speci product
+        Route::prefix('speci-product')->group(function(){
+            Route::get('/them/{id}',[ProductSpecificationController::class, 'create'])->name('specifi.create');
+            Route::post('/them',[ProductSpecificationController::class, 'store'])->name('specifi.store');
+            Route::get('/edit/{id}',[ProductSpecificationController::class, 'edit'])->name('specifi.edit');
+            Route::put('/edit/{id}',[ProductSpecificationController::class, 'update'])->name('specifi.update');
+            Route::delete('/delete/{id}',[ProductSpecificationController::class, 'destroy'])->name('specifi.delete');
+            // Speci 
+            Route::post('/them-speci',[SpecificationController::class, 'store'])->name('speci.store');
+            Route::get('/edit-speci/{productId}/{id}',[SpecificationController::class, 'edit'])->name('speci.edit');
+            Route::put('/edit-speci/{id}',[SpecificationController::class, 'update'])->name('speci.update');
+            Route::delete('/delete-speci/{id}',[SpecificationController::class, 'destroy'])->name('speci.delete');
+        });
+        
+    });
+   
+    
+    // Thương hiệu
+    Route::prefix('thuong-hieu')->group(function(){
+        Route::get('/',[BrandController::class, 'index'])->name('brand.index');
+        Route::post('/them',[BrandController::class, 'store'])->name('brand.store');
+        Route::get('/edit/{id}',[BrandController::class, 'edit'])->name('brand.edit');
+        Route::put('/edit/{id}',[BrandController::class, 'update'])->name('brand.update');
+        Route::delete('/xoa/{id}',[BrandController::class, 'destroy'])->name('brand.delete');
+
+    });
+    // Danh mục sản phẩm
+    Route::prefix('danh-muc-san-pham')->group(function(){
+        Route::get('/',[CategoriesProductController::class, 'index'])->name('product.cat.index');
+        Route::post('/them',[CategoriesProductController::class, 'store'])->name('product.cat.store');
+        Route::get('/edit/{id}',[CategoriesProductController::class, 'edit'])->name('product.cat.edit');
+        Route::put('/edit/{id}',[CategoriesProductController::class, 'update'])->name('product.cat.update');
+        Route::delete('/xoa/{id}',[CategoriesProductController::class, 'destroy'])->name('product.cat.delete');
+    });
+    
+    //Iin tức
+    Route::prefix('tin-tuc')->group(function(){
+        Route::get('/',[NewsController::class, 'index'])->name('news.index');
+        Route::get('/bo-loc',[NewsController::class, 'filter'])->name('news.filter');
+        Route::get('/them',[NewsController::class, 'create'])->name('news.create');
+        Route::post('/them',[NewsController::class, 'store'])->name('news.store');
+        Route::post('/hinh-anh-mo-ta',[NewsController::class, 'uploadCk'])->name('ckeditor.news.upload');
+        Route::get('/edit/{id}',[NewsController::class, 'edit'])->name('news.edit');
+        Route::put('/edit/{id}',[NewsController::class, 'update'])->name('news.update');
+        Route::delete('/xoa-tag/{id}/{tagId}',[NewsController::class, 'deleteTagRelaNews'])->name('news.remove');
+        Route::delete('/xoa/{id}',[NewsController::class, 'destroy'])->name('news.delete');
+
+    });
+    //Tag tin tức
+    Route::prefix('tag-tin-tuc')->group(function(){
+        Route::get('/',[TagController::class, 'index'])->name('news.tag.index');
+        Route::post('/them',[TagController::class, 'store'])->name('news.tag.store');
+        Route::get('/edit/{id}',[TagController::class, 'edit'])->name('news.tag.edit');
+        Route::put('/edit/{id}',[TagController::class, 'update'])->name('news.tag.update');
+        Route::get('/xoa/{id}',[TagController::class, 'show'])->name('news.tag.show');
+        Route::delete('/xoa/{id}',[TagController::class, 'destroy'])->name('news.tag.delete');
+
+    });
+    //Danh mục tin tức
+    Route::prefix('danh-muc-tin-tuc')->group(function(){
+        Route::get('/',[CategoriesNewsController::class, 'index'])->name('news.cat.index');
+        Route::post('/them',[CategoriesNewsController::class, 'store'])->name('news.cat.store');
+        Route::get('/edit/{id}',[CategoriesNewsController::class, 'edit'])->name('news.cat.edit');
+        Route::put('/edit/{id}',[CategoriesNewsController::class, 'update'])->name('news.cat.update');
+        Route::get('/xoa/{id}',[CategoriesNewsController::class, 'show'])->name('news.cat.show');
+        Route::delete('/xoa/{id}',[CategoriesNewsController::class, 'destroy'])->name('news.cat.delete');
+
+    });
+
+    // Admin Login
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Vai trò quản trị
+    Route::prefix('quan-tri')->group(function(){
+        Route::get('/',[RoleAdminController::class, 'index'])->name('role.index');
+        Route::get('/create',[RoleAdminController::class, 'create'])->name('role.create');
+        Route::post('/create',[RoleAdminController::class, 'store'])->name('role.store');
+        Route::get('/edit/{id}',[RoleAdminController::class, 'edit'])->name('role.edit');
+        Route::patch('/edit/{id}',[RoleAdminController::class, 'update'])->name('role.update');
+        Route::delete('/',[RoleAdminController::class, 'destroy'])->name('role.delete');
+        // Manager
+        Route::get('/manager-create',[RoleAdminController::class, 'createManager'])->name('admin.create');
+        Route::post('/manager-create',[RoleAdminController::class, 'storeManager'])->name('admin.store');
+        Route::get('/manager-edit/{id}',[RoleAdminController::class, 'editManager'])->name('admin.edit');
+        Route::patch('/manager-edit',[RoleAdminController::class, 'updateManager'])->name('admin.update');
+    });
+
+
+    // User
+    Route::get('/profile-guest', [UserProfileController::class, 'edit'])->name('profileGuest.edit');
+    Route::put('/profile-guest', [UserProfileController::class, 'update'])->name('profileGuest.update');
 });
+
 // Tới cửa hàng
 Route::get('/https://vietbh.github.io/lazi-store',function(){
     return redirect('https://vietbh.github.io/lazi-store');

@@ -5,9 +5,11 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -46,21 +48,34 @@ class User extends Authenticatable implements MustVerifyEmail
         'password' => 'hashed',
     ];
     // Kiểm tra vai trò
-    public function hasRole($role) :bool
+    public function hasRole(array $role) :bool
     {
-        // Kiểm tra xem người dùng có vai trò truyền vào hay không
-        // return $this->roles->contains('name', $role);
-        // Kiểm tra xem người dùng có vai trò truyền vào hay không
-        return $this->role === $role;
+    // Kiểm tra xem người dùng có vai trò truyền vào hay không
+        $roleUser = Role::find($this->role);
+        foreach ($role as $key => $value) {
+            # code...
+            if($value == $roleUser->role_name) return true;
+        }
+        return false;
     }
 
     public function cart():HasOne
     {
         return $this->hasOne(Cart::class);
     }
-    // public function roles()
-    // {
-    //     // Mối quan hệ nhiều-nhiều với mô hình Role
-    //     return $this->belongsToMany(Role::class);
-    // }
+    public function roleName($user_role)
+    {
+        // Mối quan hệ nhiều-nhiều với mô hình Role
+        return Role::where('id',$user_role)->first();
+    }
+    public function orders():HasMany
+    {
+        // Mối quan hệ nhiều-nhiều với mô hình Role
+        return $this->hasMany(Orders::class,'user_id','id');
+    }
+    public function detailUser():HasMany
+    {
+        // Mối quan hệ nhiều-nhiều với mô hình Role
+        return $this->hasMany(DetailUser::class,'user_id','id');
+    }
 }

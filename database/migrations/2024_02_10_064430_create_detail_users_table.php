@@ -15,7 +15,7 @@ return new class extends Migration
             $table->increments('id')->unsigned();
             $table->string('full_name',50);
             $table->string('address',225);
-            $table->string('phone_numbers',22);
+            $table->string('phone_number',30);
             $table->boolean('set_default')->default(false);
             $table->string('google_map',255)->nullable();
             $table->unsignedInteger('user_id');

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->increments('id')->unsigned();
             $table->string('role_name',50)->unique();
             $table->string('description',255)->nullable();
+            $table->string('type_access',255)->nullable();
             $table->timestamps();
         });
     }

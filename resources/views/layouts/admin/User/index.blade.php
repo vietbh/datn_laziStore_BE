@@ -1,26 +1,6 @@
 @extends('admin')
 @section('content')
-    @if (session('success'))
-        @include('layouts.admin.components.alert')
-    @endif
-    @if($errors->any())
-    <script type="module"> 
-            var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
-            keyboard: false
-            })
-            myModal.toggle();
-            myModal.show();
-    </script>
-    @endif
-    @isset($user)
-    <script type="module"> 
-            var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
-            keyboard: false
-            })
-            myModal.toggle();
-            myModal.show();
-    </script>
-    @endisset
+   
    <!-- Sale & Revenue Start -->
    <div class="container-fluid pt-4 px-4">
        <div class="row g-4">
@@ -77,29 +57,32 @@
                <table class="table text-start align-middle table-bordered table-hover mb-0" >
                    <thead>
                        <tr class="text-dark">
-                           {{-- <th scope="col">Ngày tạo</th> --}}
+                           <th scope="col">Action</th>
                            <th scope="col">Tên khách hàng</th>
                            <th scope="col">Hình đại diện</th>
                            <th scope="col">Email</th>
-                           <th scope="col">Vai trò</th>
-                           {{-- <th scope="col">Trạng thái</th> --}}
-                           <th scope="col" colspan="2">Action</th>
+                           <th scope="col">Xác minh</th>
+                           <th scope="col">Trạng thái</th>
+                           <th scope="col">Ngày tạo</th>
                        </tr>
                    </thead>
                    <tbody>
                     @foreach ($users as $user)
                         <tr title="{{$user->name}}">
-                            {{-- <td>{{$user->created_at}}</td> --}}
-                            <td>{{$user->name}}</td>
-                            <td><img src="{{ asset('public/'.$user->image_url) }}" loading="lazy" class="w-100" width="100" height="100" alt="{{$user->image_url}}"/></td>
-                            <td>{{$user->email}}</td>
-                            <td>{{$user->role == 0 ? 'Quản trị':'Khách hàng'}}</td>
-                            {{-- <td>{{$user->show_hide=='show'?'Hiện':'Ẩn'}}</td> --}}
                             <td>
                                 <div class="d-flex justify-content-evenly">
-                                    <a class="btn btn-sm btn-primary" href="{{ route('product.cat.edit', ['id' => $user->id]) }}">Detail</a>
+                                    <a class="btn btn-sm btn-primary" href="{{ route('guest.edit', ['id' => $user->id]) }}">Detail</a>
                                 </div>
                             </td>
+                            <td>{{$user->name}}</td>
+                            <td>@isset($user->image_url)<img src="{{$user->image_url}}" loading="lazy" class="rounded-circle" width="100" height="100" alt="{{$user->image_url}}"/>
+                                @else Chưa có hình ảnh
+                                @endisset
+                            </td>
+                            <td>{{$user->email}}</td>
+                            <td><span class="badge bg-danger">{{$user->email_verified_at ? $user->email_verified_at->format('d/m/Y') : "Chưa kích hoạt"}}</span></td>
+                            <td><span class="badge bg-success">{{$user->status}}</span></td>
+                            <td><span class="badge bg-success">{{$user->created_at ? $user->created_at->format('d/m/Y'): "Chưa kích hoạt"}}</span></td>
                         </tr>
                     @endforeach                      
                    </tbody>

@@ -87,7 +87,7 @@
                         <tr>
                             <td>{{$s->name}}</td>
                             <td>{{$s->address}}</td>
-                            <td>{{$s->shipping_cost}}</td>
+                            <td>{{number_format($s->shipping_cost,'0',',','.') }}đ</td>
                             <td>
                             <div class="d-flex justify-content-evenly">
                                 <a class="btn btn-sm btn-primary" href="{{ route('shipping.edit', ['id' => $s->id]) }}">Edit</a>

@@ -103,9 +103,6 @@
                                         <label for="tag_id" class="form-label ">Tag <span class="text-danger text-small">(*)</span></label>
                                         <!-- Multiple Select -->
                                         <select class="js-example-basic-multiple" name="tag_id[]" multiple="multiple">
-                                            <option value="">Alabama</option>
-                                            <option value="AL">Alabama</option>
-                                            <option value="WY">Wyoming</option>
                                         </select>
                                         @error('tag_id')
                                             <div class="form-text text-danger">{{ $message }}</div>
@@ -180,4 +177,7 @@
     </div>
     </div>
 </div>
+@section('js')
 @include('layouts.admin.News.ckeditor')
+    
+@endsection

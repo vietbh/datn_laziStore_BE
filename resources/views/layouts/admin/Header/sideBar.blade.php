@@ -16,7 +16,7 @@
         <div class="navbar-nav w-100">            
             <a href="{{ route('home') }}" class="nav-item nav-link {{request()->routeIs('home') == 1 ? 'active':''}}"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
             <a href="{{ route('chart.index') }}" class="nav-item nav-link {{request()->routeIs('chart.index') == 1 ? 'active':''}}"><i class="fa fa-chart-bar me-2"></i>Thống kê</a>
-            <a href="{{ route('guest.index') }}" class="nav-item nav-link {{request()->routeIs('guest.index') == 1 ? 'active':''}}"><i class="fas fa-users me-2"></i>Tài khoản</a>
+            <a href="{{ route('guest.index') }}" class="nav-item nav-link {{request()->routeIs(['guest.index','guest.edit']) == 1 ? 'active':''}}"><i class="fas fa-users me-2"></i>Tài khoản</a>
             <a href="{{ route('payment.index') }}" class="nav-item nav-link {{request()->routeIs('payment.index','payment.edit') == 1 ? 'active':''}}"><i class="fas fa-cash-register me-2"></i>Đơn hàng</a>
             <a href="{{ route('discount.index') }}" class="nav-item nav-link {{request()->routeIs('discount.index') == 1 ? 'active':''}}"><i class="fa fa-ticket-alt me-2"></i>Mã giảm giá</a>
             <a href="{{ route('shipping.index') }}" class="nav-item nav-link {{request()->routeIs('shipping.index') == 1 ? 'active':''}}"><i class="fa fa-truck me-2"></i>Nhà vận chuyển</a>

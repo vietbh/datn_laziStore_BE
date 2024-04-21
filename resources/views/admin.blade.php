@@ -97,10 +97,29 @@
                 language: "es",
                 // allowClear: true,
             });
-            $('textarea').each(function(){
+            $('textarea','input[all]').each(function(){
                 $(this).val($(this).val().trim());
                 }
             );
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#image_upload_preview').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            $("#inputFile").change(function () {
+                $("#image_upload_preview,.btn-remove-image").removeClass('d-none');
+                $(".image_selected").addClass('d-none');
+                readURL(this);
+            });
+            $(".btn-remove-image").bind('click',function(){
+                $("#image_upload_preview,.btn-remove-image").addClass('d-none');
+                $(".image_selected").removeClass('d-none');
+                $("#inputFile").val('');
+            });
         });
     </script>
     @yield('js')

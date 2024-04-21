@@ -26,13 +26,13 @@ class PaymentController extends Controller
         $payment = Payment::create([
             'payment_number' => $paymentNumber,
             'payment_method' => 'cod',
-            // 'status' => $request->payment,
+            'status' => $request->payment,
             'order_id' => $order->id,
             'count_items' => $order->count_items,
             'amount' => $order->amount,
             'total' => $order->total,
             'user_id' => $order->user_id,
-            'date_create' => date('Y/m/d', time()),
+            'date_create' => date('DD/MM/YYYY', time()),
             'time_create' => Carbon::now(new \DateTimeZone("Asia/Ho_Chi_Minh"))->format('H:i:s'),
         ]);
         return response()->json(['payment' => $payment],200);
@@ -85,7 +85,7 @@ class PaymentController extends Controller
             'address' => $data['address'],
             'note' => $data['note'],
             'user_id' => $cart['user_id'],
-            'date_create' => date('Y/m/d', time()),
+            'date_create' => date('DD/MM/YYYY', time()),
             'time_create' => Carbon::now(new \DateTimeZone("Asia/Ho_Chi_Minh"))->format('H:i:s'),
         ]);
         
@@ -95,7 +95,7 @@ class PaymentController extends Controller
                 OrderItems::create([
                     'product_id' => $cartItem->product_id,
                     'quantity' => $cartItem->quantity,
-                    'price' =>  $product->price_sale ,
+                    'price' =>  $product->price_sale,
                     'amount' =>  $product->price_sale * $cartItem->quantity,
                     'order_id' => $order->id,
                 ]);

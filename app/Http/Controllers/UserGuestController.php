@@ -16,11 +16,9 @@ class UserGuestController extends Controller
     public function index()
     {
         //
-        $role = Role::where('role_name','guest')->firstOr();
-        $users = User::where('role',$role->id)->paginate(10);
+        $users = User::where('role',Role::where('role_name','guest')->first('id')->id)->paginate(10);
         return view('layouts.admin.User.index',compact('users'));
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -54,20 +52,11 @@ class UserGuestController extends Controller
         return redirect()->route('guest.index')->with('success','Thêm tài khoản thành công');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         //
+        $user = User::findOrFail($id);
+        return view('layouts.admin.User.edit',compact('user'));
         
     }
 

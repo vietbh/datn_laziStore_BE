@@ -19,10 +19,11 @@ class NewsController extends Controller
     public function index()
     {
         //
-        $news = News::orderByDesc('created_at')->paginate(10);
+        $news = News::orderByDesc('id')->paginate(8);
+        $paginate = $news;
         $tags = Tag::all();
         $categories = CategoriesNews::all();
-        return view('layouts.admin.News.index',compact('news','tags','categories'));
+        return view('layouts.admin.News.index',compact('news','tags','categories','paginate'));
     }
 
     public function create(){
@@ -34,7 +35,7 @@ class NewsController extends Controller
             ];
         })->toJson();
         $categories = CategoriesNews::all();
-        return view('layouts.admin.News.store',compact('news','tags','categories'));
+        return view('layouts.admin.News.edit',compact('news','tags','categories'));
     }
 
     public function store(Request $request, News $news)
@@ -127,7 +128,7 @@ class NewsController extends Controller
         //         ];
         //     }));
         // }
-        return view('layouts.admin.News.store',compact('new','tags','categories'));
+        return view('layouts.admin.News.edit',compact('new','tags','categories'));
     }
 
     /**
@@ -210,4 +211,41 @@ class NewsController extends Controller
         $new->delete();
         return redirect()->route('news.index')->with('success','Xóa tin tức thành công!');
     }
+
+    public function filter(Request $request)
+    {
+        // Lấy các tham số lọc từ yêu cầu
+        $search = $request->input('search');
+        $name = $request->input('name');
+        $category = $request->input('category');
+        // Xây dựng truy vấn lọc sản phẩm
+        $query = News::query();
+
+        if ($search) {
+            $query->whereAll([
+                'title',
+            ], 'LIKE', '%'.$search.'%');
+        }
+        if ($name) {
+            $query->orderBy('title', $name);
+        }
+
+        if ($category) {
+            $query->whereHas('category', function ($query) use ($category) {
+                $query->where('name', $category);
+            });
+        }
+
+
+        // Thực hiện truy vấn và lấy danh sách sản phẩm đã lọc với phân trang
+        $news = $query->get();
+
+        // Truyền danh sách sản phẩm đã lọc và các thông tin phân trang cho giao diện người dùng
+        $categories = CategoriesNews::all();
+
+        $newsCount = News::all()->count();
+        $data = compact('news','categories','newsCount');
+        return view('layouts.admin.News.index',$data);
+    }
+
 }

@@ -32,9 +32,10 @@ class AuthController extends Controller
             $user = User::where('name', $request->email)->first();
         }
         if (! $user || ! Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'login' => ['Tài khoản không tồn tại.'],
-            ]);
+            // throw ValidationException::withMessages([
+            //     'login' => ['Tài khoản không tồn tại.'],
+            // ]);
+            return response()->json(['login' => ['Tài khoản không tồn tại.']],401);
         }
         $data = [
            'user'=>[
