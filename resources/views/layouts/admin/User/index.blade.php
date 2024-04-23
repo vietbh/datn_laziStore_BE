@@ -61,7 +61,7 @@
                            <th scope="col">Tên khách hàng</th>
                            <th scope="col">Hình đại diện</th>
                            <th scope="col">Email</th>
-                           <th scope="col">Xác minh</th>
+                           <th scope="col">Xác minh email</th>
                            <th scope="col">Trạng thái</th>
                            <th scope="col">Ngày tạo</th>
                        </tr>
@@ -80,7 +80,7 @@
                                 @endisset
                             </td>
                             <td>{{$user->email}}</td>
-                            <td><span class="badge bg-danger">{{$user->email_verified_at ? $user->email_verified_at->format('d/m/Y') : "Chưa kích hoạt"}}</span></td>
+                            <td><span class="badge {{$user->email_verified_at ? "bg-success" : "bg-danger"}} ">{{$user->email_verified_at ? $user->email_verified_at->format('d/m/Y') : "Chưa kích hoạt"}}</span></td>
                             <td><span class="badge bg-success">{{$user->status}}</span></td>
                             <td><span class="badge bg-success">{{$user->created_at ? $user->created_at->format('d/m/Y'): "Chưa kích hoạt"}}</span></td>
                         </tr>

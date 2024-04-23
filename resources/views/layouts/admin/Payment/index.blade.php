@@ -83,7 +83,7 @@
                             <td>{{number_format($order->total, 0, ',', '.')}}đ</td>
                             <td>@isset(($order->payment)){{$order->payment->status}}@endisset</td>
                             <td>{{ \Carbon\Carbon::parse($order->time_create)->isoFormat('HH') }} giờ : {{ \Carbon\Carbon::parse($order->time_create)->isoFormat('mm') }} phút</td>
-                            <td>{{ \Carbon\Carbon::parse($order->date_create)->isoFormat('DD/MM/YYYY') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($order->date_create)->isoFormat('D/MM/Y')}}</td>
                             
                         </tr>
                     @empty

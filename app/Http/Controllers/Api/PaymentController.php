@@ -17,22 +17,18 @@ class PaymentController extends Controller
 {
     //
     public function store(Request $request){
-        if (!$request->expectsJson()) {
-            // ...
-            return response()->json(403);
-        }
         $order = $this->createOrder($request);
         $paymentNumber = $this->generatePaymentNumber();
         $payment = Payment::create([
             'payment_number' => $paymentNumber,
             'payment_method' => 'cod',
-            'status' => $request->payment,
+            // 'status' => $request->payment,
             'order_id' => $order->id,
             'count_items' => $order->count_items,
             'amount' => $order->amount,
             'total' => $order->total,
             'user_id' => $order->user_id,
-            'date_create' => date('DD/MM/YYYY', time()),
+            'date_create' => date('Y-m-d', time()),
             'time_create' => Carbon::now(new \DateTimeZone("Asia/Ho_Chi_Minh"))->format('H:i:s'),
         ]);
         return response()->json(['payment' => $payment],200);
@@ -57,20 +53,19 @@ class PaymentController extends Controller
     } 
     protected function generatePaymentNumber()
     {
-        $orderNumber = 'PM-';
+        $paymentNumber = 'PM-';
         $order = Orders::orderByDesc('id')->first();
 
         if(isset($order)){
-            $orderNumber .= 'AN'.$order->id.'-'; // Thêm thông tin id vào mã đơn hàng
+            $paymentNumber .= 'AN'.$order->id.'-'; // Thêm thông tin id vào mã đơn hàng
         }
-        $orderNumber .= Str::random(6); // Tiền tố "DH-" và 6 ký tự ngẫu nhiên
+        $paymentNumber .= Str::random(6);
 
-        // $formattedTimestamp = date('YmdHis', time()); // Định dạng thời gian: năm, tháng, ngày, giờ, phút, giây
         $formattedTimestamp = Carbon::now(new \DateTimeZone("Asia/Ho_Chi_Minh"))->format('YmdHis');; // Định dạng thời gian: năm, tháng, ngày, giờ, phút, giây
 
-        $orderNumber .= $formattedTimestamp; // Thêm thông tin thời gian vào mã đơn hàng
+        $paymentNumber .= $formattedTimestamp; // Thêm thông tin thời gian vào mã đơn hàng
 
-        return $orderNumber;
+        return $paymentNumber;
     } 
 
     protected function createOrder($request){
@@ -85,18 +80,17 @@ class PaymentController extends Controller
             'address' => $data['address'],
             'note' => $data['note'],
             'user_id' => $cart['user_id'],
-            'date_create' => date('DD/MM/YYYY', time()),
+            'date_create' => date('Y-m-d', time()),
             'time_create' => Carbon::now(new \DateTimeZone("Asia/Ho_Chi_Minh"))->format('H:i:s'),
         ]);
         
         if(isset($order->id)){
-            foreach ($cart->cartItems as $cartItem) {
-                $product = ProductVariation::find($cartItem->product_id);
+            foreach ($cart->cartItems()->get() as $cartItem) {
                 OrderItems::create([
                     'product_id' => $cartItem->product_id,
                     'quantity' => $cartItem->quantity,
-                    'price' =>  $product->price_sale,
-                    'amount' =>  $product->price_sale * $cartItem->quantity,
+                    'price' =>  $cartItem->productVariation->price_sale,
+                    'amount' => $cartItem->productVariation->price_sale * $cartItem->quantity,
                     'order_id' => $order->id,
                 ]);
             }
@@ -105,7 +99,7 @@ class PaymentController extends Controller
         $order->count_items = $order->countItems;
         $order->total = $order->totalItems;
         $order->update();
-        $cart->cartItems()->delete();
+        // $cart->cartItems()->delete();
         return $order;
     }
 

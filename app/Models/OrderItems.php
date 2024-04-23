@@ -11,7 +11,7 @@ class OrderItems extends Model
 {
     use HasFactory;
     protected $primaryKey = 'id';
-    protected $fillable = ['quantity','price','order_id','product_varia_id'];
+    protected $fillable = ['quantity','price','order_id','product_id','amount'];
     protected $with =['order'];
     public function order():BelongsTo
     {
@@ -19,7 +19,7 @@ class OrderItems extends Model
     }
     public function productVariation():HasOne
     {
-        return $this->hasOne(ProductVariation::class,'id','product_varia_id');
+        return $this->hasOne(ProductVariation::class,'id','product_id');
     }
     
 }

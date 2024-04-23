@@ -8,13 +8,15 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rules;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
+use App\Models\DetailUser;
 use App\Models\Role;
+use Exception;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 
@@ -32,9 +34,6 @@ class AuthController extends Controller
             $user = User::where('name', $request->email)->first();
         }
         if (! $user || ! Hash::check($request->password, $user->password)) {
-            // throw ValidationException::withMessages([
-            //     'login' => ['Tài khoản không tồn tại.'],
-            // ]);
             return response()->json(['login' => ['Tài khoản không tồn tại.']],401);
         }
         $data = [
@@ -76,10 +75,10 @@ class AuthController extends Controller
             'remember_token' => Str::random(10),
         ]);
 
-        // event(new Registered($user));
+        event(new Registered($user));
         
-        // Auth::login($user);
-        
+        $user->detailUser()->create();
+
         Cart::create([
             'user_id' => $user->id,
             'amount' => 0,
@@ -110,19 +109,20 @@ class AuthController extends Controller
             'email' => 'required|email',
         ]);
 
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
-
-        if ($status == Password::RESET_LINK_SENT) {
-            return response()->back()->with('status', __($status));
+        try {
+            $email = $request->only(['email']);
+            $code = sprintf('%06d', rand(1, 999999));
+            if (!empty($email) && !empty($code)) {
+                $user = User::where(['email' => $email])->first();
+                dispatch(new SendEmailForgotPass($user->email, $code, $user->name))->onQueue(config('queue.queueType.email'));
+                $user->reset_code = $code;
+                $user->save();
+            }
+            return response()->json([], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            Log::error('[AuthController][forgotPassword] error ' . $e->getMessage());
+            throw new Exception('[AuthController][forgotPassword] error because ' . $e->getMessage());
         }
-
-        return response()->json([
-            'errors' => [
-                'email' => [trans($status)],
-            ],
-        ], 422);
     }
     public function resetPasswordCreate(Request $request)
     {

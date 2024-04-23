@@ -19,8 +19,8 @@ class DatabaseSeeder extends Seeder
         \App\Models\User::factory()->create([
             'name' => 'Admin User',
             'email' => 'admin@example.com',
-            'password' =>'123456',
-            'role' => 0,
+            'password' =>'rootlazi',
+            'role' => 1,
         ]);
         \App\Models\CategoriesProduct::factory()->create([
             'name' => 'Category Unsign',

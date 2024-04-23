@@ -18,4 +18,8 @@ class CartItems extends Model
     {
         return $this->BelongsTo(Cart::class,'cart_id','id');
     }
+    public function productVariation():HasOne
+    {
+        return $this->hasOne(ProductVariation::class,'id','product_id');
+    }
 }

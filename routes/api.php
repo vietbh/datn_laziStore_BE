@@ -58,6 +58,7 @@ Route::post('/gio-hang/them-san-pham',[CartController::class,'store']);
 Route::post('/gio-hang/cap-nhat-san-pham',[CartController::class,'update']);
 Route::post('/gio-hang/xoa-san-pham',[CartController::class,'destroy']);
 // Thanh toan
+// Route::post('/don-hang',[PaymentController::class,'store']);
 Route::post('/thanh-toan',[PaymentController::class,'store']);
 
 Route::group(['prefix' => 'api'], function () {

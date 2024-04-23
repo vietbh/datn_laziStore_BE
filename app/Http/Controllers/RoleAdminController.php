@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
@@ -127,8 +128,8 @@ class RoleAdminController extends Controller
             'name' => $validator['name'],
             'email' => $validator['email'],
             'password' => Hash::make($validator['password']),
-            'email_verified_at' => now(),
-            'role' => $validator['role']
+            'role' => $validator['role'],
+            'remember_token' => Str::random(10),
         ]);
        
         $file = $request->file('image_url'); // Lấy file từ request    

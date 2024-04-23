@@ -5,12 +5,19 @@
         </a>
         <div class="d-flex align-items-center ms-4 mb-4">
             <div class="position-relative">
-                <img class="rounded-circle" src="{{ asset('img/user.jpg') }}" alt="" style="width: 40px; height: 40px;">
-                <div class="bg-danger rounded-circle border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
+                <img class="rounded-circle" src="@if(Auth::user()->image_url != ''){{ Auth::user()->image_url}} @endif" alt="" style="width: 40px; height: 40px;">
+                @if (Auth::user()->status == 'online')    
+                    <div 
+                    class="bg-success rounded-circle border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
+                @else
+                    <div 
+                    class="bg-danger rounded-circle border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
+                    
+                @endif
             </div>
             <div class="ms-3">
-                <h6 class="mb-0">{{ Auth::user()->name }}</h6>
-                <span>Admin</span>
+                <h5 class="mb-0">{{ Auth::user()->name }}</h5>
+                <span class="text-uppercase">{{ Auth::user()->roleName(Auth::user()->role)->role_name }}</span>
             </div>
         </div>
         <div class="navbar-nav w-100">            

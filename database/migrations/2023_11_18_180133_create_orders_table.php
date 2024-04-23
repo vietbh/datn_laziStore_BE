@@ -23,8 +23,8 @@ return new class extends Migration
             $table->decimal('total',20,2);
             $table->unsignedInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->string('date_create');
-            $table->string('time_create');
+            $table->date('date_create');
+            $table->time('time_create');
             $table->timestamps();
         });
     }

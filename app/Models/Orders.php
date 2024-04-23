@@ -28,7 +28,7 @@ class Orders extends Model
     }
     public function getCountItemsAttribute()
     {
-        return $this->orderItems()->count('quantity');
+        return $this->orderItems()->sum('quantity');
     }
     public function getAmountItemsAttribute()
     {
