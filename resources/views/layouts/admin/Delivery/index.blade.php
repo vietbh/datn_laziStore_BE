@@ -1,8 +1,5 @@
 @extends('admin')
 @section('content')
-    @if (session('success'))
-        @include('layouts.admin.components.alert')
-    @endif
     @error('title')
     <script type="module"> 
             var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {

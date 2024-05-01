@@ -16,7 +16,7 @@ class CategoriesProductController extends Controller
     public function index()
     {
         //
-        $categories = CategoriesProduct::orderBy('name')->where([['id','!=',1]])->paginate(10);
+        $categories = CategoriesProduct::where([['id','!=',1]])->get();
         $categories_parent = CategoriesProduct::where([
             ['id','!=',1],
         ])->get();

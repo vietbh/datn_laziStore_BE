@@ -1,6 +1,6 @@
 @extends('admin')
 @section('content')
-    @include('layouts.admin.components.js',['errors' => $errors,'edit'=>$shippingProvider??null,'modal'=>'addShippingProviderModal'])
+    @include('layouts.admin.components.js',['errors' => $errors,'edit'=>$shippingProvider ?? null, 'modal'=>'addShippingProviderModal'])
     {{-- @if($errors->any())
         <script type="module"> 
             let myModal = new bootstrap.Modal(document.getElementById('addSlideModal'), {
@@ -69,35 +69,35 @@
                <h4 class="mb-0">Danh sách nhà vận chuyển</h4>
                <!-- Button trigger modal -->
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addShippingProviderModal">
-                    Thêm
+                    Thêm nhà vận chuyển
                 </button>
            </div>
            <div class="table-responsive" style="height: 80vh">
                <table class="table text-start align-middle table-bordered table-hover mb-0" >
                    <thead>
                        <tr class="text-dark">
+                           <th scope="col">Action</th>
                            <th scope="col">Nhà vận chuyển</th>
                            <th scope="col">Khu vực</th>
                            <th scope="col">Phí vận chuyển</th>
-                           <th scope="col" colspan="2">Action</th>
                        </tr>
                    </thead>
                    <tbody>
-                    @foreach ($shippingProviders as $s)
+                    @foreach ($shippingProviders as $ship)
                         <tr>
-                            <td>{{$s->name}}</td>
-                            <td>{{$s->address}}</td>
-                            <td>{{number_format($s->shipping_cost,'0',',','.') }}đ</td>
                             <td>
-                            <div class="d-flex justify-content-evenly">
-                                <a class="btn btn-sm btn-primary" href="{{ route('shipping.edit', ['id' => $s->id]) }}">Edit</a>
-                                <form action="{{ route('shipping.delete', ['id' => $s->id]) }}" method="POST">
-                                    @csrf
-                                    @method('delete')
-                                    <button class="btn btn-sm btn-danger" type="submit">Xóa</button>
-                                </form>
-                            </div>
+                                <div class="d-flex">
+                                    <a class="btn btn-sm btn-primary me-2" href="{{ route('shipping.edit', ['id' => $ship->id]) }}" title="Edit"><i class="fas fa-edit"></i></a>
+                                    <form action="{{ route('shipping.delete', ['id' => $ship->id]) }}" method="POST">
+                                        @csrf
+                                        @method('delete')
+                                        <button class="btn btn-sm btn-danger" type="submit" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                                    </form>
+                                </div>
                             </td>
+                            <td>{{$ship->name}}</td>
+                            <td>{{$ship->address}}</td>
+                            <td>{{number_format($ship->shipping_cost,'0',',','.') }}đ</td>
                         </tr>
                     @endforeach                      
                    </tbody>

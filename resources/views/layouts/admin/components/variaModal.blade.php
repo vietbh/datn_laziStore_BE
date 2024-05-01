@@ -14,7 +14,7 @@
                         <div class="col-lg-12">
                             <h5 class="card-title my-3">
                                 @isset($productVariation)
-                                    Sửa 
+                                    Sửa sản phẩm màu <strong>{{$productVariation->color_type}}</strong> 
                                 @else
                                     Thêm màu sắc {{$product->name}}
                                 @endisset
@@ -23,17 +23,11 @@
                         <div class="col-sm-6 col-xl-4">
                             <div class="bg-white rounded h-100 p-3 text-start">
                                 <form 
-                                    @isset($productVariation)
-                                        action="{{ route('varia.update',['id' => $productVariation->id]) }}"
-                                    @else
-                                        action="{{ route('varia.store') }}"
-                                    @endisset
+                                    action="@isset($productVariation) {{ route('varia.update',['id' => $productVariation->id]) }} @else {{ route('varia.store') }} @endisset"
                                     method="post" enctype="multipart/form-data">
                                     @csrf
-                                    @isset($productVariation)
-                                        @method('put')
-                                    @else   
-                                        @method('post')
+                                    @isset($productVariation) @method('put')
+                                    @else @method('post')
                                     @endisset
                                     <div class="row mb-3">
                                         <div class="col-sm-12 col-xl-12 mb-3">
@@ -138,28 +132,22 @@
                                         @endisset
                                         <div class="col-sm-12 col-xl-12 mb-3">
                                             <label for="image_url" class="form-label">Chọn hình ảnh <span class="text-danger text-small">(*)</span></label>
-                                            <input type="file" name="image_url" class="form-control 
-                                            @error('image_url') 
-                                                is-invalid
-                                            @enderror" 
+                                            <input 
+                                            type="file" name="image_url" class="form-control bg-white @error('image_url') is-invalid @enderror" 
                                             id="image_url"
                                             aria-describedby="image_url">
+
                                             @error('image_url')
                                                 <div class="form-text text-danger">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="col-sm-12 col-xl-12 mb-3">
                                             <label for="show_hide" class="form-label">Trạng thái (mặc định sẽ là Hiện)</label>
-                                            <select class="form-select" name="show_hide" 
-                                            @isset($productVariation)
-                                                value="{{$productVariation->show_hide}}"
-                                            @else
-                                                value="{{old('show_hide')}}"    
-                                            @endisset
-                                            autocomplete="show_hide"
-                                            id="show_hide">
-                                                <option value="1">Hiện</option>
-                                                <option value="0">Ẩn</option>
+                                            <select 
+                                            class="form-select" name="show_hide" autocomplete="show_hide" id="show_hide">
+                                                <option 
+                                                value="1" @isset($productVariation) @selected($productVariation->show_hide) @endisset >Hiện</option>
+                                                <option value="0" @isset($productVariation) @selected(!$productVariation->show_hide) @endisset>Ẩn</option>
                                             </select>    
                                         </div>
                                         <div class="col-sm-12 col-xl-12 mb-3">
@@ -187,54 +175,57 @@
                             </div>
                         </div>
                         <div class="col-sm-12 col-xl-8">
-                            <div class="bg-white rounded h-100 p-2 text-start">
+                            <div class="bg-white rounded h-100 py-1 text-start">
                                 <div class="table-responsive">
                                     <table class="table table-striped table-hover">
                                         <thead>
                                             <tr>
+                                                <th scope="col" class="text-start">Action</th>
                                                 <th scope="col">Hình ảnh</th>
                                                 <th scope="col">Màu sắc</th>
                                                 <th scope="col">Giá</th>
                                                 <th scope="col">Giá khuyến mãi</th>
                                                 <th scope="col">Số lượng</th>
-                                                <th scope="col" class="text-start" colspan="2">Action</th>
+                                                <th scope="col">Trạng thái</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @isset($productVariations)
                                                 @foreach ($productVariations as $variation)
                                                     <tr>
-                                                        <td><img src="{{$variation->image_url}}" class="rounded-3 me-2" width="100" height="100" aria-describedby="image_url"></td>
-                                                        <td ><p>{{$variation->color_type}}</p></td>
-                                                        <td ><p>{{number_format($variation->price,0,2)}}<span class="text-sm">đ</span></p></td>
-                                                        <td ><p>{{number_format($variation->price_sale,0,2)}}<span class="text-sm">đ</span></p></td>
-                                                        <td ><p>{{$variation->quantity}}<span class="text-sm"> chiếc</span></p></p></td>
                                                         <td>
-                                                            <div class="d-flex justify-content-evenly">
-                                                                <a href="{{ route('varia.edit', ['id'=>$variation->id]) }}" class="
-                                                                    @isset($productVariation)
-                                                                        {{$productVariation->id == $variation->id ? 'd-none' : ''}}
-                                                                    @endisset"
-                                                                     title="Edit">
-                                                                    <button class="btn btn-sm btn-primary">Edit</button>
+                                                            <div class="d-flex">
+                                                                <a href="{{ route('varia.edit', ['id'=>$variation->id]) }}" class="btn btn-sm btn-primary me-2 @isset($productVariation) {{$productVariation->id == $variation->id ? 'd-none' : ''}} @endisset"
+                                                                    title="Edit"> <i class="fas fa-edit"></i>
                                                                 </a>
                                                                 <form action="{{ route('varia.delete', ['id' =>$variation->id]) }}" method="POST">
                                                                     @csrf
                                                                     @method('delete')
-                                                                    <button class="btn btn-sm btn-danger" type="submit" title="Xóa">Xóa</button>
+                                                                    <button class="btn btn-sm btn-danger" type="submit" title="Xóa"><i class="fas fa-trash-alt"></i></button>
                                                                 </form>
                                                             </div>
+                                                        </td>
+                                                        <td><img src="{{$variation->image_url}}" class="rounded-3 me-2" width="100" height="100" aria-describedby="image_url"></td>
+                                                        <td ><span class="badge bg-primary">{{$variation->color_type}}</span> </td>
+                                                        <td ><p>{{number_format($variation->price,0,',','.')}}<span class="text-sm">đ</span></p></td>
+                                                        <td ><p>{{number_format($variation->price_sale,0,',','.')}}<span class="text-sm">đ</span></p></td>
+                                                        <td ><span class="badge bg-primary">{{$variation->quantity}}<span class="text-sm"> chiếc</span></span></td>
+                                                        <td >
+                                                            @if ($variation->show_hide)<span class="badge bg-primary">Hiện</span>
+                                                            @else <span class="badge bg-secondary">Ẩn</span>
+                                                            @endif
                                                         </td>
                                                 @endforeach
                                             @else
                                                 <thead>
                                                     <tr>
+                                                        <th scope="col" class="text-start">Action</th>
                                                         <th scope="col">Hình ảnh</th>
                                                         <th scope="col">Màu sắc</th>
                                                         <th scope="col">Giá</th>
                                                         <th scope="col">Giá khuyến mãi</th>
                                                         <th scope="col">Số lượng</th>
-                                                        <th scope="col" class="text-start" colspan="2">Action</th>
+                                                        <th scope="col">Trạng thái</th>
                                                         <hr>
                                                     </tr>
                                                 </thead>

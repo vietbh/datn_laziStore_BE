@@ -13,40 +13,6 @@ use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        $products = ProductVariation::where('show_hide',true)->orderBy('price_sale')->with('product')->paginate(8);
-        return response()->json($products);
-    }
-    // public function index()
-    // {
-    //     $products = Product::all();
-    //     $variations = [];
-    
-    //     foreach ($products as $product) {
-    //         $lowestPrice = PHP_INT_MAX;
-    //         $lowestPriceVariation = null;
-    
-    //         foreach ($product->variations as $variation) {
-    //             if ($variation->price_sale < $lowestPrice) {
-    //                 $lowestPrice = $variation->price_sale;
-    //                 $lowestPriceVariation = $variation;
-    //             }
-    //         }
-    
-    //         $variations[$product->id] = $lowestPriceVariation;
-    //     }
-    
-    //     $data = [
-    //         'products' => $products,
-    //         'variations' => $variations
-    //     ];
-    
-    //     return response()->json($data);
-    // }
 
     public function show(string $slug)
     {
@@ -58,17 +24,34 @@ class ProductController extends Controller
         ->where('show_hide', true)
         ->orderBy('price_sale')
         ->get();
-        $product_id = null;
-        foreach ($products as $value) {
-            $product_id = $value->product_id;
-            break;
+
+        $product = Product::find($products->first()->product()->first()->id);
+        if(isset($product->category->parent->slug)){
+            $category = CategoriesProduct::where([['show_hide',true],['slug',$product->category->parent->slug]])->first();
+        }else{
+            $category = CategoriesProduct::where([['show_hide',true],['slug',$product->category->slug]])->first();
         }
-        $product = Product::find($product_id);
+        if(empty($category)){
+            return response()->json(array());
+        }
+        //Danh mục 
+        if (!$category) {
+            return response()->json(['error' => 'Danh mục không tồn tại'], 404);
+        }
+
+        $subcategories = CategoriesProduct::where('parent_category_id',$category->id)->first();
+        // Sản phẩm liên quan
+        $productRela = $this->getProductsByCategory($category);
+
         $speci = SpecificationsProduct::where([['product_id',$product->id],['show_hide',true]])->orderBy('position')->get();
         return response()->json([
             'variation' => $products,
             'product' => $product,
-            'speci'=>$speci]);
+            'speci'=>$speci,
+            'productRela' => $productRela,
+            'category' => $category,
+            'subcategories' =>  $subcategories
+        ]);
     }
 
     public function hot()

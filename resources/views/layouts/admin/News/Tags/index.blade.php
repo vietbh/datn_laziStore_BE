@@ -103,7 +103,7 @@
     <div class="container-fluid pt-4 px-4">
         <div class="bg-light text-center rounded p-4">
             <div class="d-flex align-items-center justify-content-between mb-4">
-                <h6 class="mb-0">Tất cả tag tin tức</h6>
+                <h4 class="mb-0">Tất cả tag tin tức</h4>
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTagsModal"><i class="fas fa-plus me-1"></i>Thêm Tag</button>
             </div>

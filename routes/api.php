@@ -45,12 +45,11 @@ Route::post('/lien-he',[ContactController::class,'store']);
 
 //Auth 
 Route::post('/login', [AuthController::class, 'login']);
-Route::post('/dang-ky', [AuthController::class, 'store']);
-
-Route::get('/quen-mat-khau', [AuthController::class, 'forgotPasswordCreate']);
-Route::post('/quen-mat-khau', [AuthController::class, 'forgotPasswordStore']);
-Route::get('/dat-lai-mat-khau/{token}', [AuthController::class, 'resetPasswordCreate']);
-Route::post('/dat-lai-mat-khau', [AuthController::class, 'resetPasswordStore']);
+Route::post('/dang-ky', [AuthController::class, 'register']);
+// 
+Route::post('/quen-mat-khau', [AuthController::class, 'forgotPassword']);
+Route::post('/dat-lai-mat-khau', [AuthController::class, 'changePasswordForgot']);
+// Route::post('/doi-mat-khau', [AuthController::class, 'changePassword']);
 // // Gio hang
 
 Route::get('/gio-hang/{id}',[CartController::class,'index']);

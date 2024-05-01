@@ -5,9 +5,9 @@
         <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">
                 @isset($brand)
-                    Sửa danh mục sản phẩm {{$brand->name}}
+                    Sửa thương hiệu sản phẩm {{$brand->name}}
                 @else
-                    Thêm danh mục sản phẩm
+                    Thêm thương hiệu sản phẩm
                 @endisset
             </h5>
             @isset($brand)
@@ -36,7 +36,7 @@
                                     @method('post')
                                 @endisset
                                 <div class="mb-3">
-                                    <label for="name" class="form-label ">Tên danh mục <span class="text-danger text-small">*</span></label>
+                                    <label for="name" class="form-label ">Tên thương hiệu <span class="text-danger text-small">*</span></label>
                                     <input type="text" 
                                     name="name"
                                      class="form-control @error('name') 
@@ -46,7 +46,7 @@
                                     @isset($brand)
                                         value="{{$brand->name}}"
                                     @endisset
-                                    placeholder="Nhập tên của danh mục (vd:Đồng hồ,Laptop,...)"
+                                    placeholder="Nhập tên của thương hiệu (vd:Đồng hồ,Laptop,...)"
                                     autocomplete="name"
                                     aria-describedby="name">
                                     @error('name')
@@ -61,7 +61,7 @@
                                     @else
                                         value="{{old('country')}}"
                                     @endisset
-                                    placeholder="Nhập thứ tự hiện của danh mục"
+                                    placeholder="Nhập thứ tự hiện của thương hiệu"
                                     autocomplete="country"
                                     id="country">   
                                     @error('country')
@@ -76,7 +76,7 @@
                                     @else
                                         value="{{old('position')}}"
                                     @endisset
-                                    placeholder="Nhập thứ tự hiện của danh mục"
+                                    placeholder="Nhập thứ tự hiện của thương hiệu"
                                     autocomplete="position"
                                     id="position">   
                                     @error('position')
@@ -96,18 +96,12 @@
                                 </div>
                                 <div class="mb-3 float-end">
                                     <button type="submit" class="btn btn-primary">
-                                        @isset($brand)
-                                            Sửa
-                                        @else
-                                            Thêm mới
+                                        @isset($brand)Sửa
+                                        @else Thêm mới
                                         @endisset
                                     </button>
-                                    @isset($brand)
-                                        <a href="{{ route('brand.index') }}" class="btn btn-danger">
-                                            Đóng
-                                        </a>
-                                    @else
-                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
+                                    @isset($brand) <a href="{{ route('brand.index') }}" class="btn btn-danger">Đóng</a>
+                                    @else <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
                                     @endisset
                                 </div>
                             </form>

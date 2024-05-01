@@ -6,6 +6,7 @@
                 <th scope="col">Ngày tạo</th>
                 <th scope="col">Tên quản trị</th>
                 <th scope="col">Vai trò</th>
+                <th scope="col">Trạng thái</th>
             </tr>
         </thead>
         <tbody>
@@ -13,7 +14,7 @@
                 <tr>
                     <td>
                         <div 
-                        class="d-flex justify-content-evenly">
+                        class="d-flex ">
                             <a 
                             class="btn btn-sm btn-primary" href="{{ route('admin.edit', ['id' => $admin->id,'tab'=>'admin']) }}">Edit</a>
                             {{-- <form 
@@ -28,6 +29,7 @@
                     <td>{{$admin->created_at->format('d/m/Y')}}</td>
                     <td class="text-uppercase fw-bold">{{$admin->name}}</td>
                     <td>{{$admin->roleName($admin->role)->role_name }}</td>
+                    <td><span class="badge bg-{{$admin->user_status ? 'success' : 'danger'}}">{{$admin->user_status ? 'online' : 'offline'}}</span></td>
                 </tr>
             @endforeach                      
         </tbody>

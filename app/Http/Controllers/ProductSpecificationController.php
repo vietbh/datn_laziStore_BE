@@ -9,26 +9,33 @@ use App\Models\SpecificationsProduct;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class productSpecificationController extends Controller
+class ProductSpecificationController extends Controller
 {
 
-    public function create($id)
+    public function create($idProduct)
     {
         //
-        $param = request()->query('speci',null);
-       
-        $product = Product::findOrFail($id);
+        $param = request()->query('danh_muc',null);
+        
+        if($param) $category = CategoriesProduct::where('slug',$param)->first();
+
+        $product = Product::findOrFail($idProduct);
         $products = Product::where('show_hide',true)->get();
         $categories = CategoriesProduct::where([['show_hide',true],['parent_category_id',null]])->get();
-        $category = $product->category;
-        $specis = $category->specis()->get(); 
-        $specisKey = Specification::where('categories_product_id',$param)->get();
-        $productSpecifications = $product->specifications()->get();
+
+        $specis = Specification::where('categories_product_id',$category->id??$categories->first()->id)->get();
+              
+        $productSpecifications = $product->specifications()->whereIn('speci_id',$specis->pluck('id'))->get();
+        
         $productSpecificationCount = SpecificationsProduct::where('product_id',$product->id)->count();
         return view('layouts.admin.components.speciModal',compact(
-            'product','productSpecifications','products',
-            'productSpecificationCount','specis',
-            'categories','specisKey'));
+            'product',
+            'productSpecifications',
+            'products',
+            'productSpecificationCount',
+            'specis',
+            'categories',
+        ));
     }
 
     /**
@@ -38,17 +45,13 @@ class productSpecificationController extends Controller
     {
         //
         $request->validate([
-            // 'name' => ['required',
-            // Rule::unique('specifications_products', 'name')->ignore($productVariation->id, 'id')->where(function ($query) use ($productVariation) {
-            //     $query->where('product_id', $productVariation->product_id);
-            // })
-            // ],
-            // 'name' => 'required|unique:'.SpecificationsProduct::class,
+            'speci_id' => 'required',
             'value' => 'required',
             'position' => 'required|min:1|max:99999',
         ],[
-            'name.required' => 'Không được bỏ trống trường này.',
-            'name.unique' => 'Đã tồn tại thông số này.',
+            // 'name.required' => 'Không được bỏ trống trường này.',
+            // 'name.unique' => 'Đã tồn tại thông số này.',
+            'speci_id.required' => 'Không được bỏ trống trường này.',
             'value.required' => 'Không được bỏ trống trường này.',
             'position.required' => 'Không được bỏ trống trường này.',
             'quantity.min' => 'Vị trí nhỏ nhất là 1.',
@@ -69,7 +72,7 @@ class productSpecificationController extends Controller
 
         $productSpecification->show_hide = $request->show_hide;
         $productSpecification->save();
-        return redirect()->route('specifi.create',['id' => $product->id]);
+        return redirect()->back()->with('success','Thêm thông số sản phẩm thành công');
             
     }
 
@@ -78,39 +81,56 @@ class productSpecificationController extends Controller
         //
         $productSpecification = SpecificationsProduct::findOrFail($id);
         $product = Product::findOrFail($productSpecification->product_id);
-        $category = $product->category;
-        $specis = $category->specis()->get();        $productSpecifications = SpecificationsProduct::where('product_id',$product->id)->get();
+        $param = request()->query('danh_muc',null);
+        
+        if($param) $category = CategoriesProduct::where('slug',$param)->first();
+        
+        $categories = CategoriesProduct::where([['show_hide',true],['parent_category_id',null]])->get();
+        
+        $products = Product::where('show_hide',true)->get();
+        
+        $specis = Specification::where('categories_product_id',$category->id??$categories->first()->id)->get();
+        $productSpecifications = $product->specifications()->orderBy('position')->get();
+        if($param){
+            $productSpecifications = $product->specifications()->whereIn('speci_id',$specis->pluck('id'))->orderBy('position')->get();
+        }
         $productSpecificationCount = SpecificationsProduct::where('product_id',$product->id)->count();
-        return view('layouts.admin.components.speciModal',compact('productSpecification','productSpecifications','product','specis','productSpecificationCount'));
+        return view('layouts.admin.components.speciModal',compact(
+            'product',
+            'products',
+            'specis',
+            'categories',
+            'productSpecification',
+            'productSpecifications',
+            'productSpecificationCount'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
         //
-        $productSpecification = SpecificationsProduct::findOrFail($id);
+        $productSpecification = SpecificationsProduct::findOrFail($request->product_speci_id);
+      
         $request->validate([
-            'name' => 'required|unique:'.SpecificationsProduct::class.',name,'.$id,
+            'speci_id' => 'required|unique:specifications_products,speci_id,'.$request->product_speci_id,
             'value' => 'required',
             'position' => 'required|min:1|max:99999',
         ],[
-            'name.required' => 'Không được bỏ trống trường này.',
-            'name.unique' => 'Đã tồn tại thông số này.',
+            'speci_id.required' => 'Không được bỏ trống trường này.',
+            'speci_id.unique' => 'Đã tồn tại thông số này.',
             'position.required' => 'Không được bỏ trống trường này.',
             'quantity.min' => 'Vị trí nhỏ nhất là 1.',
             'quantity.max' => 'Vị trí lớn nhất là 99999.',
         ]);
-
-        $product = Product::findOrFail($productSpecification->product_id);
-        $productSpecification->name = $request->name;
+        $productSpecification->speci_id = $request->speci_id;
         $productSpecification->value = $request->value;
+        $productSpecification->type_speci = $request->type_speci == 'on' ? true : false;
         $productSpecification->position = $request->position;
-        $productSpecification->product_id = $product->id;
         $productSpecification->show_hide = $request->show_hide;
         $productSpecification->update();
-        return redirect()->route('specifi.create',['id' => $product->id]);
+        return redirect()->back()->with('success','Cập nhật thông số thành công');
     }
 
     /**
@@ -122,6 +142,6 @@ class productSpecificationController extends Controller
         $productSpecification = SpecificationsProduct::findOrFail($id);
         $product = Product::findOrFail($productSpecification->product_id);
         $productSpecification->delete();
-        return redirect()->route('specifi.create',['id' => $product->id])->with('success','Xóa thành công!');
+        return redirect()->back()->with('success','Xóa thông số thành công');
     }
 }

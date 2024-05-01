@@ -62,7 +62,6 @@
                     @include('layouts.admin.RoleAdmin.component.table-admin',['listManager'=>$listManager])
                     
                 </div>
-                {{-- <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">...</div> --}}
             </div>
             
            

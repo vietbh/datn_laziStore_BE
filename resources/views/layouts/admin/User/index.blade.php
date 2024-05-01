@@ -67,7 +67,7 @@
                        </tr>
                    </thead>
                    <tbody>
-                    @foreach ($users as $user)
+                    @forelse ($users as $user)
                         <tr title="{{$user->name}}">
                             <td>
                                 <div class="d-flex justify-content-evenly">
@@ -80,11 +80,13 @@
                                 @endisset
                             </td>
                             <td>{{$user->email}}</td>
-                            <td><span class="badge {{$user->email_verified_at ? "bg-success" : "bg-danger"}} ">{{$user->email_verified_at ? $user->email_verified_at->format('d/m/Y') : "Chưa kích hoạt"}}</span></td>
-                            <td><span class="badge bg-success">{{$user->status}}</span></td>
-                            <td><span class="badge bg-success">{{$user->created_at ? $user->created_at->format('d/m/Y'): "Chưa kích hoạt"}}</span></td>
+                            <td><span class="{{$user->email_verified_at ? "text-success" : "text-warning"}} ">{{$user->email_verified_at ? $user->email_verified_at->format('d/m/Y') : "Chưa kích hoạt"}}</span></td>
+                            <td><span class="badge bg-{{$user->user_status ? 'success' : 'danger'}}">{{$user->user_status ? 'online' : 'offline'}}</span></td>
+                            <td><span class="badge bg-primary">{{$user->created_at->format('d/m/Y')}}</span></td>
                         </tr>
-                    @endforeach                      
+                    @empty
+                        <tr><td class="text-center" colspan="11"><p class="fw-bold">Không có khách hàng nào</p></td></tr>
+                    @endforelse                      
                    </tbody>
                </table>
            </div>

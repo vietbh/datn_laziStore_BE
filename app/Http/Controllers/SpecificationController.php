@@ -14,49 +14,74 @@ class SpecificationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    public function index(Request $request){
+        $categories = CategoriesProduct::where('parent_category_id',null)->get();
+        $specis = Specification::paginate(10);
+        $paginate = Specification::paginate(10);
+        return view('layouts.admin.Product.Specification.index',compact('specis','categories','paginate'));
+    }
+    
+    public function create(Request $request){
+        $param = $request->query('danh_muc',null);
+        
+        if($param) $category = CategoriesProduct::where('slug',$param)->first();
+        
+        $categories = CategoriesProduct::where('parent_category_id',null)->get();
+        
+        if($param) $specis = Specification::where('categories_product_id',$category->id??$categories->first()->id)->get();
+        else $specis = Specification::where('categories_product_id',$category->id??$categories->first()->id)->paginate(6);
+        
+        $paginate = Specification::where('categories_product_id',$category->id??$categories->first()->id)->paginate(6);
+        
+        if($param) $data = compact('specis','categories');
+        else $data = compact('specis','categories','paginate');
+        
+        return view('layouts.admin.Product.Specification.edit',$data);
+    }
+    
+
     public function store(Request $request, Specification $specification)
     {
         //
+        // dd($request);
         $request->validate([
             'name' => 'required',
         ],[
             'name.required' => 'Không được bỏ trống trường này.',
         ]);
-
         $specification->name = $request->name;
         $specification->categories_product_id = $request->categories_product_id;
         $specification->save();
-        return redirect()->route('specifi.create',['id' => $request->product_id,'tab'=>'speci']);
+        return redirect()->back()->with('success','Thêm thông số thành công');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $productId, string $id)
+    public function edit(Request $request, string $id)
     {
         //
-        $param = request()->query('speci',null);
-
-        $speciDetail = Specification::findOrFail($id);
-        $product = Product::findOrFail($productId);
-        $productSpecificationCount = $product->specifications()->count();
-        $productSpecifications = $product->specifications()->get();
-        $categoryProduct = $product->category;
-        $categories = CategoriesProduct::where([['show_hide',true],['parent_category_id',null]])->get();
-        $specis = $categoryProduct->specis()->get();
-        $specisKey = Specification::where('categories_product_id',$param)->get();
-
-        return view('layouts.admin.components.speciModal',compact(
-            'speciDetail','specis','specisKey',
-            'productSpecifications','product',
-            'productSpecificationCount','categories',
-        ));
+        $speci = Specification::findOrFail($id);
+        $param = $request->query('danh_muc',null);
+        
+        if($param) $category = CategoriesProduct::where('slug',$param)->first();
+        
+        $categories = CategoriesProduct::where('parent_category_id',null)->get();
+        
+        if($param) $specis = Specification::where('categories_product_id',$category->id??$categories->first()->id)->get();
+        else $specis = Specification::where('categories_product_id',$category->id??$categories->first()->id)->paginate(6);
+        
+        $paginate = Specification::where('categories_product_id',$category->id??$categories->first()->id)->paginate(6);
+        
+        if($param) $data = compact('speci','specis','categories');
+        else $data = compact('speci','specis','categories','paginate');
+        return view('layouts.admin.Product.Specification.edit',$data);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
         //
         $request->validate([
@@ -64,22 +89,55 @@ class SpecificationController extends Controller
         ],[
             'name.required' => 'Không được bỏ trống trường này.',
         ]);
-        $specification = Specification::findOrFail($id);
+        $specification = Specification::findOrFail($request->speci_id);
         $specification->name = $request->name;
         $specification->categories_product_id = $request->categories_product_id;
         $specification->update();
-        return redirect()->route('specifi.create',['id' => $request->product_id,'tab'=>'speci']);
+        return redirect()->back()->with('success', 'Cập nhật thông số thành công');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
         //
-        $paramProductId = request()->query('productId',null);
-        $specification = Specification::findOrFail($id);
+        $specification = Specification::findOrFail($request->speci_id);
+        $specification->specisProduct()->delete();
         $specification->delete();
-        return redirect()->route('specifi.create',['id' => $paramProductId,'tab'=>'speci']);
+        return redirect()->back()->with('success','Xóa thông số '.$specification->name.' thành công');
+    }
+
+    public function filter(Request $request)
+    {
+        // Lấy các tham số lọc từ yêu cầu
+        $search = $request->input('search');
+        $name = $request->input('name');
+        $category = $request->input('category');
+        // Xây dựng truy vấn lọc sản phẩm
+        $query = Specification::query();
+
+        if ($search) {
+            $query->whereAll([
+                'name',
+            ], 'LIKE', '%'.$search.'%');
+        }
+        if ($name) {
+            $query->orderBy('name', $name);
+        }
+
+        if ($category) {
+            $query->whereHas('category', function ($query) use ($category) {
+                $query->where('name', $category);
+            });
+        }
+
+        // Thực hiện truy vấn và lấy danh sách sản phẩm đã lọc với phân trang
+        $specis = $query->get();
+
+        // Truyền danh sách sản phẩm đã lọc và các thông tin phân trang cho giao diện người dùng
+        $categories = CategoriesProduct::where('parent_category_id',null)->get();
+        $data = compact('specis','categories');
+        return view('layouts.admin.Product.Specification.index',$data);
     }
 }

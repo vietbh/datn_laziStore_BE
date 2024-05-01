@@ -54,7 +54,7 @@
                                    </div>
                                  
                                    <div class="col-md-12 col-lg-12">
-                                       <button type="submit" class="btn btn btn-primary">Lọc</button>
+                                       <button type="submit" class="btn btn btn-primary"><i class="fas fa-filter"></i></button>
                                        <a href="{{ route('product.index') }}" class="btn btn btn-danger">Bỏ lọc</a>
                                     </div>
                                </form>

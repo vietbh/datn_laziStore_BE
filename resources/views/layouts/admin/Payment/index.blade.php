@@ -68,7 +68,8 @@
                         <tr>
                             <td>
                             <div class="d-flex justify-content-evenly">
-                                <a class="btn btn-sm btn-primary" href="{{ route('payment.edit', ['id' => $order->id]) }}">Detail</a>
+                                <a 
+                                class="btn btn-sm btn-primary" href="{{ route('payment.edit', ['id' => $order->id]) }}"><i class="fas fa-eye"></i></a>
                                 {{-- <form action="{{ route('product.cat.delete', ['id' => $order->id]) }}" method="POST">
                                     @csrf
                                     @method('delete')
@@ -78,12 +79,15 @@
                             </td>
                             <td>{{$order->full_name}}</td>
                             <td>{{$order->phone_number}}</td>
-                            {{-- <td>{{$order->address}}</td> --}}
-                            <td>{{$order->count_items}}</td>
+                            <td><span class="badge bg-primary">{{$order->count_items}}</span></td>
                             <td>{{number_format($order->total, 0, ',', '.')}}đ</td>
-                            <td>@isset(($order->payment)){{$order->payment->status}}@endisset</td>
-                            <td>{{ \Carbon\Carbon::parse($order->time_create)->isoFormat('HH') }} giờ : {{ \Carbon\Carbon::parse($order->time_create)->isoFormat('mm') }} phút</td>
-                            <td>{{ \Carbon\Carbon::parse($order->date_create)->isoFormat('D/MM/Y')}}</td>
+                            <td>@isset($order->payment){{$order->payment->status}}@endisset</td>
+                            <td><span class="badge bg-primary">
+                                {{ \Carbon\Carbon::parse($order->time_create)->isoFormat('h') }} giờ : {{ \Carbon\Carbon::parse($order->time_create)->isoFormat('mm') }} phút {{ \Carbon\Carbon::parse($order->time_create)->isoFormat('A') }}   
+                            </span></td>
+                            <td><span class="badge bg-primary">
+                                {{ \Carbon\Carbon::parse($order->date_create)->diffForHumans()}}    
+                            </span></td>
                             
                         </tr>
                     @empty

@@ -20,7 +20,7 @@ class ProductController extends Controller
     public function index()
     {
         //
-        $products = Product::orderByDesc('id')->paginate(9);
+        $products = Product::orderByDesc('id')->get();
         $paginate = $products;
         $productsCount = Product::all()->count();
         $categories = CategoriesProduct::all();
@@ -123,9 +123,7 @@ class ProductController extends Controller
         $product->show_hide = $request->show_hide;
         $product->update();
         // 
-        return redirect()->route('product.index')
-        ->with('success','Cập nhật sản phẩm thành công')
-        ;
+        return redirect()->back()->with('success','Cập nhật sản phẩm thành công');
     }
 
     /**

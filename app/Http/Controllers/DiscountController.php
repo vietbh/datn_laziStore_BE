@@ -15,7 +15,7 @@ class DiscountController extends Controller
     public function index()
     {
         //
-        $discounts = Discount::all();
+        $discounts = Discount::paginate(8);
         return view('layouts.admin.Discount.index',compact('discounts'));
     }
 
@@ -55,6 +55,7 @@ class DiscountController extends Controller
         $discount->discount_code = $code;
         $discount->discount_price = $request->discount_price;
         $discount->discount_total = $request->discount_total;
+        $discount->status = $request->discount_status == 'on' ? true : false;
         $discount->start_date = Carbon::parse($request->start_date)->toDateTimeString();
         $discount->end_date = Carbon::parse($request->end_date)->toDateTimeString();
         $discount->save();
@@ -109,6 +110,7 @@ class DiscountController extends Controller
         $discount->discount_code = $code;
         $discount->discount_price = $request->discount_price;
         $discount->discount_total = $request->discount_total;
+        $discount->status = $request->discount_status == 'on' ? true : false;
         $discount->start_date = Carbon::parse($request->start_date)->toDateTimeString();
         $discount->end_date = Carbon::parse($request->end_date)->toDateTimeString();
         $discount->update();

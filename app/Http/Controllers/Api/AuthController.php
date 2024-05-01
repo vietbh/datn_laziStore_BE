@@ -2,40 +2,43 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\Api\ForgotPassRequest;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
-use App\Models\DetailUser;
 use App\Models\Role;
-use Exception;
-use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Http\Client\Response;
-use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\Api\UserUpdatePasswordRequest;
+use App\Jobs\SendEmailForgotPass;
+use Exception;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
     public function login(Request $request){
         
         $request->validate([
+            'name' => 'nullable|string|',
             'email' => 'required|string',
             'password' => 'required|string',
         ]);
-        if(User::where('email', $request->email)->first()){
+        $request->only('name', 'email', 'password');
+        if (User::where('email', $request->email)->first()) {
             $user = User::where('email', $request->email)->first();
-        }else if(User::where('name', $request->email)->first()){
-            $user = User::where('name', $request->email)->first();
+        }
+        if (User::where('name', $request->name)->first()) {
+            $user = User::where('name', $request->name)->first();
         }
         if (! $user || ! Hash::check($request->password, $user->password)) {
-            return response()->json(['login' => ['Tài khoản không tồn tại.']],401);
+            return response()->json(['login' => 'Tài khoản không tồn tại.'],401);
         }
+        $token_user = $user->createToken($user->email)->plainTextToken;       
         $data = [
            'user'=>[
             'id' => $user->id,
@@ -44,27 +47,30 @@ class AuthController extends Controller
             'image_url' => $user->image_url,
             'remember_token' => $user->remember_token,
             'cart_id' => $user->cart->id,
-           ]
+           ],
+            'access_token' => $token_user
         ];
-        return response()->json($data);     
+        return response()->json($data);
+     
     }
 
-    public function store(Request $request)
+
+    public function register(Request $request)
     {
         //
         $request->validate([
-            'name' => ['required', 'string', 'max:255', 'unique:'.User::class],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed',Rules\Password::defaults()],
-        ],[
-            'name.required' =>'Vui lòng không bỏ trống trường này.',
-            'name.unique' =>'Đã tồn tại tên này.',
-            'email.required' =>'Vui lòng không bỏ trống trường này.',
-            'email.lowercase' =>'Vui lòng không viết hoa trường này.',
-            'email.email' =>'Vui lòng nhập đúng định dạng email.',
-            'email.unique' =>'Đã tồn tại email này.',
-            'password.required' =>'Vui lòng không bỏ trống trường này.',
-            'password.confirmed' =>'Mật khẩu xác nhận chưa chính xác.',
+            'name' => ['required', 'string', 'max:255', 'unique:' . User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ], [
+            'name.required' => 'Vui lòng không bỏ trống trường này.',
+            'name.unique' => 'Đã tồn tại tên này.',
+            'email.required' => 'Vui lòng không bỏ trống trường này.',
+            'email.lowercase' => 'Vui lòng không viết hoa trường này.',
+            'email.email' => 'Vui lòng nhập đúng định dạng email.',
+            'email.unique' => 'Đã tồn tại email này.',
+            'password.required' => 'Vui lòng không bỏ trống trường này.',
+            'password.confirmed' => 'Mật khẩu xác nhận chưa chính xác.',
         ]);
         $role = Role::where('role_name','guest')->first();
         $user = User::create([
@@ -72,12 +78,14 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $role->id,
-            'remember_token' => Str::random(10),
+            'remember_token' => Str::random(60),
         ]);
 
         event(new Registered($user));
         
-        $user->detailUser()->create();
+        $user->detailUser()->create([
+            'full_name' => $user->name,
+        ]);
 
         Cart::create([
             'user_id' => $user->id,
@@ -96,88 +104,77 @@ class AuthController extends Controller
          ];
         return response()->json($data);   
     }
-
-    public function forgotPasswordCreate()
+    /**
+     *Forgot password
+     *
+     * @param ForgotPassRequest $request
+     * @return  [type]  [return description]
+     */
+    public function forgotPassword(ForgotPassRequest $request) :JsonResponse 
     {
-        return response()->json([
-            'status' => session('status'),
-        ]);
-    }
-    public function forgotPasswordStore(Request $request): Response
-    {
-        $request->validate([
-            'email' => 'required|email',
-        ]);
-
         try {
             $email = $request->only(['email']);
             $code = sprintf('%06d', rand(1, 999999));
+            Session::put('key', $code);
             if (!empty($email) && !empty($code)) {
                 $user = User::where(['email' => $email])->first();
                 dispatch(new SendEmailForgotPass($user->email, $code, $user->name))->onQueue(config('queue.queueType.email'));
-                $user->reset_code = $code;
-                $user->save();
             }
-            return response()->json([], Response::HTTP_OK);
-        } catch (\Exception $e) {
+            return response()->json(['success' => 'Vui lòng kiểm tra email'],200);
+        } catch (Exception $e) {
             Log::error('[AuthController][forgotPassword] error ' . $e->getMessage());
             throw new Exception('[AuthController][forgotPassword] error because ' . $e->getMessage());
         }
     }
-    public function resetPasswordCreate(Request $request)
-    {
-        return response()->json([
-            'email' => $request->email,
-            'token' => $request->route('token'),
-        ]);
-    }
-     /**
-     * Handle an incoming new password request.
+    /**
+     *Forgot password
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * @param ForgotPassRequest $request
+     * @return  [type]  [return description]
      */
-    public function resetPasswordStore(Request $request): RedirectResponse
+    public function changePasswordForgot(ForgotPassRequest $request)
     {
-        $request->validate([
-            'token' => 'required',
-            'email' => 'required|email',
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
-
-        // Here we will attempt to reset the user's password. If it is successful we
-        // will update the password on an actual user model and persist it to the
-        // database. Otherwise we will parse the error and return the response.
-        $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user) use ($request) {
-                $user->forceFill([
-                    'password' => Hash::make($request->password),
-                    'remember_token' => Str::random(60),
-                ])->save();
-
-                event(new PasswordReset($user));
+        return response()->json( Session::get('key'));
+        try {
+            $data = $request->only(['email', 'code', 'password']);
+            $user = User::where('email', $data['email'])->first();
+            if (empty($user) && ($data['code'])) {
+                return response()->json([
+                    'message' => 'Mã code không chính xác'
+                ], 400);
             }
-        );
-
-        // If the password was successfully reset, we will redirect the user back to
-        // the application's home authenticated view. If there is an error we can
-        // redirect them back to where they came from with their error message.
-        if ($status == Password::PASSWORD_RESET) {
-            // $user = auth()->user();
-            // $data = [
-            //     ['id' => $user->id,
-            //      'name' => $user->name,
-            //      'email' => $user->email,
-            //      'image_url' => $user->image_url
-            //      ]
-            //  ];
-            return response()->json(200)->with('status', __($status));
+            $user->password = Hash::make($data['password']);
+            $user->save();
+            return response()->json([
+                'message' => 'Đổi mật khẩu thành công'
+            ], 200);
+        } catch (Exception $e) {
+            Log::error('[AuthController][forgotPassword] error ' . $e->getMessage());
+            throw new Exception('[AuthController][forgotPassword] error because ' . $e->getMessage());
         }
-
-        return response()->json(throw ValidationException::withMessages([
-            'email' => [trans($status)],
-        ]));
+    }
+    /**
+     *Forgot password
+     *
+     * @param UserUpdatePasswordRequest $request
+     * @return  [type]  [return description]
+     */
+    public function changePassword(UserUpdatePasswordRequest $request)
+    {
+        try {
+            $userId = $request->only(['user_id']);
+            $user = User::where(['id' => $userId])->first();
+            if (empty($user)) return response()->json([], 400);
+            if (!Hash::check($request->input('password_old'), $user->password)) {
+                return response()->json([],400);
+            }
+            $user->password = Hash::make($request->input('password'));
+            $user->save();
+            return $user;
+        } catch (Exception $e) {
+            Log::error("[AuthController][changePassword] error because" . $e->getMessage());
+            throw new Exception('[AuthController][changePassword] error because ' . $e->getMessage());
+        }
     }
 
-    
 }

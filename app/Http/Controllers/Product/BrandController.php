@@ -15,7 +15,7 @@ class BrandController extends Controller
     public function index()
     {
         //
-        $brands = Brands::orderBy('position','asc')->orderByDesc('created_at')->paginate(8);
+        $brands = Brands::orderBy('position','asc')->get();
         $data = compact('brands');
         return view('layouts.admin.Brands.index',$data);
     }
@@ -46,7 +46,7 @@ class BrandController extends Controller
         $brands->country = $request->country;
         $brands->show_hide = $request->show_hide;
         $brands->save();
-        return redirect()->route('brand.index')->with('success','Thêm mới thành công');
+        return redirect()->back()->with('success','Thêm mới thành công');
 
     }
 

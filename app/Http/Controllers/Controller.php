@@ -18,16 +18,13 @@ class Controller extends BaseController
         // Kiểm tra xem có sản phẩm nào chứa ID danh mục con trong toàn bộ danh mục con
         $productQuery = ProductVariation::query();
         
-        foreach ($categoryIds as $categoryId) {
-            $productQuery->orWhereHas('product', function ($query) use ($categoryId) {
-                $query->where([
-                    ['show_hide', true],
-                    ['categories_product_id', $categoryId]
-                ]);
-            });
-        }
-
-        $products = $productQuery->with('product')->orderBy('position')->paginate(12);
+        $productQuery->orWhereHas('product', function ($query) use ($categoryIds) {
+            $query->where('show_hide', true);
+            $query->whereIn('categories_product_id', $categoryIds);
+        });
+        $productQuery->orderBy('price_sale');
+        $productQuery->with('product')->orderBy('position');
+        $products = $productQuery->paginate(12);
 
         return $products;
     }

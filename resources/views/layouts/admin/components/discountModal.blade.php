@@ -22,17 +22,11 @@
                     <div class="col-sm-12 col-xl-12">
                         <div class="bg-light rounded h-100 p-4 text-start">
                             <form 
-                            @isset($discount)
-                                action="{{ route('discount.update',['id'=>$discount->id]) }}"
-                            @else
-                                action="{{ route('discount.store') }}"
-                            @endisset
+                            action=" @isset($discount) {{ route('discount.update',['id'=>$discount->id]) }} @else {{ route('discount.store') }} @endisset"                            
                             method="POST">
                                 @csrf
-                                @isset($discount)
-                                    @method('put')
-                                @else
-                                    @method('post')
+                                @isset($discount) @method('put')
+                                @else @method('post')
                                 @endisset
                                 <div class="mb-3 ">
                                     <label for="discount_code" class="form-label ">Tên mã <span class="text-danger text-small">*</span></label>
@@ -75,6 +69,7 @@
                                         <div class="form-text text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
+                          
                                 <div class="row mb-3">
                                     <div class="col-lg-6 col-sm-12">
                                         <label for="start_date" class="form-label">Ngày bắt đầu</label>
@@ -101,40 +96,39 @@
                                         @enderror
                                     </div>
                                 </div>
-                                {{-- <div class="mb-3">
-                                    <label for="show_hide" class="form-label">Trạng thái (mặc định sẽ là Hiện)</label>
-                                    <select class="form-select" name="show_hide" 
-                                    @isset($discount)
-                                        value="{{$discount->show_hide}}"
-                                    @endisset
-                                    id="show_hide">
-                                        <option value='1' >Hiện</option>
-                                        <option value='0' >Ẩn</option>
-                                    </select>
-                                </div> --}}
-                                <div class="mb-3">
-                                    <label for="show_hide" class="form-label">Trạng thái (mặc định sẽ là Hiện)</label>
-                                    <select class="form-select" name="show_hide" 
-                                    @isset($discount)
-                                        value="{{$discount->show_hide}}"
-                                    @endisset
-                                    id="show_hide">
-                                        <option value='1' >Hiện</option>
-                                        <option value='0' >Ẩn</option>
-                                    </select>
+                                <div class="row mb-3">
+                                    <div class="col-lg-6">
+                                        <label for="show_hide" class="form-label">Ẩn hiện (mặc định sẽ là Hiện)</label>
+                                        <select class="form-select" name="show_hide" 
+                                        @isset($discount)
+                                            value="{{$discount->show_hide}}"
+                                        @endisset
+                                        id="show_hide">
+                                            <option value='1' >Hiện</option>
+                                            <option value='0' >Ẩn</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <label for="discount_status" class="form-label">Trạng thái mã</label>
+                                        <div class="form-control">
+                                            <div class="form-check form-switch">
+                                                <input 
+                                                class="form-check-input" name="discount_status" @isset($discount) @checked($discount->status) @endisset type="checkbox" id="discount_status">
+                                                <label class="form-check-label" for="discount_status">Kích hoạt </label>
+                                            </div>
+
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="mb-3 float-end ">
+                                <div class="mb-3 float-end">
                                     <button type="submit" class="btn btn-primary">
-                                    @isset($discount)
-                                        Sửa
-                                    @else
-                                        Thêm mới
+                                    @isset($discount) Sửa
+                                    @else Thêm mới
                                     @endisset
                                     </button>
-                                    @isset($discount)
-                                        <a href="{{ route('discount.index') }}" class="btn btn-danger">Đóng</a>
-                                    @else
-                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
+
+                                    @isset($discount) <a href="{{ route('discount.index') }}" class="btn btn-danger">Đóng</a>
+                                    @else <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
                                     @endisset
                                 </div>
                             </form>

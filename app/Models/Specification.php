@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Specification extends Model
 {
@@ -15,5 +16,10 @@ class Specification extends Model
     public function category():BelongsTo
     {
         return $this->belongsTo(CategoriesProduct::class,'categories_product_id','id');
+    }
+    
+    public function specisProduct():HasMany
+    {
+        return $this->hasMany(SpecificationsProduct::class,'speci_id','id');
     }
 }

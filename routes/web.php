@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\ChartController;
-use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CommentNewsController;
 use App\Http\Controllers\CommentProductController;
 use App\Http\Controllers\ContactController;
@@ -31,20 +30,22 @@ use App\Models\Role;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Route;
 
-// Tin tuc
 Route::get('/lazi-store.html', function () {
     return redirect('http://localhost:5173/lazi-store/');
 });
 
+// Tin tuc
+
 Route::get('/tin-tuc.html',[FrontEndNewsController::class,'index'])->name('newsFront.index');
+Route::get('/', function () {
+    return redirect()->route('newsFront.index');
+});
 Route::get('/{slug}.html',[FrontEndNewsController::class,'show'])->name('newsFront.show');
 // Route::resource('/categories',CategoryController::class)->only(['show']);
 // Route::resource('/comment',CommentController::class)->only(['store']);
 // Route::get('/tin/search',[TinController::class,'search'])->name('tin.search');
 // Route::get('/admin/search',[TinController::class,'search'])->name('admin.search');
 // Route::get('/admin/category/search',[CategoryController::class,'search'])->name('category.search');
-// 
-
 
 Route::get('/dashboard', function () {
     // return view('dashboard');
@@ -52,7 +53,6 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/authorize', function () {
-    // dd('role:'.Role::whereNot('role_name','guest')->pluck('role_name')->join(','));
     return view('layouts.abort.401');
 })->middleware(['auth'])->name('401');
 
@@ -140,18 +140,23 @@ Route::middleware(['auth','role:'.Role::whereNot('role_name','guest')->pluck('ro
         });
         // Speci product
         Route::prefix('speci-product')->group(function(){
-            Route::get('/them/{id}',[ProductSpecificationController::class, 'create'])->name('specifi.create');
+            Route::get('/them/{idProduct}',[ProductSpecificationController::class, 'create'])->name('specifi.create');
             Route::post('/them',[ProductSpecificationController::class, 'store'])->name('specifi.store');
             Route::get('/edit/{id}',[ProductSpecificationController::class, 'edit'])->name('specifi.edit');
-            Route::put('/edit/{id}',[ProductSpecificationController::class, 'update'])->name('specifi.update');
+            Route::put('/edit',[ProductSpecificationController::class, 'update'])->name('specifi.update');
             Route::delete('/delete/{id}',[ProductSpecificationController::class, 'destroy'])->name('specifi.delete');
-            // Speci 
-            Route::post('/them-speci',[SpecificationController::class, 'store'])->name('speci.store');
-            Route::get('/edit-speci/{productId}/{id}',[SpecificationController::class, 'edit'])->name('speci.edit');
-            Route::put('/edit-speci/{id}',[SpecificationController::class, 'update'])->name('speci.update');
-            Route::delete('/delete-speci/{id}',[SpecificationController::class, 'destroy'])->name('speci.delete');
         });
-        
+    });
+    
+    // Speci 
+    Route::prefix('specifications')->group(function(){
+        Route::get('/bo-loc',[SpecificationController::class, 'filter'])->name('speci.filter');
+        Route::get('/',[SpecificationController::class, 'index'])->name('speci.index');
+        Route::get('/them',[SpecificationController::class, 'create'])->name('speci.create');
+        Route::post('/them',[SpecificationController::class, 'store'])->name('speci.store');
+        Route::get('/edit/{id}',[SpecificationController::class, 'edit'])->name('speci.edit');
+        Route::patch('/edit',[SpecificationController::class, 'update'])->name('speci.update');
+        Route::delete('/xoa',[SpecificationController::class, 'destroy'])->name('speci.delete');
     });
    
     

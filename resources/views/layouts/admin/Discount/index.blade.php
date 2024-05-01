@@ -75,18 +75,28 @@
                <table class="table text-start align-middle table-bordered table-hover mb-0" >
                    <thead>
                        <tr class="text-dark">
+                           <th scope="col">Action</th>
                            <th scope="col">Mã giảm giá</th>
                            <th scope="col">Số lượng</th>
                            <th scope="col">Status</th>
                            <th scope="col">Thời gian</th>
                            <th scope="col">Trạng thái</th>
-                           <th scope="col" colspan="2">Action</th>
                        </tr>
                    </thead>
                    <tbody>
                     @isset($discounts)
                         @foreach ($discounts as $dis)
                             <tr>
+                                <td>
+                                    <div class="d-flex justify-content-evenly">
+                                        <a class="btn btn-sm btn-primary" href="{{ route('discount.edit', ['id' => $dis->id]) }}" title="Edit"><i class="fas fa-edit"></i></a>
+                                        <form action="{{ route('discount.delete', ['id' => $dis->id]) }}" method="POST">
+                                            @csrf
+                                            @method('delete')
+                                            <button class="btn btn-sm btn-danger" type="submit" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                                        </form>
+                                    </div>
+                                </td>
                                 <td>{{$dis->discount_code}}</td>
                                 <td>{{$dis->discount_total}}</td>
                                 <td class="text-uppercase">{{$dis->status}}</td>
@@ -115,16 +125,7 @@
                                     @endif
                                 </td>
                                 <td>{{$dis->show_hide ? 'Hiện' : 'Ẩn'}}</td>
-                                <td>
-                                <div class="d-flex justify-content-evenly">
-                                    <a class="btn btn-sm btn-primary" href="{{ route('discount.edit', ['id' => $dis->id]) }}">Edit</a>
-                                    <form action="{{ route('discount.delete', ['id' => $dis->id]) }}" method="POST">
-                                        @csrf
-                                        @method('delete')
-                                        <button class="btn btn-sm btn-danger" type="submit">Xóa</button>
-                                    </form>
-                                </div>
-                                </td>
+
                             </tr>
                         @endforeach                      
                     @endisset
