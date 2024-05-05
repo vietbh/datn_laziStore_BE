@@ -107,38 +107,43 @@
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTagsModal"><i class="fas fa-plus me-1"></i>Thêm Tag</button>
             </div>
-            <div class="table-responsive" style="height: 73vh">
-                <table class="table text-start align-middle table-bordered table-hover mb-0">
+            <div style="min-height: 73vh;">
+                <table class="table text-start align-middle table-bordered table-hover mb-0" id="table-items">
                     <thead>
                         <tr class="text-dark">
+                            <th scope="col">Action</th>
                             <th scope="col">Tên Tag</th>
                             <th scope="col">Thứ tự</th>
                             <th scope="col">Trạng thái</th>
-                            <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @isset($tags)
                             @foreach ($tags as $tag)
                                 <tr title="{{$tag->name}}">
-                                    <td>{{$tag->name}}</td>
-                                    <td>{{$tag->position}}</td>
-                                    <td>{{$tag->show_hide ? 'Hiện' : 'Ẩn'}}</td>
                                     <td>
                                         @if ($tag->id != 1)
-                                            <div class="d-flex justify-content-evenly">
-                                                <a href="{{ route('news.tag.edit', ['id' => $tag->id]) }}" class="btn btn-sm btn-primary" id="edit">Edit</a>
-                                                <a href="{{ route('news.tag.show', ['id'=>$tag->id]) }}" class="btn btn-sm btn-danger" id="delete" >Xóa</a>
+                                            <div class="d-flex">
+                                                <a href="{{ route('news.tag.edit', ['id' => $tag->id]) }}" class="btn btn-sm btn-primary me-2" title="Edit"><i class="fas fa-edit"></i></a>
+                                                <form action="{{ route('news.tag.delete') }}" method="POST">
+                                                    @csrf
+                                                    @method('delete')
+                                                    <input type="text" name="tag_id" value="{{$tag->id}}" hidden id="">
+                                                    <button class="btn btn-sm btn-danger" type="submit" title="Delete"><i class="fas fa-trash-alt"></i></button>
+                                                </form>
+                                                {{-- <a href="{{ route('news.tag.show', ['id'=>$tag->id]) }}" class="btn btn-sm btn-danger" title="Delete" ><i class="fas fa-trash-alt"></i></a> --}}
                                             </div>
                                         @endif
                                     </td>
+                                    <td>{{$tag->name}}</td>
+                                    <td><span class="badge bg-primary">{{$tag->position}}</span></td>
+                                    <td><span class="badge bg-primary">{{$tag->show_hide ? 'Hiện' : 'Ẩn'}}</span></td>
                                 </tr>
                             @endforeach                      
                         @endisset
                     </tbody>
                 </table>
             </div>
-            {{ $tags->links('pagination::bootstrap-5') }}
         </div>
     </div>
     <!-- Table Cate End -->
@@ -148,4 +153,74 @@
     @include('layouts.admin.components.modalAdd')
     @include('layouts.admin.components.comfirmModal')
     <!--End Modal -->
+@endsection
+@section('css')
+    <style rel="stylesheet">
+        div.dt-button-collection {
+            width: 400px;
+        }
+        
+        div.dt-button-collection button.dt-button {
+            display: inline-block;
+            width: 32%;
+        }
+        div.dt-button-collection button.buttons-colvis {
+            display: inline-block;
+            width: 49%;
+        }
+        div.dt-button-collection h3 {
+            margin-top: 5px;
+            margin-bottom: 5px;
+            font-weight: 100;
+            border-bottom: 1px solid rgba(181, 181, 181, 0.5);
+            font-size: 1em;
+            padding: 0 1em;
+        }
+        div.dt-button-collection h3.not-top-heading {
+            margin-top: 10px;
+        }
+    </style>
+@endsection
+@section('js')
+    <script type="text/javascript">
+        $(document).ready(function(){
+            
+            $('#table-items').DataTable({
+                columnDefs: [
+                    {
+                        targets: 1,
+                        className: 'noVis'
+                    }
+                ],
+                layout: {
+                    topStart: {
+                        buttons: [
+                            'pageLength',
+                            {
+                                extend: 'copyHtml5',
+                                exportOptions: {
+                                    columns: [0, ':visible']
+                                },
+                            },
+                            {
+                                text: 'Setting',
+                                extend: 'collection',
+                                className: 'custom-html-collection',
+                                buttons: [
+                                    '<h3>Export</h3>',
+                                    'pdf','excel','csv','print',
+                                    '<h3 class="not-top-heading">Column Visibility</h3>',
+                                    'colvisRestore',
+                                    'columnsToggle',
+                                ],
+                            },
+                          
+                        ]
+                    }
+                }
+            });
+     
+        });
+     
+    </script>
 @endsection

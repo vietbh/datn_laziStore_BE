@@ -73,7 +73,7 @@
 </body>
     @yield('modal')
     <!-- JavaScript Libraries -->
-    <script src="{{ url('https://code.jquery.com/jquery-3.7.1.js') }} "></script>
+    <script src="{{ url('https://code.jquery.com/jquery-3.7.1.js') }}"></script>
     <script src="{{ asset('lib/chart/chart.min.js') }}"></script>
     <script src="{{ asset('lib/easing/easing.min.js') }}"></script>
     <script src="{{ asset('lib/waypoints/waypoints.min.js') }}"></script>
@@ -86,7 +86,7 @@
     <!-- Template Javascript -->
     <script src="{{ asset('js/main.js') }}"></script>
     {{-- Multiple Select --}}
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
     {{-- Table Data --}}
@@ -102,8 +102,8 @@
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.print.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.colVis.min.js"></script>
 
-
-    <script type="module">
+    <script>
+        
         setTimeout(() => {
                 let alerts = document.getElementsByClassName('alert');
                 for (let i = 0; i < alerts.length; i++) {

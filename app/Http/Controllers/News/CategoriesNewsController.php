@@ -106,13 +106,13 @@ class CategoriesNewsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
         //
-        $category = CategoriesNews::findOrFail($id);
+        $category = CategoriesNews::findOrFail($request->cate_news_id);
         $category->delete();
         $alert='Danh mục '.$category->name.' đã được xóa thành công.';
-        return redirect()->route('news.cat.index')->with('success',$alert);
+        return redirect()->back()->with('success',$alert);
 
     }
 }

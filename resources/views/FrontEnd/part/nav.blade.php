@@ -1,21 +1,20 @@
 <div class="main-menu d-none d-md-block">
-    
     <nav>
         <ul id="navigation">
             <li><a href="{{ route('newsFront.index') }}">Trang chủ</a></li>
             <li><a href="#">Danh mục</a>
                 <ul class="submenu">
-                    @foreach ($news as $tl)
+                    @foreach ($categories as $category)
                         <li class="nav-item">
-                            {{-- <a class="nav-link" href="{{ route('categories.show', ['slug' => $tl->id]) }}">{{ $tl->category_nm }}</a> --}}
+                            <a class="nav-link" href="{{ route('categoryFront.show', ['slug' => $category->slug]) }}">{{ $category->name }}</a>
                         </li>
                     @endforeach
                 </ul>
             </li>
-            <li><a href="{{ route('newsFront.index', ['slug'=>1]) }}">Tin ngoài nước</a></li>
+            {{-- <li><a href="{{ route('newsFront.index', ['slug'=>1]) }}">Tin ngoài nước</a></li>
             <li><a href="latest_news.html">Tin buôn bán</a></li>
-            <li><a href="contact.html">Dịch vụ</a></li>
-            @if (Auth::check())
+            <li><a href="contact.html">Dịch vụ</a></li> --}}
+            {{-- @if (Auth::check())
                 <li><a href="#" class="truncate">Xin chào {{ Auth::user()->name }}</a>
                     <ul class="submenu">
                         @if (Route::has('login'))
@@ -57,24 +56,21 @@
                             
                             @endif
 
-                            {{-- <a class="nav-link"
-                                href="{{ route('tin.category', ['idTL' => $tl->id]) }}">{{ $tl->category_nm }}</a> --}}
                         </li>
                     </ul>
                 </li>        
-            @endif
+            @endif --}}
         </ul>
     </nav>
 
 </div>
 </div>
-<div class="col-xl-2 col-lg-2 col-md-4">
+<div class="col-xl-3 col-lg-3 col-md-4">
     <div class="header-right-btn f-right d-none d-lg-block">
         <i class="fas fa-search special-tag"></i>
         <div class="search-box">
             <form action="#">
-                <input type="text" placeholder="Search">
-
+                <input type="text" class="form-control" placeholder="Tìm kiếm">
             </form>
         </div>
     </div>

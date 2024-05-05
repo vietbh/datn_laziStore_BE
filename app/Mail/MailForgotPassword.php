@@ -32,7 +32,7 @@ class MailForgotPassword extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Lazi Store',
+            subject: env('APP_ENV'),
         );
     }
 

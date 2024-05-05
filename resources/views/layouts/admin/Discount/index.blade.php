@@ -71,8 +71,8 @@
                     Thêm mã giảm giá
                 </button>
            </div>
-           <div class="table-responsive" style="height: 90vh">
-               <table class="table text-start align-middle table-bordered table-hover mb-0" >
+           <div style="min-height: 75vh">
+               <table class="table text-start align-middle table-bordered table-hover mb-0" id="table-items">
                    <thead>
                        <tr class="text-dark">
                            <th scope="col">Action</th>
@@ -88,8 +88,8 @@
                         @foreach ($discounts as $dis)
                             <tr>
                                 <td>
-                                    <div class="d-flex justify-content-evenly">
-                                        <a class="btn btn-sm btn-primary" href="{{ route('discount.edit', ['id' => $dis->id]) }}" title="Edit"><i class="fas fa-edit"></i></a>
+                                    <div class="d-flex ">
+                                        <a class="btn btn-sm btn-primary me-2" href="{{ route('discount.edit', ['id' => $dis->id]) }}" title="Edit"><i class="fas fa-edit"></i></a>
                                         <form action="{{ route('discount.delete', ['id' => $dis->id]) }}" method="POST">
                                             @csrf
                                             @method('delete')
@@ -97,11 +97,15 @@
                                         </form>
                                     </div>
                                 </td>
-                                <td>{{$dis->discount_code}}</td>
-                                <td>{{$dis->discount_total}}</td>
-                                <td class="text-uppercase">{{$dis->status}}</td>
+                                <td class="text-success">{{$dis->discount_code}}</td>
+                                <td><span class="badge bg-primary">{{$dis->discount_total}}</span></td>
+                                <td class="text-capitalize">
+                                    @if ($dis->discount_status) <span class="badge bg-success">active</span>
+                                    @else <span class="badge bg-danger">inactive</span>
+                                    @endif
+                                </td>
                                 <td>
-                                    @if ($dis->status != 'active')
+                                    @if (!$dis->discount_status)
                                         <span class="text-warning">Chưa được kích hoạt</span>
                                     @else
                                         @php
@@ -111,20 +115,20 @@
                                             $remainingTimeStart = $currentDate->diff($startDateTime);
                                             $remainingTimeEnd = $currentDate->diff($endDateTime);
                                         @endphp
-                                        @if ($remainingTimeStart->days > 0 || $remainingTimeStart->h > 0 || $remainingTimeStart->i > 0)
+                                        {{-- @if ($remainingTimeStart->days > 0 || $remainingTimeStart->h > 0 || $remainingTimeStart->i > 0)
                                             <div class="d-flex p-1">
                                                 <span class="fw-bold">Hiệu lực sau {{ $remainingTimeStart->days.' ngày'}} 
                                                     {{$remainingTimeStart->h == 0 ? '' : '- '.$remainingTimeStart->h.' giờ'}}
                                                     {{$remainingTimeStart->i == 0 ? '' : '- '.$remainingTimeStart->i.' phút'}} </span>
                                             </div>
                                         @else
-                                            <div class="d-flex p-1">
-                                                <span class=" fw-bold text-danger">Hết hiệu lực sau {{ $remainingTimeEnd->days.' ngày'}} {{$remainingTimeEnd->h == 0 ? '' : '- '.$remainingTimeEnd->h.' giờ'}} </span>
-                                            </div>
+                                        @endif --}}
+                                        @if ($remainingTimeEnd->days == 0 && $remainingTimeEnd->h == 0) <span class="fw-bold text-danger">Chưa được kích hoạt</span>
+                                        @else <span class="fw-bold text-success">Hết hiệu lực sau {{ $remainingTimeEnd->days.' ngày'}} {{$remainingTimeEnd->h == 0 ? '' : '- '.$remainingTimeEnd->h.' giờ'}} </span>                                            
                                         @endif
                                     @endif
                                 </td>
-                                <td>{{$dis->show_hide ? 'Hiện' : 'Ẩn'}}</td>
+                                <td> <span class="badge bg-primary">{{$dis->show_hide ? 'Hiện' : 'Ẩn'}}</span></td>
 
                             </tr>
                         @endforeach                      
@@ -141,4 +145,74 @@
     <!-- Modal -->
         @include('layouts.admin.components.discountModal')
     <!--End Modal -->
+@endsection
+@section('css')
+    <style rel="stylesheet">
+        div.dt-button-collection {
+            width: 400px;
+        }
+        
+        div.dt-button-collection button.dt-button {
+            display: inline-block;
+            width: 32%;
+        }
+        div.dt-button-collection button.buttons-colvis {
+            display: inline-block;
+            width: 49%;
+        }
+        div.dt-button-collection h3 {
+            margin-top: 5px;
+            margin-bottom: 5px;
+            font-weight: 100;
+            border-bottom: 1px solid rgba(181, 181, 181, 0.5);
+            font-size: 1em;
+            padding: 0 1em;
+        }
+        div.dt-button-collection h3.not-top-heading {
+            margin-top: 10px;
+        }
+    </style>
+@endsection
+@section('js')
+    <script type="text/javascript">
+        $(document).ready(function(){
+            
+            $('#table-items').DataTable({
+                columnDefs: [
+                    {
+                        targets: 1,
+                        className: 'noVis'
+                    }
+                ],
+                layout: {
+                    topStart: {
+                        buttons: [
+                            'pageLength',
+                            {
+                                extend: 'copyHtml5',
+                                exportOptions: {
+                                    columns: [0, ':visible']
+                                },
+                            },
+                            {
+                                text: 'Setting',
+                                extend: 'collection',
+                                className: 'custom-html-collection',
+                                buttons: [
+                                    '<h3>Export</h3>',
+                                    'pdf','excel','csv','print',
+                                    '<h3 class="not-top-heading">Column Visibility</h3>',
+                                    'colvisRestore',
+                                    'columnsToggle',
+                                ],
+                            },
+                          
+                        ]
+                    }
+                }
+            });
+     
+        });
+     
+    </script>
 @endsection

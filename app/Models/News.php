@@ -11,7 +11,7 @@ class News extends Model
 {
     use HasFactory;
     protected $primaryKey = 'id';
-    protected $fillable = ['title','seo_keywords','description','author','datetime_create','views','show_hide'];
+    protected $fillable = ['title','seo_keywords','description','author','categories_news_id','datetime_create','views','show_hide'];
 
     public function category ():BelongsTo
     {
@@ -21,5 +21,9 @@ class News extends Model
     public function tags(): HasMany
     {
         return $this->hasMany(TagRelationNews::class,'news_id','id');
+    }
+    public function comments(): HasMany
+    {
+        return $this->hasMany(CommentNews::class,'news_id','id');
     }
 }

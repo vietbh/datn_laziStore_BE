@@ -72,8 +72,8 @@
                     Thêm nhà vận chuyển
                 </button>
            </div>
-           <div class="table-responsive" style="height: 80vh">
-               <table class="table text-start align-middle table-bordered table-hover mb-0" >
+           <div style="min-height: 80vh">
+               <table class="table text-start align-middle table-bordered table-hover mb-0" id="table-items">
                    <thead>
                        <tr class="text-dark">
                            <th scope="col">Action</th>
@@ -110,4 +110,74 @@
 @endsection
 @section('modal')
     @include('layouts.admin.components.shippingProviderModal',['modal'=>'addShippingProviderModal'])
+@endsection
+@section('css')
+    <style rel="stylesheet">
+        div.dt-button-collection {
+            width: 400px;
+        }
+        
+        div.dt-button-collection button.dt-button {
+            display: inline-block;
+            width: 32%;
+        }
+        div.dt-button-collection button.buttons-colvis {
+            display: inline-block;
+            width: 49%;
+        }
+        div.dt-button-collection h3 {
+            margin-top: 5px;
+            margin-bottom: 5px;
+            font-weight: 100;
+            border-bottom: 1px solid rgba(181, 181, 181, 0.5);
+            font-size: 1em;
+            padding: 0 1em;
+        }
+        div.dt-button-collection h3.not-top-heading {
+            margin-top: 10px;
+        }
+    </style>
+@endsection
+@section('js')
+    <script type="text/javascript">
+        $(document).ready(function(){
+            
+            $('#table-items').DataTable({
+                columnDefs: [
+                    {
+                        targets: 1,
+                        className: 'noVis'
+                    }
+                ],
+                layout: {
+                    topStart: {
+                        buttons: [
+                            'pageLength',
+                            {
+                                extend: 'copyHtml5',
+                                exportOptions: {
+                                    columns: [0, ':visible']
+                                },
+                            },
+                            {
+                                text: 'Setting',
+                                extend: 'collection',
+                                className: 'custom-html-collection',
+                                buttons: [
+                                    '<h3>Export</h3>',
+                                    'pdf','excel','csv','print',
+                                    '<h3 class="not-top-heading">Column Visibility</h3>',
+                                    'colvisRestore',
+                                    'columnsToggle',
+                                ],
+                            },
+                          
+                        ]
+                    }
+                }
+            });
+     
+        });
+     
+    </script>
 @endsection

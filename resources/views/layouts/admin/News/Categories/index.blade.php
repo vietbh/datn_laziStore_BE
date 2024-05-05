@@ -126,10 +126,15 @@
                     @foreach ($categories as $cat)
                         <tr title="{{$cat->name}}">
                             <td>
-                                <div class="d-flex justify-content-evenly">
+                                <div class="d-flex">
                                     @if ($cat->id != 1)
-                                        <a class="btn btn-sm btn-primary" href="{{ route('news.cat.edit', ['id' => $cat->id]) }}">Edit</a>
-                                        <a class="btn btn-sm btn-danger"  href="{{ route('news.cat.show', ['id' => $cat->id]) }}">Xóa</a>
+                                        <a class="btn btn-sm btn-primary me-2" href="{{ route('news.cat.edit', ['id' => $cat->id]) }}" title="Edit"><i class="fas fa-edit"></i></a>
+                                        <form action="{{ route('news.cat.delete') }}" method="post">
+                                            @method('delete')
+                                            @csrf
+                                            <input type="text" name="cate_news_id" value="{{$cat->id}}" hidden>
+                                            <button class="btn btn-sm btn-danger" type="submit" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                                        </form>
                                     @endif
                                 </div>
                             </td>

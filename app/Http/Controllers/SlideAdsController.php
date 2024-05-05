@@ -14,7 +14,7 @@ class SlideAdsController extends Controller
     public function index()
     {
         //
-        $slides = SlideAds::orderBy('position')->orderByDesc('created_at')->paginate(10);
+        $slides = SlideAds::orderBy('position')->get();
         return view('layouts.admin.SlideAds.index',compact('slides'));
     }
 
@@ -41,7 +41,6 @@ class SlideAdsController extends Controller
             'position.numeric' => 'Vui lòng nhập số.',
             'image_url.required'=>'Vui lòng không bỏ trống trường này.',
             'image_url.image' => 'Chỉ cho phép file hình hoặc gif.',
-            // 'image_url.mimes' => 'Chỉ cho phép file có đuôi là jpg, png, jpeg, jfif.',
             'image_url.max' => 'Chỉ cho phép kích thước tối đa 2048Kb.',
         ]);
         $file = $request->file('image_url'); // Lấy file từ request    
@@ -118,10 +117,10 @@ class SlideAdsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
         //
-        $slideAds = SlideAds::findOrFail($id);
+        $slideAds = SlideAds::findOrFail($request->slider_id);
         $path = $slideAds->image_path; // Đường dẫn tới file cần xóa trong thư mục 'public'
         if(!Storage::exists('public/'. $path)){
             return redirect()->route('slide.index')->with('error','Xóa hình ảnh không thành công!');

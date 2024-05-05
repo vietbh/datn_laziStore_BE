@@ -71,34 +71,37 @@
                     Thêm slide
                 </button>
            </div>
-           <div class="table-responsive" style="height: 80vh">
-               <table class="table text-start align-middle table-bordered table-hover mb-0" >
+           <div style="min-height: 80vh">
+               <table class="table text-start align-middle table-bordered table-hover mb-0" id="table-items">
                    <thead>
                        <tr class="text-dark">
+                           <th scope="col">Action</th>
                            <th scope="col">Tiêu đề</th>
+                           <th scope="col">Thumnail</th>
                            <th scope="col">Nội dung</th>
                            <th scope="col">Thứ tự</th>
                            <th scope="col">Trạng thái</th>
-                           <th scope="col" colspan="2">Action</th>
                        </tr>
                    </thead>
                    <tbody>
                     @foreach ($slides as $s)
                         <tr>
-                            <td>{{$s->title}}</td>
-                            <td>{{$s->content}}</td>
-                            <td>{{$s->position}}</td>
-                            <td>{{$s->show_hide ? 'Hiện' : 'Ẩn'}}</td>
                             <td>
-                            <div class="d-flex justify-content-evenly">
-                                <a class="btn btn-sm btn-primary" href="{{ route('slide.edit', ['id' => $s->id]) }}">Edit</a>
-                                <form action="{{ route('slide.delete', ['id' => $s->id]) }}" method="POST">
-                                    @csrf
-                                    @method('delete')
-                                    <button class="btn btn-sm btn-danger" type="submit">Xóa</button>
-                                </form>
-                            </div>
+                                <div class="d-flex ">
+                                    <a class="btn btn-sm btn-primary me-2" href="{{ route('slide.edit', ['id' => $s->id]) }}"><i class="fas fa-edit"></i></a>
+                                    <form action="{{ route('slide.delete') }}" method="POST">
+                                        @csrf
+                                        @method('delete')
+                                        <input type="text" name="slide_id" value="{{$s->id}}" hidden>
+                                        <button class="btn btn-sm btn-danger" type="submit"><i class="fas fa-trash-alt"></i></button>
+                                    </form>
+                                </div>
                             </td>
+                            <td>{{$s->title}}</td>
+                            <td><img src="{{ asset('storage/'.$s->image_path) }}" class="img-thumbnail" alt="" srcset=""></td>
+                            <td>{{$s->content}}</td>
+                            <td><span class="badge bg-primary">{{$s->position}}</span></td>
+                            <td><span class="badge bg-primary">{{$s->show_hide ? 'Hiện' : 'Ẩn'}}</span></td>
                         </tr>
                     @endforeach                      
                    </tbody>
@@ -111,4 +114,74 @@
 @endsection
 @section('modal')
     @include('layouts.admin.components.sildeModal')
+@endsection
+@section('css')
+    <style rel="stylesheet">
+        div.dt-button-collection {
+            width: 400px;
+        }
+        
+        div.dt-button-collection button.dt-button {
+            display: inline-block;
+            width: 32%;
+        }
+        div.dt-button-collection button.buttons-colvis {
+            display: inline-block;
+            width: 49%;
+        }
+        div.dt-button-collection h3 {
+            margin-top: 5px;
+            margin-bottom: 5px;
+            font-weight: 100;
+            border-bottom: 1px solid rgba(181, 181, 181, 0.5);
+            font-size: 1em;
+            padding: 0 1em;
+        }
+        div.dt-button-collection h3.not-top-heading {
+            margin-top: 10px;
+        }
+    </style>
+@endsection
+@section('js')
+    <script type="text/javascript">
+        $(document).ready(function(){
+            
+            $('#table-items').DataTable({
+                columnDefs: [
+                    {
+                        targets: 1,
+                        className: 'noVis'
+                    }
+                ],
+                layout: {
+                    topStart: {
+                        buttons: [
+                            'pageLength',
+                            {
+                                extend: 'copyHtml5',
+                                exportOptions: {
+                                    columns: [0, ':visible']
+                                },
+                            },
+                            {
+                                text: 'Setting',
+                                extend: 'collection',
+                                className: 'custom-html-collection',
+                                buttons: [
+                                    '<h3>Export</h3>',
+                                    'pdf','excel','csv','print',
+                                    '<h3 class="not-top-heading">Column Visibility</h3>',
+                                    'colvisRestore',
+                                    'columnsToggle',
+                                ],
+                            },
+                          
+                        ]
+                    }
+                }
+            });
+     
+        });
+     
+    </script>
 @endsection

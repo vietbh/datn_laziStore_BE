@@ -72,19 +72,11 @@
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-xl-6 mb-3">
                                         <label for="categories_product_id" class="form-label ">Danh mục sản phẩm <span class="text-danger text-small">(*)</span></label>
-                                        <select class="form-select  
-                                        @error('categories_product_id') 
-                                        is-invalid
-                                        @enderror" 
-                                        name="categories_product_id" 
-                                        @isset($product)
-                                            value="{{$product->categories_product_id}}"
-                                        @else
-                                        value="{{old('categories_product_id')}}"    
-                                        @endisset
-                                        id="categories_product_id">
+                                        <select
+                                        class="form-select @error('categories_product_id') is-invalid @enderror" name="categories_product_id" id="categories_product_id">
                                             @foreach ($categories as $category)
-                                                <option value="{{$category->id}}">{{$category->name}}</option>
+                                                <option 
+                                                value="{{$category->id}}" @isset($product) @selected($product->categories_product_id == $category->id) @endisset>{{$category->name}}</option>
                                             @endforeach
                                         </select>
                                         @error('categories_product_id')
@@ -93,18 +85,10 @@
                                     </div>
                                     <div class="col-sm-12 col-xl-6 mb-3">
                                         <label for="brand_id" class="form-label ">Thương hiệu <span class="text-danger text-small">(*)</span></label>
-                                        <select class="form-select  
-                                        @error('brand_id') 
-                                        is-invalid
-                                        @enderror" name="brand_id" 
-                                        @isset($product)
-                                            value="{{$product->brand_id}}"
-                                        @else
-                                        value="{{old('brand_id')}}"    
-                                        @endisset
-                                        id="brand_id">
+                                        <select 
+                                        class="form-select @error('brand_id') is-invalid @enderror" name="brand_id" id="brand_id">
                                             @foreach ($brands as $brand)
-                                                <option value="{{$brand->id}}">{{$brand->name}}</option>
+                                                <option value="{{$brand->id}}" @isset($product) @selected($product->brand_id == $brand->id) @endisset>{{$brand->name}}</option>
                                             @endforeach
                                         </select>
                                         @error('brand_id')

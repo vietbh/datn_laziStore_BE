@@ -14,7 +14,7 @@ class TagController extends Controller
      */
     public function index()
     {
-        $tags = Tag::paginate(10);
+        $tags = Tag::all();
         return view('layouts.admin.News.Tags.index',compact('tags'));
     }
 
@@ -96,12 +96,13 @@ class TagController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
         //
-        $tag = Tag::findOrFail($id);
+        $tag = Tag::findOrFail($request->tag_id);
         $tag->delete();
+        $tag->tagRelaNews()->delete();
         $alert='Tag #'.$tag->name.' đã được xóa thành công.';
-        return redirect()->route('news.tag.index')->with('success',$alert);
+        return redirect()->back()->with('success',$alert);
     }
 }

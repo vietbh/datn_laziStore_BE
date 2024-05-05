@@ -9,6 +9,7 @@ use App\Models\CategoriesNews;
 use App\Http\Controllers\Controller;
 use App\Models\Tag;
 use App\Models\TagRelationNews;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
 
 class NewsController extends Controller
@@ -19,11 +20,10 @@ class NewsController extends Controller
     public function index()
     {
         //
-        $news = News::orderByDesc('id')->paginate(8);
-        $paginate = $news;
+        $news = News::orderByDesc('id')->get();
         $tags = Tag::all();
         $categories = CategoriesNews::all();
-        return view('layouts.admin.News.index',compact('news','tags','categories','paginate'));
+        return view('layouts.admin.News.index',compact('news','tags','categories'));
     }
 
     public function create(){
@@ -40,12 +40,11 @@ class NewsController extends Controller
 
     public function store(Request $request, News $news)
     {
-        // dd($request->tag_id);
         $request->validate([
             'title' => 'required|unique:'.News::class,
             'seo_keywords' => 'required|unique:news,seo_keywords',
             'author' => 'required',
-            'image_url' => 'required|mimes:jpg, png, jpeg, jfif, gif, svg|max:2048|dimensions:min_width=100,min_height=100,max_width=1080,max_height=1080',
+            'image_url' => 'required|image|max:2048|dimensions:min_width=100,min_height=100,max_width=1080,max_height=1080',
             'categories_news_id' => 'required',
             'description' => 'required'
         ],[
@@ -53,7 +52,6 @@ class NewsController extends Controller
             'title.unique'=>'Đã tồn tại tiêu đề này.',
             'image_url.required'=>'Vui lòng không bỏ trống trường này.',
             'image_url.image' => 'Chỉ cho phép file hình hoặc gif.',
-            'image_url.mimes' => 'Chỉ cho phép file có đuôi là jpg, png, jpeg, jfif.',
             'image_url.max' => 'Chỉ cho phép kích thước tối đa 2048Kb.',
             'author.required'=>'Vui lòng không bỏ trống trường này.',
             'categories_news_id.required'=>'Vui lòng không bỏ trống trường này.',
@@ -79,12 +77,12 @@ class NewsController extends Controller
         $news->show_hide = $request->show_hide;
         $news->user_id = auth()->user()->id;
         $news->save();
-        if($news->id){
-            foreach ($request->tag_id as $tag_id) {
-                $tag = new TagRelationNews();
-                $tag->news_id = $news->id;
-                $tag->tag_id = $tag_id;
-                $tag->save();
+        if ($request->has('tag_id')) {
+            $tagIds = $request->tag_id;
+            foreach ($tagIds as $tagId) {
+                if (!$news->tags()->where('tag_id', $tagId)->exists()) {
+                    $news->tags()->create(['tag_id' => $tagId]);
+                }
             }
         }
         return redirect()->route('news.index')->with('success', 'Thêm tin tức thành công');
@@ -120,14 +118,6 @@ class NewsController extends Controller
                 'text' => $tag->name,
             ];
         })->toJson();
-        // if($new->tags()->count() > 0){
-        //     $tagsSelected = json_encode(Tag::select('id', 'name')->findMany($new->tags()->get())->map(function ($tag) {
-        //         return [
-        //             'id' => $tag->id,
-        //             'text' => $tag->name,
-        //         ];
-        //     }));
-        // }
         return view('layouts.admin.News.edit',compact('new','tags','categories'));
     }
 
@@ -137,13 +127,14 @@ class NewsController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        // dd($request->categories_news_id);
         $news = News::findOrFail($id);
         $request->validate([
             'title' => 'required|unique:'.News::class.',title,'.$id,
             'seo_keywords' => 'required|unique:'.News::class.',seo_keywords,'.$id,
             'author' => 'required',
             'categories_news_id' => 'required',
-            'image_url' => 'required|mimes:jpg, png, jpeg, jfif, gif, svg|max:2048|dimensions:min_width=100,min_height=100,max_width=1080,max_height=1080',
+            'image_url' => 'image|max:2048|dimensions:min_width=100,min_height=100,max_width=1080,max_height=1080',
             'description' => 'required'
         ],[
             'title.required'=>'Vui lòng không bỏ trống trường này.',
@@ -153,7 +144,6 @@ class NewsController extends Controller
             'author.required'=>'Vui lòng không bỏ trống trường này.',
             'image_url.required'=>'Vui lòng không bỏ trống trường này.',
             'image_url.image' => 'Chỉ cho phép file hình hoặc gif.',
-            'image_url.mimes' => 'Chỉ cho phép file có đuôi là jpg, png, jpeg, jfif.',
             'image_url.max' => 'Chỉ cho phép kích thước tối đa 2048Kb.',
             'categories_news_id.required'=>'Vui lòng không bỏ trống trường này.',
             'description.required'=>'Vui lòng không bỏ trống trường này.',
@@ -171,12 +161,12 @@ class NewsController extends Controller
         $news->seo_keywords = Str::slug($request->seo_keywords);
         $news->slug = Str::slug($request->title);
         $news->categories_news_id = $request->categories_news_id;
-        if($news->id){
-            foreach ($request->tag_id as $tag_id) {
-                $tag = new TagRelationNews();
-                $tag->news_id = $news->id;
-                $tag->tag_id = $tag_id;
-                $tag->save();
+        if ($request->has('tag_id')) {
+            $tagIds = $request->tag_id;
+            foreach ($tagIds as $tagId) {
+                if (!$news->tags()->where('tag_id', $tagId)->exists()) {
+                    $news->tags()->create(['tag_id' => $tagId]);
+                }
             }
         }
         $news->description = $request->description;
@@ -184,22 +174,21 @@ class NewsController extends Controller
         $news->show_hide = $request->show_hide;
         $news->user_id = auth()->user()->id;
         $news->update();
-        return redirect()->route('news.index')->with('success', 'Cập nhật tin tức thành công');
+        return redirect()->back()->with('success', 'Cập nhật tin tức thành công');
     }
 
-    public function deleteTagRelaNews(string $id,string $tagId){
-        $new = News::find($id);
-        $tagRelaNews = TagRelationNews::findOrFail($tagId);
-        $tagRelaNews->delete();
-        return redirect()->route('news.edit',['id'=>$new->id])->with('success','Bỏ tag thành công!');
+    public function deleteTagRelaNews(Request $request):JsonResponse
+    {
+        $tagRelaNews = TagRelationNews::where([['news_id',$request->news_id],['tag_id',$request->tag_id]])->delete();
+        return response()->json(['success'=>'Bỏ tag thành công!'],200);
     }
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
         //
-        $new = News::findOrFail($id);
+        $new = News::findOrFail($request->news_id);
         if($new->tags()->count() > 0){
             $new->tags()->delete();
         }

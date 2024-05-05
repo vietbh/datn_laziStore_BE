@@ -14,7 +14,7 @@ class PaymentController extends Controller
     public function index()
     {
         //
-        $orders = Orders::with('payment')->paginate(10);
+        $orders = Orders::with('payment')->get();
         return view('layouts.admin.Payment.index',compact('orders'));
     }
 

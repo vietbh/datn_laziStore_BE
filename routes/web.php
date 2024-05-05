@@ -4,10 +4,12 @@ use App\Http\Controllers\ChartController;
 use App\Http\Controllers\CommentNewsController;
 use App\Http\Controllers\CommentProductController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\FrontEnd\CategoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashBoardController;
 use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\DiscountController;
+use App\Http\Controllers\FrontEnd\CommentController;
 use App\Http\Controllers\FrontEnd\NewsController as FrontEndNewsController;
 use App\Http\Controllers\Product\CategoriesProductController;
 use App\Http\Controllers\Product\BrandController;
@@ -31,18 +33,21 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/lazi-store.html', function () {
-    return redirect('http://localhost:5173/lazi-store/');
-});
+    return redirect('http://localhost:5173/');
+})->name('lazi.index');
+
 
 // Tin tuc
-
-Route::get('/tin-tuc.html',[FrontEndNewsController::class,'index'])->name('newsFront.index');
 Route::get('/', function () {
-    return redirect()->route('newsFront.index');
+    return redirect()->route('fe.news.index');
 });
-Route::get('/{slug}.html',[FrontEndNewsController::class,'show'])->name('newsFront.show');
-// Route::resource('/categories',CategoryController::class)->only(['show']);
-// Route::resource('/comment',CommentController::class)->only(['store']);
+Route::prefix('tin-tuc')->group(function(){
+    Route::get('/',[FrontEndNewsController::class,'index'])->name('fe.news.index');
+    Route::get('/chi-tiet/{slugNews}',[FrontEndNewsController::class,'show'])->name('fe.news.show');
+    Route::get('/tim-kiem',[FrontEndNewsController::class,'search'])->name('fe.news.search');
+    Route::post('/binh-luan',[CommentController::class,'store'])->name('fe.comment.store');
+    Route::get('/{slug}',[CategoryController::class,'show'])->name('fe.category.show');
+});
 // Route::get('/tin/search',[TinController::class,'search'])->name('tin.search');
 // Route::get('/admin/search',[TinController::class,'search'])->name('admin.search');
 // Route::get('/admin/category/search',[CategoryController::class,'search'])->name('category.search');
@@ -60,7 +65,11 @@ Route::middleware(['auth','role:'.Role::whereNot('role_name','guest')->pluck('ro
     // Dashboard
     Route::get('/',[DashBoardController::class, 'index'])->name('home');
     // Thống kê
-    Route::get('/thong-ke',[ChartController::class, 'index'])->name('chart.index');
+    Route::prefix('thong-ke')->group(function(){
+        Route::get('/',[ChartController::class, 'index'])->name('chart.index');
+        Route::get('/data-product',[ChartController::class, 'dataChart'])->name('chart.product.data');
+        Route::get('/data-news',[ChartController::class, 'dataChart'])->name('chart.news.data');
+    });
     // Khách hàng
     Route::prefix('khach-hang')->group(function(){
         Route::get('/',[UserGuestController::class, 'index'])->name('guest.index');
@@ -79,8 +88,7 @@ Route::middleware(['auth','role:'.Role::whereNot('role_name','guest')->pluck('ro
         Route::put('/edit/{id}',[DiscountController::class, 'update'])->name('discount.update');
         Route::delete('/xoa/{id}',[DiscountController::class, 'destroy'])->name('discount.delete');
     });
-    // Sản phẩm hot
-    Route::get('/san-pham-hot',[ProductHotController::class, 'index'])->name('hot.index');
+
     //Đơn hàng Vận chuyển
     Route::get('/van-chuyen',[DeliveryController::class, 'index'])->name('delivery.index');
     //Nhà Vận chuyển
@@ -98,8 +106,8 @@ Route::middleware(['auth','role:'.Role::whereNot('role_name','guest')->pluck('ro
         Route::put('/binh-luan-san-pham/edit/{id}',[CommentProductController::class, 'update'])->name('comment.product.update');
     });
     // Bình luận tin tức
-  
     Route::get('/binh-luan-tin-tuc',[CommentNewsController::class, 'index'])->name('comment.news.index');
+  
     // Tư vấn
     Route::get('/tu-van',[ContactController::class, 'index'])->name('contact.index');
     // Chính sách
@@ -116,7 +124,7 @@ Route::middleware(['auth','role:'.Role::whereNot('role_name','guest')->pluck('ro
         Route::post('/them',[SlideAdsController::class, 'store'])->name('slide.store');
         Route::get('/edit/{id}',[SlideAdsController::class, 'edit'])->name('slide.edit');
         Route::put('/edit/{id}',[SlideAdsController::class, 'update'])->name('slide.update');
-        Route::delete('/xoa/{id}',[SlideAdsController::class, 'destroy'])->name('slide.delete');
+        Route::delete('/xoa',[SlideAdsController::class, 'destroy'])->name('slide.delete');
     });
     
     //Sản phẩm
@@ -187,8 +195,8 @@ Route::middleware(['auth','role:'.Role::whereNot('role_name','guest')->pluck('ro
         Route::post('/hinh-anh-mo-ta',[NewsController::class, 'uploadCk'])->name('ckeditor.news.upload');
         Route::get('/edit/{id}',[NewsController::class, 'edit'])->name('news.edit');
         Route::put('/edit/{id}',[NewsController::class, 'update'])->name('news.update');
-        Route::delete('/xoa-tag/{id}/{tagId}',[NewsController::class, 'deleteTagRelaNews'])->name('news.remove');
-        Route::delete('/xoa/{id}',[NewsController::class, 'destroy'])->name('news.delete');
+        Route::post('/xoa-tag',[NewsController::class, 'deleteTagRelaNews'])->name('news.tag.remove');
+        Route::delete('/xoa',[NewsController::class, 'destroy'])->name('news.delete');
 
     });
     //Tag tin tức
@@ -198,7 +206,7 @@ Route::middleware(['auth','role:'.Role::whereNot('role_name','guest')->pluck('ro
         Route::get('/edit/{id}',[TagController::class, 'edit'])->name('news.tag.edit');
         Route::put('/edit/{id}',[TagController::class, 'update'])->name('news.tag.update');
         Route::get('/xoa/{id}',[TagController::class, 'show'])->name('news.tag.show');
-        Route::delete('/xoa/{id}',[TagController::class, 'destroy'])->name('news.tag.delete');
+        Route::delete('/xoa',[TagController::class, 'destroy'])->name('news.tag.delete');
 
     });
     //Danh mục tin tức
@@ -208,7 +216,7 @@ Route::middleware(['auth','role:'.Role::whereNot('role_name','guest')->pluck('ro
         Route::get('/edit/{id}',[CategoriesNewsController::class, 'edit'])->name('news.cat.edit');
         Route::put('/edit/{id}',[CategoriesNewsController::class, 'update'])->name('news.cat.update');
         Route::get('/xoa/{id}',[CategoriesNewsController::class, 'show'])->name('news.cat.show');
-        Route::delete('/xoa/{id}',[CategoriesNewsController::class, 'destroy'])->name('news.cat.delete');
+        Route::delete('/xoa',[CategoriesNewsController::class, 'destroy'])->name('news.cat.delete');
 
     });
 
@@ -239,8 +247,8 @@ Route::middleware(['auth','role:'.Role::whereNot('role_name','guest')->pluck('ro
 });
 
 // Tới cửa hàng
-Route::get('/https://vietbh.github.io/lazi-store',function(){
-    return redirect('https://vietbh.github.io/lazi-store');
-})->name('lazi.index');
+// Route::get('/https://vietbh.github.io/lazi-store',function(){
+//     return redirect('https://vietbh.github.io/lazi-store');
+// })->name('lazi.index');
 
 require __DIR__.'/auth.php';

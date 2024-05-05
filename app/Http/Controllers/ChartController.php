@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\CategoriesProduct;
+use App\Models\Orders;
+use App\Models\Product;
+use Illuminate\Http\JsonResponse;
 
 class ChartController extends Controller
 {
@@ -12,54 +15,40 @@ class ChartController extends Controller
     public function index()
     {
         //
-        return view('layouts.admin.Chart.index');
+        
+        $orders = Orders::orderByDesc('id')->get();
+        $data = compact('orders');
+        return view('layouts.admin.Chart.index',$data);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    // 
+    public function dataChart():JsonResponse
+    {   
+        $data = $this->getCategoryCounts();
+       
+        return response()->json($data,200);
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+    function getCategoryCounts($parentId = null) {
+        $categories = CategoriesProduct::select('id', 'name')
+            ->where('parent_category_id', $parentId)
+            ->get();
+            
+        $result = [];
+        
+        foreach ($categories as $category) {
+            $subcategories = collect($this->getCategoryCounts($category->id)) ;
+            
+            $subcategoryCounts = $subcategories->sum('_value');
+            
+            $categoryCount = Product::where('categories_product_id', $category->id)->count();
+            
+            $totalCount = $subcategoryCounts + $categoryCount;
+            
+            $result[] = [
+                '_id' => $category->name,
+                '_value' => $totalCount
+            ];
+        }
+        
+        return $result;
     }
 }

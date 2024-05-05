@@ -92,7 +92,7 @@
                                             <form action="{{ route('product.cat.delete', ['id' => $cat->id]) }}" method="POST">
                                                 @csrf
                                                 @method('delete')
-                                                <button class="btn btn-sm btn-danger" type="submit"><i class="fas fa-trash-alt"></i></button>
+                                                <button class="btn btn-sm btn-danger" type="submit" title="Delete"><i class="fas fa-trash-alt"></i></button>
                                             </form>
                                         @endif
                                     </div>
@@ -159,14 +159,12 @@
                     topStart: {
                         buttons: [
                             'pageLength',
-                            'spacer',
                             {
                                 extend: 'copyHtml5',
                                 exportOptions: {
                                     columns: [0, ':visible']
                                 },
                             },
-                            'spacer',
                             {
                                 text: 'Setting',
                                 extend: 'collection',

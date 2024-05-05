@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\FrontEnd;
 
-use App\Models\Contact;
+use App\Http\Controllers\Controller;
+use App\Models\CommentNews;
 use Illuminate\Http\Request;
 
-class ContactController extends Controller
+class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,9 +14,6 @@ class ContactController extends Controller
     public function index()
     {
         //
-        $contacts = Contact::orderBy('created_at')->get();
-        return view('layouts.admin.Contact.index',compact('contacts'));
-
     }
 
     /**
@@ -32,6 +30,12 @@ class ContactController extends Controller
     public function store(Request $request)
     {
         //
+        $comment = new CommentNews();
+        $comment->content = $request->content;
+        $comment->news_id = $request->news_id;
+        $comment->user_id = 1;
+        $comment->save();
+        return redirect()->back()->with('success','Cảm ơn bạn đã để lại bình luận');
     }
 
     /**

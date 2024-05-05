@@ -110,44 +110,50 @@ class AuthController extends Controller
      * @param ForgotPassRequest $request
      * @return  [type]  [return description]
      */
-    public function forgotPassword(ForgotPassRequest $request) :JsonResponse 
+    public function forgotPassword(Request $request): JsonResponse 
     {
         try {
-            $email = $request->only(['email']);
-            $code = sprintf('%06d', rand(1, 999999));
-            Session::put('key', $code);
-            if (!empty($email) && !empty($code)) {
-                $user = User::where(['email' => $email])->first();
-                dispatch(new SendEmailForgotPass($user->email, $code, $user->name))->onQueue(config('queue.queueType.email'));
+            if ($request->code !== null) {
+                $data = $request->only('email', 'code', 'password');
+                $user = User::where('email', $data['email'])->first();
+    
+                if (Session::get('code') !== $data['code']) {
+                    return response()->json([
+                        'message' => 'Mã code không chính xác',Session::get('code')
+                    ], 400);
+                }
+    
+                $user->update([
+                    'password' => Hash::make($data['password']),
+                ]);
+    
+                return response()->json([
+                    'message' => 'Đổi mật khẩu thành công'
+                ], 200);
             }
-            return response()->json(['success' => 'Vui lòng kiểm tra email'],200);
+    
+            $email = $request->input('email');
+            $code = sprintf('%06d', rand(1, 999999));
+            Session::put('code', $code);
+    
+            if (!empty($email) && !empty($code)) {
+                $user = User::where('email',$email)->first();
+                if (User::where('email', $email)->exists()) {
+                    dispatch(new SendEmailForgotPass($email, $code, $user->name))
+                        ->onQueue(config('queue.queueType.email'));
+                }
+            }
+    
+            return response()->json(['success' => 'Vui lòng kiểm tra email'], 200);
         } catch (Exception $e) {
             Log::error('[AuthController][forgotPassword] error ' . $e->getMessage());
             throw new Exception('[AuthController][forgotPassword] error because ' . $e->getMessage());
         }
     }
-    /**
-     *Forgot password
-     *
-     * @param ForgotPassRequest $request
-     * @return  [type]  [return description]
-     */
     public function changePasswordForgot(ForgotPassRequest $request)
     {
-        return response()->json( Session::get('key'));
         try {
-            $data = $request->only(['email', 'code', 'password']);
-            $user = User::where('email', $data['email'])->first();
-            if (empty($user) && ($data['code'])) {
-                return response()->json([
-                    'message' => 'Mã code không chính xác'
-                ], 400);
-            }
-            $user->password = Hash::make($data['password']);
-            $user->save();
-            return response()->json([
-                'message' => 'Đổi mật khẩu thành công'
-            ], 200);
+        
         } catch (Exception $e) {
             Log::error('[AuthController][forgotPassword] error ' . $e->getMessage());
             throw new Exception('[AuthController][forgotPassword] error because ' . $e->getMessage());

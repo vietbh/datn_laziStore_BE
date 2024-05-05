@@ -71,7 +71,7 @@
                                 </div>
                           
                                 <div class="row mb-3">
-                                    <div class="col-lg-6 col-sm-12">
+                                    {{-- <div class="col-lg-6 col-sm-12">
                                         <label for="start_date" class="form-label">Ngày bắt đầu</label>
                                         <input type="datetime-local" name="start_date" class="form-control" 
                                         @isset($discount)
@@ -82,8 +82,8 @@
                                         @error('start_date')
                                             <div class="form-text text-danger">{{ $message }}</div>
                                         @enderror
-                                    </div>
-                                    <div class="col-lg-6 col-sm-12">
+                                    </div> --}}
+                                    <div class="col-lg-12 col-sm-12">
                                         <label for="end_date" class="form-label">Ngày kết thúc</label>
                                         <input type="datetime-local" name="end_date" class="form-control" 
                                         @isset($discount)
@@ -99,13 +99,10 @@
                                 <div class="row mb-3">
                                     <div class="col-lg-6">
                                         <label for="show_hide" class="form-label">Ẩn hiện (mặc định sẽ là Hiện)</label>
-                                        <select class="form-select" name="show_hide" 
-                                        @isset($discount)
-                                            value="{{$discount->show_hide}}"
-                                        @endisset
-                                        id="show_hide">
-                                            <option value='1' >Hiện</option>
-                                            <option value='0' >Ẩn</option>
+                                        <select 
+                                        class="form-select" name="show_hide" id="show_hide">
+                                            <option value='1' @isset($discount) @selected($discount->show_hide) @endisset>Hiện</option>
+                                            <option value='0' @isset($discount) @selected(!$discount->show_hide) @endisset>Ẩn</option>
                                         </select>
                                     </div>
                                     <div class="col-lg-6">
@@ -113,7 +110,7 @@
                                         <div class="form-control">
                                             <div class="form-check form-switch">
                                                 <input 
-                                                class="form-check-input" name="discount_status" @isset($discount) @checked($discount->status) @endisset type="checkbox" id="discount_status">
+                                                class="form-check-input" name="discount_status" @isset($discount) @checked($discount->discount_status) @endisset type="checkbox" id="discount_status">
                                                 <label class="form-check-label" for="discount_status">Kích hoạt </label>
                                             </div>
 

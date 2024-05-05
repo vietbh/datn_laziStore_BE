@@ -134,9 +134,7 @@
                                         @endisset
                                     </button>
                                     @isset($slide)
-                                        <a href="{{ route('slide.index') }}" class="btn btn-danger">
-                                            Đóng
-                                        </a>
+                                        <a href="{{ route('slide.index') }}" class="btn btn-danger">Đóng</a>
                                     @else
                                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
                                     @endisset

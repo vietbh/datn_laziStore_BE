@@ -3,8 +3,8 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Trang tin tức🆕 Lazi Store Page</title>
-        <meta name="description" content="">
+        <title>Lazi Store Tech</title>
+        <meta name="description" content="Trang thông tin về công nghệ">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         {{-- <link rel="manifest" href="site.webmanifest"> --}}
 		{{-- <link rel="shortcut icon" type="image/x-icon" href="news/assets/assets/img/favicon.ico"> --}}
@@ -41,18 +41,18 @@
     </div>  --}}
     <!-- Preloader Start -->
 
-    <header>
+    <header style="min-height: 15vh">
         <!-- Header Start -->
        <div class="header-area">
             <div class="main-header ">
-                <div class="header-top black-bg d-none d-md-block">
+                <div class="header-top black-bg d-none d-md-block  ">
                    <div class="container">
                        <div class="col-xl-12">
                             <div class="row d-flex justify-content-between align-items-center">
                                 <div class="header-info-left">
                                     <ul>     
-                                        <li><img src="{{asset('news/assets/assets/img/icon/header_icon1.png')}}" alt="">27ºc, Sunny </li>
-                                        <li><img src="{{asset('news/assets/assets/img/icon/header_icon1.png')}}" alt=""><script>document.write(new Date().toLocaleString());</script></li>
+                                        {{-- <li><img src="{{asset('news/assets/assets/img/icon/header_icon1.png')}}" alt="">27ºc, Sunny </li> --}}
+                                        <li><img src="{{asset('news/assets/assets/img/icon/header_icon2.png')}}" alt=""><script>document.write(new Date().toLocaleString());</script></li>
                                     </ul>
                                 </div>
                                 <div class="header-info-right">
@@ -71,37 +71,51 @@
                         <div class="row d-flex align-items-center">
                             <!-- Logo -->
                             <div class="col-xl-3 col-lg-3 col-md-3">
-                                <div class="logo ">
-                                    <a class="d-flex align-items-center text-decoration-none" href="{{ route('newsFront.index') }}">
-                                            <img src="{{asset('news/assets/upload/images/Logo-Tinh-Ba-Ria-Vung-Tau.png')}}" width="50" height="50">
-                                            <h4 class="text-secondary text-bolder ">Lazi Store</h4>
+                                <div class="logo">
+                                    <a 
+                                    class="text-decoration-none" href="{{ route('fe.news.index') }}">
+                                        {{-- <img src="{{asset('news/assets/upload/images/Logo-Tinh-Ba-Ria-Vung-Tau.png')}}" width="50" height="50"> --}}
+                                        <h4 class="text-secondary text-uppercase mb-1" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; font-size: 32px;">Lazi Store</h4>
+                                        <p class="m-0" style="font-size: 12px;">Trang tin công nghệ của cửa hàng Lazi Store</p>
                                     </a>
                                 </div>
                             </div>
                             <div class="col-xl-9 col-lg-9 col-md-9">
-                                <div class="header-banner f-right ">
-                                    <img src="news/assets/assets/img/hero/header_card.jpg" alt="">
-                                </div>
+                                <nav class="navbar navbar-light ">
+                                    <div class="container-fluid">
+                                        <form action="{{ route('fe.news.search') }}" class="row w-100 g-0">
+                                            <div class="col-lg-12 d-flex">
+                                                <textarea name="search"
+                                                class="form-control w-100" style="border-radius: 15px;" rows="1" wrap="hard" type="search" placeholder="Tìm kiếm tin tức" aria-label="Search">{{ request()->query('search') }}</textarea>
+                                                <button class="genric-btn danger-border border-0 circle arrow ml-1" type="submit"><i class="fas fa-search"></i></button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </nav>
+                                {{-- <div class="header-banner f-right ">
+                                    <img src="{{ asset('news/assets/assets/img/hero/header_card.jpg') }}" alt="">
+                                </div> --}}
                             </div>
                         </div>
+                      
                    </div>
                 </div>
-               <div class="header-bottom header-sticky">
+               {{-- <div class="header-bottom header-sticky">
                     <div class="container">
                         <div class="row align-items-center">
-                            <div class="col-xl-10 col-lg-10 col-md-12 header-flex">
+                            <div class="col-xl-9 col-lg-9 col-md-12 header-flex">
                                 <!-- sticky -->
                                     <div class="sticky-logo">
-                                        <a href="{{ route('newsFront.index') }}">
-                                            <img src="{{asset('news/assets/upload/images/Logo-Tinh-Ba-Ria-Vung-Tau.png')}}" width="50" height="50" alt="">
-                                            <h4 class="text-secondary text-bolder">Lazi Store</h4>
+                                        <a  href="{{ route('fe.news.index') }}">
+                                            <h4 class="text-secondary text-uppercase mb-1" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; font-size: 32px;">Lazi Store</h4>
+                                            <p class="m-0" style="font-size: 12px;">Trang tin công nghệ của cửa hàng Lazi Store</p>
                                         </a>
                                     </div>
                                 <!-- Main-menu -->
                                     @include('FrontEnd.part.nav')
                          </div>
                     </div>
-               </div>
+               </div> --}}
             </div>
        </div>
         <!-- Header End -->
@@ -120,12 +134,12 @@
                             <div class="single-footer-caption">
                                 <!-- logo -->
                                 <div class="footer-logo">
-                                    {{-- <a href="index.html"><img src="news/assets/assets/img/logo/logo2_footer.png" alt=""></a> --}}
-                                    <a href="{{ route('newsFront.index') }}"><h4 class="text-warning"><img src="{{asset('upload/images/Logo-Tinh-Ba-Ria-Vung-Tau.png')}}" width="70" height="70" alt=""> Lazi Store Page</h4></a>
+                                    <h4 class="text-secondary text-uppercase mb-1" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; font-size: 32px;">Lazi Store</h4>
+                                    <p class="m-0" style="font-size: 12px;">Trang tin công nghệ của cửa hàng Lazi Store</p>
                                 </div>
                                 <div class="footer-tittle">
                                     <div class="footer-pera">
-                                        <p>Suscipit mauris pede for con sectetuer sodales adipisci for cursus fames lectus tempor da blandit gravida sodales  Suscipit mauris pede for con sectetuer sodales adipisci for cursus fames lectus tempor da blandit gravida sodales  Suscipit mauris pede for sectetuer.</p>
+                                        {{-- <p>Suscipit mauris pede for con sectetuer sodales adipisci for cursus fames lectus tempor da blandit gravida sodales  Suscipit mauris pede for con sectetuer sodales adipisci for cursus fames lectus tempor da blandit gravida sodales  Suscipit mauris pede for sectetuer.</p> --}}
                                     </div>
                                 </div>
                                 <!-- social -->
@@ -187,9 +201,9 @@
                         <div class="col-lg-6">
                             <div class="footer-menu f-right">
                                 <ul>                             
-                                    <li><a href="#">Terms of use</a></li>
-                                    <li><a href="#">Privacy Policy</a></li>
-                                    <li><a href="#">Contact</a></li>
+                                    <li><a href="#">Chính sách</a></li>
+                                    <li><a href="#">Điều khoản sử dụng</a></li>
+                                    <li><a href="#">Liên hệ</a></li>
                                 </ul>
                             </div>
                         </div>

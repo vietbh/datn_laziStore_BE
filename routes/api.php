@@ -50,8 +50,8 @@ Route::post('/dang-ky', [AuthController::class, 'register']);
 Route::post('/quen-mat-khau', [AuthController::class, 'forgotPassword']);
 Route::post('/dat-lai-mat-khau', [AuthController::class, 'changePasswordForgot']);
 // Route::post('/doi-mat-khau', [AuthController::class, 'changePassword']);
-// // Gio hang
 
+// // Gio hang
 Route::get('/gio-hang/{id}',[CartController::class,'index']);
 Route::post('/gio-hang/them-san-pham',[CartController::class,'store']);
 Route::post('/gio-hang/cap-nhat-san-pham',[CartController::class,'update']);
@@ -59,6 +59,10 @@ Route::post('/gio-hang/xoa-san-pham',[CartController::class,'destroy']);
 // Thanh toan
 // Route::post('/don-hang',[PaymentController::class,'store']);
 Route::post('/thanh-toan',[PaymentController::class,'store']);
+Route::post('/vnpay/create',[PaymentController::class,'create']);
+
+Route::get('/vnpay/return',[PaymentController::class,'return'])->name('vnpay.return');
+
 
 Route::group(['prefix' => 'api'], function () {
 

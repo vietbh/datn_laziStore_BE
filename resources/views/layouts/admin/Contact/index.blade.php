@@ -1,6 +1,5 @@
 @extends('admin')
-@section('content')
-   
+@section('content') 
     @if($errors->any())
         <script type="module"> 
             var myModal = new bootstrap.Modal(document.getElementById('addCategoriesModal'), {
@@ -80,38 +79,37 @@
                <table class="table text-start align-middle table-bordered table-hover mb-0" >
                    <thead>
                        <tr class="text-dark">
+                           <th scope="col">Action</th>
                            <th scope="col">Họ và Tên</th>
                            <th scope="col">Email</th>
                            <th scope="col">Số điện thoại</th>
                            <th scope="col">Tiêu đề</th>
                            <th scope="col">Ngày gửi</th>
-                           <th scope="col" colspan="2">Action</th>
                        </tr>
                    </thead>
                    <tbody>
-                    @foreach ($contacts as $cont)
-                        <tr>
-                            <td>{{$cont->fullname}}</td>
-                            <td>{{$cont->email}}</td>
-                            <td>{{$cont->phone_number}}</td>
-                            <td>{{$cont->title}}</td>
-                            <td>{{$cont->datetime_create}}</td>
-                            <td>
-                            <div class="d-flex justify-content-evenly">
-                                <a class="btn btn-sm btn-primary" href="{{ route('product.cat.edit', ['id' => $cont->id]) }}">Edit</a>
-                                <form action="{{ route('product.cat.delete', ['id' => $cont->id]) }}" method="POST">
-                                    @csrf
-                                    @method('delete')
-                                    <button class="btn btn-sm btn-danger" type="submit">Xóa</button>
-                                </form>
-                            </div>
-                            </td>
-                        </tr>
-                    @endforeach                      
+                        @foreach ($contacts as $cont)
+                            <tr>
+                                <td>
+                                    <div class="d-flex justify-content-evenly">
+                                        <a class="btn btn-sm btn-primary" href="{{ route('product.cat.edit', ['id' => $cont->id]) }}"><i class="fas fa-edit"></i></a>
+                                        <form action="{{ route('product.cat.delete', ['id' => $cont->id]) }}" method="POST">
+                                            @csrf
+                                            @method('delete')
+                                            <button class="btn btn-sm btn-danger" type="submit"><i class="fas fa-trash-alt"></i></button>
+                                        </form>
+                                    </div>
+                                </td>
+                                <td>{{$cont->fullname}}</td>
+                                <td>{{$cont->email}}</td>
+                                <td>{{$cont->phone_number}}</td>
+                                <td>{{$cont->title}}</td>
+                                <td><span class="badge bg-primary">{{$cont->datetime_create->format('d/m/Y')}}</span></td>
+                            </tr>
+                        @endforeach                      
                    </tbody>
                </table>
            </div>
-        <div class="mt-2">{{ $contacts->links('pagination::bootstrap-5') }}</div>
        </div>
    </div>
    <!-- Table Cate End -->
