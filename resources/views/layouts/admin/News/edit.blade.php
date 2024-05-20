@@ -66,6 +66,14 @@
                                             <div class="form-text text-danger">{{ $message }}</div>
                                             @enderror
                                         </div>
+                                        <div class="col-sm-12 col-xl-12">
+                                            <label for="sub_title" class="form-label">Mô tả ngắn<span class="text-danger text-small">(*)</span></label>
+                                            <textarea 
+                                            name="sub_title" class="form-control" id="sub_title" placeholder="Nhập mô tả ngắn" rows="3">@isset($new){{$new->sub_title}}@else{{old('sub_title')}}@endisset</textarea>
+                                            @error('sub_title')
+                                                <div class="form-text text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-sm-12 col-xl-6 mb-3">

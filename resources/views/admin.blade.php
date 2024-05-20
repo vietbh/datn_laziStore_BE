@@ -59,7 +59,7 @@
             @endif  
              
             @include('layouts.admin.Header.nav')   
-            
+    
             @yield('content')
 
             <!-- Footer Start -->

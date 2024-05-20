@@ -76,7 +76,9 @@
                                         @endforelse
                                     </div>
                                 </div>
-
+                                <div class="d-flex justify-content-center">
+                                    {{ $searchNews->links('pagination::bootstrap-4') }}
+                                </div>
                                 <!-- End Nav Card -->
                             </div>
                         </div>
@@ -112,8 +114,6 @@
                 </div>
             </div>
         </div>
-        <div class="d-flex justify-content-center">
-            {{ $searchNews->links('pagination::bootstrap-4') }}
-        </div>
+      
     </section>
 @endsection

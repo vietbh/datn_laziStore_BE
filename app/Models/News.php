@@ -11,7 +11,7 @@ class News extends Model
 {
     use HasFactory;
     protected $primaryKey = 'id';
-    protected $fillable = ['title','seo_keywords','description','author','categories_news_id','datetime_create','views','show_hide'];
+    protected $fillable = ['title','sub_title','seo_keywords','description','author','categories_news_id','datetime_create','views','show_hide'];
 
     public function category ():BelongsTo
     {

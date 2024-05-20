@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('policies', function (Blueprint $table) {
             $table->increments('id')->unsigned();
-            $table->string('name')->unique();
-            $table->text('value');
+            $table->string('name');
+            $table->longText('value');
             $table->integer('position')->default(1);
             $table->boolean('show_hide')->default(true);
+            $table->boolean('policy_type')->default(true);
             $table->timestamps();
         });
     }

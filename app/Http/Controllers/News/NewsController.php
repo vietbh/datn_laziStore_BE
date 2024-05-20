@@ -42,6 +42,7 @@ class NewsController extends Controller
     {
         $request->validate([
             'title' => 'required|unique:'.News::class,
+            'sub_title' => 'string|required',
             'seo_keywords' => 'required|unique:news,seo_keywords',
             'author' => 'required',
             'image_url' => 'required|image|max:2048|dimensions:min_width=100,min_height=100,max_width=1080,max_height=1080',
@@ -50,6 +51,7 @@ class NewsController extends Controller
         ],[
             'title.required'=>'Vui lòng không bỏ trống trường này.',
             'title.unique'=>'Đã tồn tại tiêu đề này.',
+            'sub_title.required'=>'Vui lòng không bỏ trống trường này.',
             'image_url.required'=>'Vui lòng không bỏ trống trường này.',
             'image_url.image' => 'Chỉ cho phép file hình hoặc gif.',
             'image_url.max' => 'Chỉ cho phép kích thước tối đa 2048Kb.',
@@ -66,6 +68,7 @@ class NewsController extends Controller
             $news->image_url = $url;
         }
         $news->title = $request->title;
+        $news->sub_title = $request->sub_title;
         $news->seo_keywords = Str::slug($request->seo_keywords);
         $news->slug = Str::slug($request->title);
         $news->categories_news_id = $request->categories_news_id;
@@ -131,14 +134,16 @@ class NewsController extends Controller
         $news = News::findOrFail($id);
         $request->validate([
             'title' => 'required|unique:'.News::class.',title,'.$id,
+            'sub_title' => 'string|required',
             'seo_keywords' => 'required|unique:'.News::class.',seo_keywords,'.$id,
-            'author' => 'required',
+            'author' => 'nullable',
             'categories_news_id' => 'required',
             'image_url' => 'image|max:2048|dimensions:min_width=100,min_height=100,max_width=1080,max_height=1080',
             'description' => 'required'
         ],[
             'title.required'=>'Vui lòng không bỏ trống trường này.',
             'title.unique'=>'Đã tồn tại tiêu đề này.',
+            'sub_title.required'=>'Vui lòng không bỏ trống trường này.',
             'seo_keywords.required'=>'Vui lòng không bỏ trống trường này.',
             'seo_keywords.unique'=>'Đã tồn tại từ khóa SEO này.',
             'author.required'=>'Vui lòng không bỏ trống trường này.',
@@ -158,6 +163,7 @@ class NewsController extends Controller
             $news->image_url = $url;
         }
         $news->title = $request->title;
+        $news->sub_title = $request->sub_title;
         $news->seo_keywords = Str::slug($request->seo_keywords);
         $news->slug = Str::slug($request->title);
         $news->categories_news_id = $request->categories_news_id;
@@ -170,7 +176,7 @@ class NewsController extends Controller
             }
         }
         $news->description = $request->description;
-        $news->author = $request->author;
+        $news->author = $request->author ?? 'Đang cập nhật';
         $news->show_hide = $request->show_hide;
         $news->user_id = auth()->user()->id;
         $news->update();

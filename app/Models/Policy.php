@@ -9,6 +9,6 @@ class Policy extends Model
 {
     use HasFactory;
     protected $primaryKey = 'id';
-    protected $fillable = ['name','value','position','show_hide'];
+    protected $fillable = ['name','value','position','show_hide','policy_type'];
     
 }

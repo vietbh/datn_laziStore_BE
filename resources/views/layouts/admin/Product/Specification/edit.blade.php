@@ -60,7 +60,7 @@
                                         <label 
                                         for="categories_product_id" class="form-label">Danh mục <span class="text-danger text-small">(*)</span></label>
                                         
-                                        <select 
+                                        <select @disabled(true)
                                         class="form-select" name="categories_product_id" id="categories_product_id" aria-label="Default select example">
                                             @isset($categories)
                                                 @foreach ($categories as $category)

@@ -20,18 +20,18 @@ class ProductSpecificationController extends Controller
         if($param) $category = CategoriesProduct::where('slug',$param)->first();
 
         $product = Product::findOrFail($idProduct);
-        $products = Product::where('show_hide',true)->get();
+        // $products = Product::where('show_hide',true)->get();
         $categories = CategoriesProduct::where([['show_hide',true],['parent_category_id',null]])->get();
 
-        $specis = Specification::where('categories_product_id',$category->id??$categories->first()->id)->get();
-              
+        $specis = Specification::where('categories_product_id', $category->id ?? $categories->first()->id)->get();
+        
         $productSpecifications = $product->specifications()->whereIn('speci_id',$specis->pluck('id'))->get();
         
         $productSpecificationCount = SpecificationsProduct::where('product_id',$product->id)->count();
         return view('layouts.admin.components.speciModal',compact(
             'product',
             'productSpecifications',
-            'products',
+            // 'products',
             'productSpecificationCount',
             'specis',
             'categories',

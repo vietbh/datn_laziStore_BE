@@ -159,7 +159,7 @@
                                                     </a>                                            
                                                 @else
                                                     @if($productVariationCount > 0)
-                                                        <a href="{{ route('specifi.create',['id'=>$product->id]) }}">
+                                                        <a href="{{ route('specifi.create',['idProduct'=>$product->id]) }}">
                                                             <button type="button" class="float-right btn btn-sm btn-secondary me-2">Thông số</button>
                                                         </a>      
                                                         <a href="{{ route('product.index') }}">
@@ -181,6 +181,7 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col" class="text-start">Action</th>
+                                                <th scope="col">Id</th>
                                                 <th scope="col">Hình ảnh</th>
                                                 <th scope="col">Màu sắc</th>
                                                 <th scope="col">Giá</th>
@@ -205,6 +206,7 @@
                                                                 </form>
                                                             </div>
                                                         </td>
+                                                        <td>{{$variation->id}}</td>
                                                         <td><img src="{{$variation->image_url}}" class="rounded-3 me-2" width="100" height="100" aria-describedby="image_url"></td>
                                                         <td ><span class="badge bg-primary">{{$variation->color_type}}</span> </td>
                                                         <td ><p>{{number_format($variation->price,0,',','.')}}<span class="text-sm">đ</span></p></td>

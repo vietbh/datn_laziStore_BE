@@ -15,7 +15,7 @@ class SpecificationsProduct extends Model
 
     public function product():BelongsTo
     {
-        return $this->belongsTo(Product::class,'product_id','id');
+        return $this->belongsTo(Product::class,'id','product_id');
     }
     public function speci():BelongsTo
     {

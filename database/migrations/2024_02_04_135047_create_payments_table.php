@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->increments('id')->unsigned();
             $table->string('payment_number')->unique();
-            $table->enum('payment_method',['cod', 'banking', 'credit'])->default('cod');
+            $table->enum('payment_method',['cod', 'banking', 'credit']);
             $table->integer('count_items');
             $table->decimal('total',20,2);
             $table->decimal('amount',20,2);
-            $table->enum('status',['pending', 'in_progress', 'completed'])->default('pending');
+            $table->enum('status',['pending', 'in_progress', 'completed','cancel'])->default('pending');
             $table->string('payment_qr_code',100)->nullable();
             $table->string('payment_momo_link',100)->nullable();
             $table->unsignedInteger('order_id');

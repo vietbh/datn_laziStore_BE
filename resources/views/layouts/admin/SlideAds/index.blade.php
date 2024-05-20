@@ -80,7 +80,9 @@
                            <th scope="col">Thumnail</th>
                            <th scope="col">Nội dung</th>
                            <th scope="col">Thứ tự</th>
-                           <th scope="col">Trạng thái</th>
+                           <th scope="col">Khu vực</th>
+                           <th scope="col">Hẹn thời gian</th>
+                           <th scope="col">Ẩn hiện</th>
                        </tr>
                    </thead>
                    <tbody>
@@ -98,9 +100,21 @@
                                 </div>
                             </td>
                             <td>{{$s->title}}</td>
-                            <td><img src="{{ asset('storage/'.$s->image_path) }}" class="img-thumbnail" alt="" srcset=""></td>
+                            <td><img src="{{ asset('storage/'.$s->image_path) }}" class="img-thumbnail" alt="" width="300" height="200"></td>
                             <td>{{$s->content}}</td>
                             <td><span class="badge bg-primary">{{$s->position}}</span></td>
+                            <td>
+                                @if ($s->slide_area === "store") <span class="badge bg-success">Cửa hàng</span>
+                                @elseif ($s->slide_area === "blog") <span class="badge bg-primary">Blog</span>
+                                @else <span class="badge bg-secondary">Chung (Cả cửa hàng và blog)</span>
+                                @endif
+                                </td>
+                            <td>
+                                @if ($s->slide_now)
+                                    <span class="badge bg-primary">Có (Trạng thái {{$s->slide_status ? 'Mở' : 'Khóa'}})</span>
+                                @else <span class="badge bg-secondary">Không</span>
+                                @endif
+                            </td>
                             <td><span class="badge bg-primary">{{$s->show_hide ? 'Hiện' : 'Ẩn'}}</span></td>
                         </tr>
                     @endforeach                      

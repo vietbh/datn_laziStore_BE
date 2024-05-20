@@ -44,7 +44,7 @@ class NewsController extends Controller
             ], 'LIKE', '%'.$search.'%');
             
         }
-        $searchNews = $query->paginate(6);
+        $searchNews = $query->paginate(8)->appends('search',$search);
         $categories = CategoriesNews::where([['show_hide',true]])->whereNot([['id',1],['parent_category_id',null]])->get();
         return view('FrontEnd.search',compact('searchNews','categories'));
     }

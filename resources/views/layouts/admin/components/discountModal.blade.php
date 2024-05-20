@@ -69,21 +69,20 @@
                                         <div class="form-text text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
-                          
                                 <div class="row mb-3">
-                                    {{-- <div class="col-lg-6 col-sm-12">
+                                    <div class="col-lg-6 col-sm-12">
                                         <label for="start_date" class="form-label">Ngày bắt đầu</label>
-                                        <input type="datetime-local" name="start_date" class="form-control" 
+                                        <input 
+                                        type="datetime-local" name="start_date" class="form-control" 
                                         @isset($discount)
-                                            value="{{$discount->start_date}}"
+                                            value="{{ Carbon\Carbon::parse($discount->start_date) }}"
                                         @endisset
-                                        autocomplete="start_date"
-                                        id="start_date">   
+                                        help="Thứ tự tháng/ngày/năm" autocomplete="start_date" id="start_date">   
                                         @error('start_date')
                                             <div class="form-text text-danger">{{ $message }}</div>
                                         @enderror
-                                    </div> --}}
-                                    <div class="col-lg-12 col-sm-12">
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12">
                                         <label for="end_date" class="form-label">Ngày kết thúc</label>
                                         <input type="datetime-local" name="end_date" class="form-control" 
                                         @isset($discount)
@@ -106,12 +105,12 @@
                                         </select>
                                     </div>
                                     <div class="col-lg-6">
-                                        <label for="discount_status" class="form-label">Trạng thái mã</label>
+                                        <label for="discount_now" class="form-label">Hẹn thời gian</label>
                                         <div class="form-control">
                                             <div class="form-check form-switch">
                                                 <input 
-                                                class="form-check-input" name="discount_status" @isset($discount) @checked($discount->discount_status) @endisset type="checkbox" id="discount_status">
-                                                <label class="form-check-label" for="discount_status">Kích hoạt </label>
+                                                class="form-check-input" name="discount_now" @isset($discount) @checked($discount->discount_now) @endisset type="checkbox" id="discount_now">
+                                                <label class="form-check-label" for="discount_now">Hoạt động</label>
                                             </div>
 
                                         </div>

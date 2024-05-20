@@ -41,7 +41,7 @@ Route::get('/lazi-store.html', function () {
 Route::get('/', function () {
     return redirect()->route('fe.news.index');
 });
-Route::prefix('tin-tuc')->group(function(){
+Route::prefix('blog')->group(function(){
     Route::get('/',[FrontEndNewsController::class,'index'])->name('fe.news.index');
     Route::get('/chi-tiet/{slugNews}',[FrontEndNewsController::class,'show'])->name('fe.news.show');
     Route::get('/tim-kiem',[FrontEndNewsController::class,'search'])->name('fe.news.search');
@@ -117,6 +117,7 @@ Route::middleware(['auth','role:'.Role::whereNot('role_name','guest')->pluck('ro
         Route::get('/edit/{id}',[PolicyController::class, 'edit'])->name('policy.edit');
         Route::put('/edit/{id}',[PolicyController::class, 'update'])->name('policy.update');
         Route::delete('/xoa/{id}',[PolicyController::class, 'destroy'])->name('policy.delete');
+        Route::post('/hinh-anh-mo-ta',[PolicyController::class, 'uploadCk'])->name('ckeditor.policy.upload');
     });
     // Slide quảng cáo
     Route::prefix('slide-quang-cao')->group(function(){

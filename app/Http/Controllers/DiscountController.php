@@ -12,10 +12,14 @@ class DiscountController extends Controller
     /**
      * Display a listing of the resource.
      */
+    
     public function index()
     {
         //
-        $discounts = Discount::paginate(8);
+        $discounts = Discount::all();
+        // new Cacbon::setlocale('vi');
+      
+
         return view('layouts.admin.Discount.index',compact('discounts'));
     }
 
@@ -30,17 +34,18 @@ class DiscountController extends Controller
             'discount_code' =>'required|unique:'.Discount::class,
             'discount_price' =>'required|min:1',
             'discount_total' =>'required|min:1',
-            // 'start_date' =>'required|date|after_or_equal:today',
-            'end_date' =>'required|date',
+            'start_date' =>'required|date|after_or_equal:today',
+            'end_date' =>'required|date|after_or_equal:start_date',
         ],[
             'discount_code.required' => 'Vui lòng không bỏ trống trường này.',
             'discount_price.required' => 'Vui lòng không bỏ trống trường này.',
             'discount_total.required' => 'Vui lòng không bỏ trống trường này.',
             'start_date.required' => 'Vui lòng không bỏ trống trường này.',
-            // 'start_date.date' => 'Phải là dạng năm-tháng-ngày này.',
-            // 'start_date.after_or_equal' => 'Phải lớn hơn ngày hiện tại.',
+            'start_date.date' => 'Phải là dạng năm-tháng-ngày.',
+            'start_date.after_or_equal' => 'Ngày bắt đầu phải lớn hơn ngày hiện tại.',
             'end_date.required' => 'Vui lòng không bỏ trống trường này.',
-            // 'end_date.after' => 'Ngày kết thúc phải lớn hơn ngày bắt đầu.',
+            'end_date.date' => 'Phải là dạng năm-tháng-ngày.',
+            'end_date.after' => 'Ngày kết thúc phải lớn hơn ngày bắt đầu.',
         ]);
         $specialChars = array(
             'ư' => 'u',
@@ -55,10 +60,14 @@ class DiscountController extends Controller
         $discount->discount_code = $code;
         $discount->discount_price = $request->discount_price;
         $discount->discount_total = $request->discount_total;
-        $discount->discount_status = $request->discount_status == 'on' ? true : false;
-        // $discount->start_date = Carbon::parse($request->start_date)->toDateTimeString();
-        $discount->start_date = Carbon::now()->toDateTimeString();
-        $discount->end_date = Carbon::parse($request->end_date)->toDateTimeString();
+        $discount->discount_now = $request->discount_now == 'on' ? true : false;
+        if($request->discount_now !== 'on'){
+            $discount->discount_status = false;
+        }else{
+            $discount->start_date = Carbon::parse($request->start_date)->toDateTimeString();
+            $discount->end_date = Carbon::parse($request->end_date)->toDateTimeString();
+
+        }
         $discount->save();
         return redirect()->route('discount.index')->with('success','Thêm mã giảm giá thành công');
     }
@@ -85,18 +94,19 @@ class DiscountController extends Controller
             'discount_code' =>'required|unique:'.Discount::class.',discount_code,'.$id,
             'discount_price' =>'required|min:1',
             'discount_total' =>'required|min:1',
-            // 'start_date' =>'required|date|after_or_equal:today',
-            'end_date' =>'required|date',
+            'start_date' =>'required|date|after_or_equal:today',
+            'end_date' =>'required|date|after_or_equal:start_date',
 
         ],[
             'discount_code.required' => 'Vui lòng không bỏ trống trường này.',
             'discount_price.required' => 'Vui lòng không bỏ trống trường này.',
             'discount_total.required' => 'Vui lòng không bỏ trống trường này.',
             'start_date.required' => 'Vui lòng không bỏ trống trường này.',
-            // 'start_date.date' => 'Phải là dạng năm-tháng-ngày này.',
-            // 'start_date.after_or_equal' => 'Phải lớn hơn ngày hiện tại.',
+            'start_date.date' => 'Phải là dạng năm-tháng-ngày.',
+            'start_date.after_or_equal' => 'Ngày bắt đầu phải lớn hơn ngày hiện tại.',
+            'end_date.date' => 'Phải là dạng năm-tháng-ngày.',
             'end_date.required' => 'Vui lòng không bỏ trống trường này.',
-            // 'end_date.after' => 'Ngày kết thúc phải lớn hơn ngày bắt đầu.',
+            'end_date.after_or_equal' => 'Ngày kết thúc phải lớn hơn hoặc bằng ngày bắt đầu.',
         ]);
         $specialChars = array(
             'ư' => 'u',
@@ -111,9 +121,14 @@ class DiscountController extends Controller
         $discount->discount_code = $code;
         $discount->discount_price = $request->discount_price;
         $discount->discount_total = $request->discount_total;
-        $discount->discount_status = $request->discount_status == 'on' ? true : false;
-        $discount->start_date = Carbon::now()->toDateTimeString();
-        $discount->end_date = Carbon::parse($request->end_date)->toDateTimeString();
+        $discount->discount_now = $request->discount_now == 'on' ? true : false;
+        if($request->discount_now !== 'on'){
+            $discount->discount_status = false;
+        }else{
+            $discount->start_date = Carbon::parse($request->start_date)->toDateTimeString();
+            $discount->end_date = Carbon::parse($request->end_date)->toDateTimeString();
+
+        }
         $discount->update();
         return redirect()->route('discount.index')->with('success','Cập nhật thành công');
     }

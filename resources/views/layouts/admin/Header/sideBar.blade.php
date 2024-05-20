@@ -20,10 +20,10 @@
             <a href="{{ route('chart.index') }}" class="nav-item nav-link {{request()->routeIs('chart.index') == 1 ? 'active':''}}"><i class="fa fa-chart-bar me-2"></i>Thống kê</a>
             <a href="{{ route('guest.index') }}" class="nav-item nav-link {{request()->routeIs('guest.index','guest.edit') == 1 ? 'active':''}}"><i class="fas fa-users me-2"></i>Tài khoản</a>
             <a href="{{ route('payment.index') }}" class="nav-item nav-link {{request()->routeIs('payment.index','payment.edit') == 1 ? 'active':''}}"><i class="fas fa-cash-register me-2"></i>Đơn hàng</a>
-            <a href="{{ route('payment.index') }}" class="nav-item nav-link {{request()->routeIs('payment.index','payment.edit') == 1 ? 'active':''}}"><i class="fas fa-money-check-alt"></i>Thanh toán</a>
+            {{-- <a href="{{ route('payment.index') }}" class="nav-item nav-link {{request()->routeIs('payment.index','payment.edit') == 1 ? 'active':''}}"><i class="fas fa-money-check-alt"></i>Thanh toán</a> --}}
             <a href="{{ route('discount.index') }}" class="nav-item nav-link {{request()->routeIs('discount.index','discount.edit') == 1 ? 'active':''}}"><i class="fa fa-ticket-alt me-2"></i>Mã giảm giá</a>
-            <a href="{{ route('shipping.index') }}" class="nav-item nav-link {{request()->routeIs('shipping.index','shipping.edit') == 1 ? 'active':''}}"><i class="fa fa-truck me-2"></i>Nhà vận chuyển</a>
-            <a href="{{ route('delivery.index') }}" class="nav-item nav-link {{request()->routeIs('delivery.index','delivery.edit') == 1 ? 'active':''}}"><i class="fa fa-truck me-2"></i>Vận chuyển</a>
+            {{-- <a href="{{ route('shipping.index') }}" class="nav-item nav-link {{request()->routeIs('shipping.index','shipping.edit') == 1 ? 'active':''}}"><i class="fa fa-truck me-2"></i>Nhà vận chuyển</a> --}}
+            {{-- <a href="{{ route('delivery.index') }}" class="nav-item nav-link {{request()->routeIs('delivery.index','delivery.edit') == 1 ? 'active':''}}"><i class="fa fa-truck me-2"></i>Vận chuyển</a> --}}
             <a href="{{ route('comment.product.index') }}" class="nav-item nav-link text-nowrap {{request()->routeIs('comment.product.index') == 1 ? 'active':''}}"><i class="fa fa-comments me-2"></i>Bình luận sản phẩm</a>
             <a href="{{ route('comment.news.index') }}" class="nav-item nav-link {{request()->routeIs('comment.news.index') == 1 ? 'active':''}}"><i class="fa fa-comments me-2"></i>Bình luận tin tức</a>
             <a href="{{ route('brand.index') }}" class="nav-item nav-link {{request()->routeIs('brand.index','brand.edit') == 1 ? 'active':''}}"><i class="fas fa-globe"></i>Thương hiệu</a>
@@ -38,6 +38,15 @@
             <a href="{{ route('slide.index') }}" class="nav-item nav-link {{request()->routeIs('slide.index','slide.edit') == 1 ? 'active':''}}"><i class="far fa-question-circle me-2"></i>Slide quảng cáo</a>
             <a href="{{ route('role.index') }}" class="nav-item nav-link {{request()->routeIs('role.index','role.edit') == 1 ? 'active':''}}"><i class="fas fa-key me-2"></i>Vai trò</a>
             <a href="{{ route('lazi.index') }}" target="_blank" class="nav-item nav-link {{request()->routeIs('lazi.index') == 1 ? 'active':''}}"><i class="fas fa-store me-2"></i>Tới cửa hàng</a>
+            {{-- <a href="{{ route('profile.edit') }}" class="dropdown-item">Thông tin cá nhân</a> --}}
+                {{-- <a href="{{ route('dashboard') }}" class="dropdown-item">Cài đặt</a> --}}
+            <a href="{{ route('logout') }}" class="nav-item nav-link {{request()->routeIs('logout') == 1 ? 'active':''}}">
+                <form action="{{ route('logout') }}" method="post">
+                    @csrf
+                    @method('post')
+                    <button type="submit" class="btn btn-white fw-bold">Đăng xuất</button>
+                </form>
+            </a>
         </div>
     </nav>
 </div>

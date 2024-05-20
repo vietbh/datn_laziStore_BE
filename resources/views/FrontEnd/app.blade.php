@@ -68,14 +68,14 @@
                 </div>
                 <div class="header-mid d-none d-md-block">
                    <div class="container">
-                        <div class="row d-flex align-items-center">
+                        <div class="row d-flex align-items-center py-3">
                             <!-- Logo -->
                             <div class="col-xl-3 col-lg-3 col-md-3">
                                 <div class="logo">
                                     <a 
                                     class="text-decoration-none" href="{{ route('fe.news.index') }}">
                                         {{-- <img src="{{asset('news/assets/upload/images/Logo-Tinh-Ba-Ria-Vung-Tau.png')}}" width="50" height="50"> --}}
-                                        <h4 class="text-secondary text-uppercase mb-1" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; font-size: 32px;">Lazi Store</h4>
+                                        <h4 class="text-secondary text-uppercase my-2" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; font-size: 32px;line-height: 0.8rem;">Lazi Store</h4>
                                         <p class="m-0" style="font-size: 12px;">Trang tin công nghệ của cửa hàng Lazi Store</p>
                                     </a>
                                 </div>

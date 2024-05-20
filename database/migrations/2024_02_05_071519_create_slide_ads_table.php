@@ -19,6 +19,11 @@ return new class extends Migration
             $table->string('image_path');
             $table->integer('position')->default(1);
             $table->string('link')->nullable();
+            $table->string('slide_area')->default(null);
+            $table->boolean('slide_now')->default(false);
+            $table->boolean('slide_status')->default(false);
+            $table->datetime('start_date');
+            $table->datetime('end_date');
             $table->boolean('show_hide')->default(true);
             $table->timestamps();
         });

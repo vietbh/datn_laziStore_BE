@@ -26,7 +26,7 @@ class PolicyController extends Controller
     {
         //
         $request->validate([
-            'name'=>'required|unique:'.Policy::class,
+            'name'=>'required',
             'value'=>'required',
             'position'=>'required|min:1|max:9999|numeric',
         ],[
@@ -42,6 +42,7 @@ class PolicyController extends Controller
         $policy->value =$request->value;
         $policy->position =$request->position;
         $policy->show_hide =$request->show_hide;
+        $policy->policy_type =$request->policy_type;
         $policy->save();
         return redirect()->route('policy.index')->with('success','Thêm mới chính sách thành công');
     }
@@ -65,7 +66,7 @@ class PolicyController extends Controller
         //
         $policy = Policy::findOrFail($id);
         $request->validate([
-            'name'=>'required|unique:'.Policy::class.',name,'.$id,
+            'name'=>'required',
             'value'=>'required',
             'position'=>'required|min:1|max:9999|numeric',
         ],[
@@ -81,6 +82,7 @@ class PolicyController extends Controller
         $policy->value =$request->value;
         $policy->position =$request->position;
         $policy->show_hide =$request->show_hide;
+        $policy->policy_type =$request->policy_type;
         $policy->save();
         return redirect()->route('policy.index')->with('success','Cập nhật chính sách thành công');
     }
@@ -94,5 +96,20 @@ class PolicyController extends Controller
         $policy = Policy::findOrFail($id);
         $policy->delete();
         return redirect()->route('policy.index')->with('success','Xóa thành công');
+    }
+
+    public function uploadCk(Request $request){
+        if($request->hasFile('upload')){
+            $originName = $request->file('upload')->getClientOriginalName();
+            $fileName = pathinfo($originName, PATHINFO_FILENAME);
+            $extension = $request->file('upload')->getClientOriginalExtension();
+            $fileName = $fileName . '_' . time() . '.' . $extension;
+
+            $request->file('upload')->move(public_path('media'), $fileName);
+
+            $url = asset('media/' .  $fileName);
+
+            return response()->json(['fileName' => $fileName, 'uploaded'=> 1, 'url'=> $url]);
+        }
     }
 }

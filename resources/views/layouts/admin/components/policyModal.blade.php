@@ -44,32 +44,37 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="value" class="form-label ">Nội dung <span class="text-danger text-small">*</span></label>
-                                    <input type="text" name="value" class="form-control @error('value') is-invalid @enderror" 
-                                    id="value"
-                                    @isset($policy)
-                                        value="{{$policy->value}}"
-                                    @endisset
-                                    placeholder="Nhập tên (vd:Chính sách bảo mật,Laptop,...)"
-                                    autocomplete="value"
-                                    aria-describedby="value">
+                                    <textarea 
+                                    type="text" name="value" class="form-control ck-editor__editable_inline @error('value') is-invalid @enderror" 
+                                    id="value" placeholder="Nhập tên (vd:Chính sách bảo mật,Laptop,...)" @required(true)
+                                    autocomplete="value" aria-describedby="value">@isset($policy){{$policy->value}}@else{{old('value')}}@endisset</textarea>
                                     @error('value')
                                         <div class="form-text text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="mb-3">
-                                    <label for="position" class="form-label">Thứ tự(Mặc định là 1)</label>
-                                    <input type="number" name="position" class="form-control @error('position')invalid @enderror" 
-                                    @isset($policy)
-                                        value="{{$policy->position}}"
-                                    @else
-                                        value="1"
-                                    @endisset
-                                    placeholder="Nhập thứ tự hiện của danh mục"
-                                    autocomplete="position"
-                                    id="position">   
-                                    @error('position')
-                                        <div class="form-text text-danger">{{ $message }}</div>
-                                    @enderror
+                                <div class="row mb-3">
+                                    <div class="col-sm-12 col-xl-6">
+                                        <label for="position" class="form-label">Thứ tự(Mặc định là 1)</label>
+                                        <input type="number" name="position" class="form-control @error('position')invalid @enderror" 
+                                        @isset($policy)
+                                            value="{{$policy->position}}"
+                                        @else
+                                            value="1"
+                                        @endisset
+                                        placeholder="Nhập thứ tự hiện của danh mục"
+                                        autocomplete="position"
+                                        id="position">   
+                                        @error('position')
+                                            <div class="form-text text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="col-sm-12 col-xl-6">
+                                        <label for="policy_type" class="form-label">Dành cho (mặc định sẽ là Cửa hàng)</label>
+                                        <select class="form-select" name="policy_type" autocomplete="policy_type" id="policy_type">
+                                            <option value="1" @isset($policy) @selected($policy->show_hide) @endisset>Cửa hàng</option>
+                                            <option value="0" @isset($policy) @selected(!$policy->show_hide) @endisset>Sản phẩm</option>
+                                        </select>    
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="show_hide" class="form-label">Trạng thái (mặc định sẽ là Hiện)</label>
@@ -82,6 +87,7 @@
                                         <option value="0">Ẩn</option>
                                     </select>
                                 </div>
+                              
                                 <div class="mb-3 float-end">
                                     <button type="submit" class="btn btn-primary">
                                         @isset($policy)

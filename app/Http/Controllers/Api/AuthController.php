@@ -47,8 +47,15 @@ class AuthController extends Controller
             'image_url' => $user->image_url,
             'remember_token' => $user->remember_token,
             'cart_id' => $user->cart->id,
+            'data' => [
+                'uid' =>  '-'.$user->id,
+                'name' => 'image.png',
+                'status' => 'done',
+                'percent' => 100,
+                'url' => $user->image_url ?? 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+            ]
            ],
-            'access_token' => $token_user
+            // 'access_token' => $token_user
         ];
         return response()->json($data);
      
@@ -100,6 +107,13 @@ class AuthController extends Controller
              'image_url' => $user->image_url,
              'remember_token' => $user->remember_token,
              'cart_id' => $user->cart->id,
+             'data' => [
+                'uid' =>  '-'.$user->id,
+                'name' => 'image.png',
+                'status' => 'done',
+                'percent' => 100,
+                'url' => $user->image_url ?? 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+            ]
             ]
          ];
         return response()->json($data);   

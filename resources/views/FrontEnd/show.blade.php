@@ -30,7 +30,7 @@
                                 {{-- <li><a href="#"><i class="fa fa-comments"></i>{{ $detailNews->comments->count() }}Comments</a></li> --}}
                             </ul>
                             <h3 style="font-family: Roboto">{{ $detailNews->title }}</h3>
-                            <p class="excert">{!! $detailNews->description !!}</p>
+                            <div class="excert">{!! $detailNews->description !!}</div>
                         </div>
                     </div>
                     <div class="navigation-top">

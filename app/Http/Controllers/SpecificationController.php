@@ -16,9 +16,9 @@ class SpecificationController extends Controller
      */
     public function index(Request $request){
         $categories = CategoriesProduct::where('parent_category_id',null)->get();
-        $specis = Specification::paginate(10);
-        $paginate = Specification::paginate(10);
-        return view('layouts.admin.Product.Specification.index',compact('specis','categories','paginate'));
+        $specis = Specification::all();
+        // $paginate = Specification::paginate(10);
+        return view('layouts.admin.Product.Specification.index',compact('specis','categories'));
     }
     
     public function create(Request $request){
@@ -103,6 +103,11 @@ class SpecificationController extends Controller
     {
         //
         $specification = Specification::findOrFail($request->speci_id);
+        if($request->has('speci_ids')){
+            $specification = Specification::findMany($request->speci_ids);
+
+        }
+
         $specification->specisProduct()->delete();
         $specification->delete();
         return redirect()->back()->with('success','Xóa thông số '.$specification->name.' thành công');

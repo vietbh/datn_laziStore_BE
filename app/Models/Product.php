@@ -16,13 +16,17 @@ class Product extends Model
     protected $primaryKey = 'id';
     protected $fillable = ['name','seo_keywords','image_url','categories_product_id','brand_id','description','show_hide'];
 
+    public function scopeVisible($query)
+    {
+        return $query->where('show_hide', true);
+    }
     public function variations(): HasMany
     {
         return $this->hasMany(ProductVariation::class);
     }
     public function specifications(): HasMany
     {
-        return $this->hasMany(SpecificationsProduct::class);
+        return $this->hasMany(SpecificationsProduct::class,'product_id','id');
     }
     public function category(): BelongsTo
     {

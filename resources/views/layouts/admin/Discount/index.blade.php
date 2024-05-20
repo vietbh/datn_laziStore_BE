@@ -78,9 +78,10 @@
                            <th scope="col">Action</th>
                            <th scope="col">Mã giảm giá</th>
                            <th scope="col">Số lượng</th>
-                           <th scope="col">Status</th>
+                           <th scope="col">Hẹn thời gian</th>
+                           <th scope="col">Trạng thái hoạt động</th>
                            <th scope="col">Thời gian</th>
-                           <th scope="col">Trạng thái</th>
+                           <th scope="col">Ẩn hiện</th>
                        </tr>
                    </thead>
                    <tbody>
@@ -100,33 +101,42 @@
                                 <td class="text-success">{{$dis->discount_code}}</td>
                                 <td><span class="badge bg-primary">{{$dis->discount_total}}</span></td>
                                 <td class="text-capitalize">
-                                    @if ($dis->discount_status) <span class="badge bg-success">active</span>
-                                    @else <span class="badge bg-danger">inactive</span>
+                                    @if ($dis->discount_now) <span class="badge bg-success">Kích hoạt</span>
+                                    @else <span class="badge bg-secondary">Không </span>
                                     @endif
                                 </td>
+                                <td class="text-capitalize">
+                                    @if ($dis->discount_now) 
+                                        @if ($dis->discount_status) <span class="badge bg-success">Mở</span>
+                                        @else <span class="badge bg-danger">Khóa</span>
+                                        @endif
+                                    @else <span class="badge bg-secondary">Không</span>
+                                    @endif
+                                  
+                                </td>
                                 <td>
-                                    @if (!$dis->discount_status)
-                                        <span class="text-warning">Chưa được kích hoạt</span>
-                                    @else
+                                    @if ($dis->discount_now)
                                         @php
-                                            $startDateTime = Carbon\Carbon::parse($dis->start_date);
-                                            $endDateTime = Carbon\Carbon::parse($dis->end_date);
-                                            $currentDate = Carbon\Carbon::now();                                        
-                                            $remainingTimeStart = $currentDate->diff($startDateTime);
-                                            $remainingTimeEnd = $currentDate->diff($endDateTime);
+                                            Carbon\Carbon::setLocale("vi");
+                                            $startDateTime = Carbon\Carbon::parse($dis->start_date,'Asia/Ho_Chi_Minh');
+                                            $endDateTime = Carbon\Carbon::parse($dis->end_date,'Asia/Ho_Chi_Minh');
+                                            $currentDate = Carbon\Carbon::now('Asia/Ho_Chi_Minh');                                 
+                                            $remainingTimeStart = $startDateTime->diff($currentDate);
+                                            $remainingTimeEnd = $endDateTime->diff($currentDate);
                                         @endphp
-                                        {{-- @if ($remainingTimeStart->days > 0 || $remainingTimeStart->h > 0 || $remainingTimeStart->i > 0)
+                                        @if ($remainingTimeStart->invert !== 0)
                                             <div class="d-flex p-1">
-                                                <span class="fw-bold">Hiệu lực sau {{ $remainingTimeStart->days.' ngày'}} 
-                                                    {{$remainingTimeStart->h == 0 ? '' : '- '.$remainingTimeStart->h.' giờ'}}
-                                                    {{$remainingTimeStart->i == 0 ? '' : '- '.$remainingTimeStart->i.' phút'}} </span>
+                                                <span class="fw-bold">Mã sẽ được mở vào {{$startDateTime->diffForHumans($currentDate)}} </span>
                                             </div>
                                         @else
-                                        @endif --}}
-                                        @if ($remainingTimeEnd->days == 0 && $remainingTimeEnd->h == 0) <span class="fw-bold text-danger">Chưa được kích hoạt</span>
-                                        @else <span class="fw-bold text-success">Hết hiệu lực sau {{ $remainingTimeEnd->days.' ngày'}} {{$remainingTimeEnd->h == 0 ? '' : '- '.$remainingTimeEnd->h.' giờ'}} </span>                                            
+                                            @if ($remainingTimeEnd->invert === 0) <span class="fw-bold text-danger">Hết hạn</span>
+                                            @else <span class="fw-bold text-dark">Mã sẽ bị khóa vào {{$endDateTime->diffForHumans($currentDate)}}</span>                                            
+                                            @endif
                                         @endif
+                                    @else
+                                        <span class="text-danger">Không kích hoạt thời gian hẹn</span>
                                     @endif
+                                 
                                 </td>
                                 <td> <span class="badge bg-primary">{{$dis->show_hide ? 'Hiện' : 'Ẩn'}}</span></td>
 

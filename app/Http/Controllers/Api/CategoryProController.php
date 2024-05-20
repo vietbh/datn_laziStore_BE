@@ -20,18 +20,19 @@ class CategoryProController extends Controller
         return response()->json($categories, 200);
     }
   
-    public function show(string $slug)
+    public function show(Request $request, string $slug)
     {
         // Tìm kiếm danh mục bằng slug
+        $param = $request->only(['orderBy']);
         $category = CategoriesProduct::where('slug', $slug)->first();
-
+        
         if (!$category) {
-            return response()->json(['error' => 'Danh mục không tồn tại'], 404);
+            return response()->json(['message' => 'Danh mục không tồn tại'], 404);
         }
 
         $subcategories = CategoriesProduct::where('parent_category_id',$category->id)->get();
         // Kiểm tra xem có sản phẩm nào chứa ID danh mục con trong toàn bộ danh mục con
-        $products = $this->getProductsByCategory($category);
+        $products = $this->getProductsByCategory($category,$param['orderBy'] ?? null);
 
         return response()->json(['category' => $category, 'subcategories' => $subcategories, 'products' => $products], 200);
     }

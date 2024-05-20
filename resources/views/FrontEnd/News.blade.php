@@ -89,7 +89,7 @@
                         <!-- Trending Bottom -->
                         <div class="trending-bottom">
                             <div class="row row-cols-1 row-cols-md-2 g-4">
-                                <div class="col-lg-9">
+                                <div class="col-lg-9 col-sm-6">
                                     <div class="row">
                                         <div class="col-lg-12 col-sm-12 mb-3">
                                             <h4 class="text-danger" style="font-family: Arial">Tin mới cập nhật</h4>
@@ -153,10 +153,33 @@
 
                                     </div>
                                 </div>
-                                <div class="col-lg-3">
+                                <div class="col-lg-3 col-sm-6 ">
                                     <div class="row">
+                                        <div class="col-lg-12 col-sm-12 mb-3 ">
+                                            <h4 class="text-danger" style="font-family: Arial">Tin khác</h4>
+                                            <hr>
+                                        </div>
                                         <div class="col-lg-12 col-sm-12 mb-3">
-                                            <h4 class="text-danger" style="font-family: Arial">Tin mới cập nhật</h4>
+                                            <h5 class="text-danger" style="font-family: Arial">Thể thao</h5>
+                                            <ul>
+                                                <li>3</li>
+                                                <li>3</li>
+                                                <li>3</li>
+                                                <li>3</li>
+                                                <li>3</li>
+                                                <li>3</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-lg-12 col-sm-12 mb-3">
+                                            <h5 class="text-danger" style="font-family: Arial">Đời sống</h5>
+                                            <ul>
+                                                <li>3</li>
+                                                <li>3</li>
+                                                <li>3</li>
+                                                <li>3</li>
+                                                <li>3</li>
+                                                <li>3</li>
+                                            </ul>
                                         </div>
                                     </div>
                                 </div>  

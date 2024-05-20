@@ -82,20 +82,25 @@
                                 <td>{{number_format($order->total, 0, ',', '.')}}đ</td>
                                 <td>
                                     @isset($order->payment)
-                                    @if ($order->payment->status =='pending') <span class="badge bg-warning">{{$order->payment->status}}</span>
-                                    @elseif ($order->payment->status =='in_progress') <span class="badge bg-primary">{{$order->payment->status}}</span>
-                                    @else <span class="badge bg-success">{{$order->payment->status}}</span>
+                                    @if ($order->payment->payment_status =='pending') <span class="badge bg-secondary capitalize">{{$order->payment->payment_status}}</span>
+                                    @elseif ($order->payment->payment_status =='in_progress') <span class="badge bg-primary capitalize">{{$order->payment->payment_status}}</span>
+                                    @elseif ($order->payment->payment_status =='cancel') <span class="badge bg-danger capitalize">{{$order->payment->payment_status}}</span>
+                                    @else <span class="badge bg-success capitalize">{{$order->payment->payment_status}}</span>
                                     @endif    
                                     @endisset
                                 </td>
                                 <td>
                                     <div class="d-flex">
+                                        @php
+                                            Carbon\Carbon::setLocale("vi");
+                            
+                                        @endphp
                                         <span class="badge bg-primary me-2">
                                         {{ \Carbon\Carbon::parse($order->time_create)->isoFormat('h') }} giờ : {{ \Carbon\Carbon::parse($order->time_create)->isoFormat('mm') }} phút {{ \Carbon\Carbon::parse($order->time_create)->isoFormat('A') }}   
                                         </span>
                                         
                                         <span class="badge bg-primary">
-                                        {{ \Carbon\Carbon::parse($order->date_create)->diffForHumans()}}    
+                                        {{ \Carbon\Carbon::parse($order->date_create,'A')->diffForHumans()}}    
                                         </span>
 
                                     </div>

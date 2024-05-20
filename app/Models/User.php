@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -79,4 +80,12 @@ class User extends Authenticatable implements MustVerifyEmail
         // Mối quan hệ nhiều-nhiều với mô hình Role
         return $this->hasMany(DetailUser::class,'user_id','id');
     }
+    // public function setUserStatusOnline():void
+    // {
+    //     Auth::user();
+    //     $this->update(['user_status'=>'online']);
+    // }
+    // public function setUserStatusOffline(){
+    //     $this->update(['user_status'=>'offline']);
+    // }
 }

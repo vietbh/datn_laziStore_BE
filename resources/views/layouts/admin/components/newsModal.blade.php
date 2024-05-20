@@ -35,7 +35,7 @@
                                 @method('post')
                                 @endisset
                                 <div class="row mb-3">
-                                    <div class="col-sm-12 col-xl-6 mb-3">
+                                    <div class="col-sm-12 col-xl-6">
                                         <label for="title" class="form-label ">Tiêu đề tin tức <span class="text-danger text-small">(*)</span></label>
                                         <input type="text" name="title" class="form-control @error('title') 
                                         is-invalid
@@ -49,7 +49,7 @@
                                         <div class="form-text text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                    <div class="col-sm-12 col-xl-6 mb-3">
+                                    <div class="col-sm-12 col-xl-6">
                                         <label for="seo_keywords" class="form-label">Từ khóa SEO<span class="text-danger text-small">(*)</span></label>
                                         <input type="text" name="seo_keywords" class="form-control" 
                                         @isset($new)
@@ -58,7 +58,15 @@
                                         placeholder="Vui lòng nhập trường này"
                                         id="seo_keywords">   
                                         @error('seo_keywords')
-                                        <div id="seo_keywords" class="form-text text-danger">{{ $message }}</div>
+                                        <div class="form-text text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="col-sm-12 col-xl-12">
+                                        <label for="sub_title" class="form-label">Tiêu đề ngắn<span class="text-danger text-small">(*)</span></label>
+                                        <textarea 
+                                        name="sub_title" id="sub_title" placeholder="Nhập tiêu đề ngắn" rows="5" required>@isset($new){{$new->sub_title}}@else{{old('sub_title')}}@endisset</textarea>
+                                        @error('sub_title')
+                                            <div class="form-text text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>

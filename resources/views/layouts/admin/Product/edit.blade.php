@@ -106,10 +106,8 @@
                                             </a>
                                         </div>
                                         <div class="col-sm-12 col-xl-6 mb-3 px-3">
-                                            <a href="{{ route('specifi.create', ['idProduct'=>$product->id]) }}">
-                                                <button type="button" class="w-100 btn btn-primary">
-                                                    Thông số sản phẩm
-                                                </button>
+                                            <a href="{{ route('specifi.create', ['idProduct'=>$product->id]) }}" class="w-100 btn btn-primary">
+                                                Thông số sản phẩm
                                             </a>
                                         </div>
                                     </div> 

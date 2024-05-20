@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\CartItems;
-use App\Models\Product;
 use App\Models\ProductVariation;
 use Illuminate\Http\Request;
 
@@ -34,6 +33,7 @@ class CartController extends Controller
     }
     public function store(Request $request)
     {
+        
         // Hiển thị dữ liệu trong request POST    
         // Lưu dữ liệu vào CartsItems
         $cartItemsCheck = CartItems::where([['cart_id',$request->cart],['product_id',$request->product]])->count();
@@ -51,7 +51,7 @@ class CartController extends Controller
         $countItem = CartItems::where('cart_id',$request->cart)->count();
         Cart::where('id',$request->cart)->update(['amount'=>$countItem]);
         // Lấy thông tin sản phẩm và biến thể sản phẩm    
-        return response()->json(200);
+        return response()->json('success',200);
     }
     public function update(Request $request){
         $cart = Cart::find($request->cart);
@@ -78,7 +78,7 @@ class CartController extends Controller
         }
         $countItem = CartItems::where('cart_id',$cart->id)->count();
         Cart::where('id',$cart->id)->update(['amount'=>$countItem]);
-        return response()->json(200);
+        return response()->json('success',200);
     }
     public function destroy (Request $request){
         $cart = Cart::find($request->cart);

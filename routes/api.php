@@ -5,10 +5,12 @@ use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CategoryProController;
 use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\EmailVerificationPromptController as ApiEmailVerificationPromptController;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\ProductController;
 
 use App\Http\Controllers\Api\VerifyEmailController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,6 +30,8 @@ use Illuminate\Support\Facades\Route;
 // Route::middleware('auth:sanctum')->group(function(){
 // });
 Route::get('/san-pham/{slug}',[ProductController::class,'show']);
+// Route::get('/product',[ProductController::class,'index']);
+
 Route::get('/san-pham-moi',[ProductController::class,'new']);
 Route::get('/san-pham-hot',[ProductController::class,'hot']);
 Route::get('/san-pham-tablet',[ProductController::class,'tablet']);
@@ -36,6 +40,8 @@ Route::get('/san-pham-pc',[ProductController::class,'pc']);
 Route::get('/san-pham-dong-ho',[ProductController::class,'watch']);
 Route::get('/san-pham-am-thanh',[ProductController::class,'audio']);
 Route::get('/slide-ads',[ProductController::class,'banner']);
+Route::get('/search',[ProductController::class,'handleSearch']);
+
 // Danh muc
 Route::get('/danh-muc-san-pham',[CategoryProController::class,'index']);
 Route::get('/danh-muc-san-pham/{slug}',[CategoryProController::class,'show']);
@@ -46,22 +52,38 @@ Route::post('/lien-he',[ContactController::class,'store']);
 //Auth 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/dang-ky', [AuthController::class, 'register']);
+Route::post('/comment',[ProductController::class,'comment']);
+Route::post('/comment/add',[ProductController::class,'handleComment']);
+Route::post('/discount',[ProductController::class,'discount']);
 // 
 Route::post('/quen-mat-khau', [AuthController::class, 'forgotPassword']);
 Route::post('/dat-lai-mat-khau', [AuthController::class, 'changePasswordForgot']);
 // Route::post('/doi-mat-khau', [AuthController::class, 'changePassword']);
-
+// User
+Route::post('user/upload',function(){
+    $data = [
+        'uid'=> '-1',
+        'name' => 'image.png',
+        'status' => 'done',
+        'response' => '{"status": "success"}', 
+        'linkProps' => 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+    ];
+    return response()->json($data,200);
+});
 // // Gio hang
-Route::get('/gio-hang/{id}',[CartController::class,'index']);
-Route::post('/gio-hang/them-san-pham',[CartController::class,'store']);
+// Route::prefix('cart')
+Route::post('/gio-hang/{id}',[CartController::class,'index']);
+Route::post('/cart/store',[CartController::class,'store']);
 Route::post('/gio-hang/cap-nhat-san-pham',[CartController::class,'update']);
 Route::post('/gio-hang/xoa-san-pham',[CartController::class,'destroy']);
+// Don hang
+Route::post('/order',[OrderController::class,'index']);
+Route::post('/detail-order',[OrderController::class,'show']);
 // Thanh toan
-// Route::post('/don-hang',[PaymentController::class,'store']);
 Route::post('/thanh-toan',[PaymentController::class,'store']);
-Route::post('/vnpay/create',[PaymentController::class,'create']);
+Route::post('/vnpay_payment',[PaymentController::class,'handleVnPay']);
 
-Route::get('/vnpay/return',[PaymentController::class,'return'])->name('vnpay.return');
+Route::get('/vnpay_payment/return',[PaymentController::class,'return'])->name('vnpay.return');
 
 
 Route::group(['prefix' => 'api'], function () {

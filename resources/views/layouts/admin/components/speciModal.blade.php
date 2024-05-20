@@ -1,8 +1,6 @@
 @extends('admin')
 @section('content')
-@php
-    $tab = request()->query('tab');
-@endphp
+    @dump(request()->get('danh_muc',null))
     <div class="container-fluid mt-5 mb-5" style="height: 85vh">
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -16,7 +14,6 @@
                     <nav>
                         <div class="nav nav-tabs" id="nav-tab" role="tablist">
                           <button class="nav-link active " id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Thông số sản phẩm</button>
-                          {{-- <button class="nav-link @if($tab == 'speci') active @endif" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Thông số setting</button> --}}
                         </div>
                     </nav>
                     <div class="tab-content" id="nav-tabContent">
@@ -118,7 +115,7 @@
                                                             @foreach ($products as $product)
                                                                 <option 
                                                                 value="{{$product->id}}" @isset($productSpecification) {{$productSpecification->product_id == $product->id ? 'selected':''}} @endisset >{{$product->name}}</option>
-                                                            
+                            
                                                             @endforeach
                                                         @endisset
 
@@ -193,8 +190,8 @@
                                                     <div class="col-12">
                                                         <div class="d-flex">
                                                             <select
-                                                            class="form-select me-1" autocomplete="danh_muc" name="danh_muc" data-action="@isset($productSpecification) {{ route('specifi.edit', ['id' => $productSpecification->id,'danh_muc'=>'']) }}
-                                                            @else {{ route('specifi.create',['idProduct' => $product->id,'danh_muc'=>'']) }} @endisset"  id="danh_muc">
+                                                            class="form-select me-1" autocomplete="danh_muc" name="danh_muc" data-action="@isset($productSpecification) {{ route('specifi.edit', ['id' => $productSpecification->id,'danh_muc'=>''.request()->get('danh_muc',null)]) }}
+                                                            @else {{ route('specifi.create',['idProduct' => $product->id,'danh_muc'=>''.request()->get('danh_muc',null)]) }} @endisset"  id="danh_muc">
                                                                 @foreach ($categories as $category)
                                                                     <option
                                                                     value="{{$category->slug}}" 
@@ -309,9 +306,10 @@
 @section('js')
     <script type="text/javascript">
         $(document).ready(function(){
-            $('#danh_muc').bind('change',function(){
-                const danhMuc = $(this).val();
-                let url = $(this).data('action')+danhMuc
+            $('#danh_muc').on('change',function(){
+                const cate = $(this).val();
+                let url = $(this).data('action').concat(cate);
+                // console.log(url);
                 location.href = url;
             });
             

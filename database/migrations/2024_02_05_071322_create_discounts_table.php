@@ -20,7 +20,8 @@ return new class extends Migration
             $table->datetime('start_date');
             $table->datetime('end_date');
             $table->boolean('show_hide')->default(true);
-            $table->boolean('discount_status')->default(false);
+            $table->string('discount_now')->default(false);
+            $table->string('discount_status')->default(false);
             $table->timestamps();
         });
     }

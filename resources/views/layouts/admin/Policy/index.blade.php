@@ -97,7 +97,7 @@
                                 </div>
                             </td>
                             <td>{{$poli->name}}</td>
-                            <td>{{$poli->value}}</td>
+                            <td>{!!$poli->value!!}</td>
                             <td><span class="badge bg-primary">{{$poli->position}}</span></td>
                             <td><span class="badge bg-primary">{{$poli->show_hide ? 'Hiện' : 'Ẩn'}}</span></td>
                         </tr>
@@ -146,7 +146,8 @@
     </style>
 @endsection
 @section('js')
-    <script type="text/javascript">
+@include('layouts.admin.Policy.ckeditor') 
+<script type="text/javascript">
         $(document).ready(function(){
             
             $('#table-items').DataTable({
